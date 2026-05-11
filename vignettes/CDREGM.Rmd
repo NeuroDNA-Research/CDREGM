@@ -1,0 +1,58 @@
+---
+title: "Introduction to CDREGM"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to CDREGM}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+## Overview
+
+**CDREGM** provides tools for estimating economic growth models within the
+*Capitalism, Democracy, and Rule of Law* (CDR) framework.  The central
+premise is that institutional quality — measured along three dimensions —
+is a first-order determinant of long-run per-capita income growth.
+
+| Dimension        | Typical proxy variables                          |
+|------------------|--------------------------------------------------|
+| Capitalism       | Property-rights index, economic-freedom score    |
+| Democracy        | Polity IV, Freedom House political-rights score  |
+| Rule of Law      | World Governance Indicators, ICRG law & order    |
+
+## Basic usage
+
+```{r basic}
+library(CDREGM)
+
+set.seed(42)
+n <- 100
+df <- data.frame(
+  growth      = rnorm(n, 2, 1.5),
+  prop_rights = runif(n, 0, 10),
+  democracy   = runif(n, 0, 10),
+  rule_of_law = runif(n, 0, 10),
+  ln_gdp0     = rnorm(n, 8, 1)
+)
+
+m <- cdr_growth(
+  data       = df,
+  gdp_growth = "growth",
+  cdr_vars   = c("prop_rights", "democracy", "rule_of_law"),
+  controls   = "ln_gdp0"
+)
+
+summary(m$fit)
+```
+
+## Interpreting coefficients
+
+A positive coefficient on a CDR variable indicates that higher institutional
+quality is associated with faster growth, holding other factors constant.
+Consult the vignette `vignette("panel-data", package = "CDREGM")` (planned)
+for fixed-effects and GMM extensions.
+```

@@ -1,0 +1,32 @@
+Package: CDREGM
+Title: Capitalism, Democracy and Rule of Law Economic Growth Models
+Version: 0.1.0
+Authors@R: c(
+    person("Cesar", "Garcia", role = c("aut", "cre"),
+           email = "gypsaman@gmail.com"),
+    person("Felipe", "Llaugel", role = "aut")
+  )
+Description: Implements economic growth models within the Capitalism,
+    Democracy, and Rule of Law (CDR) framework. Provides tools for
+    estimating, comparing, and visualising the joint effects of
+    institutional quality, democratic governance, and property-rights
+    protection on long-run economic growth. Supports panel-data
+    estimation, robustness diagnostics, and replication workflows
+    common in comparative political economy research.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Depends:
+    R (>= 4.1.0)
+Imports:
+    stats,
+    utils
+Suggests:
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown
+Config/testthat/edition: 3
+VignetteBuilder: knitr
+URL: https://github.com/Gypsaman/CDREGM
+BugReports: https://github.com/Gypsaman/CDREGM/issues
