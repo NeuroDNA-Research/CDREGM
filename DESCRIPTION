@@ -15,8 +15,9 @@ Description: Implements economic growth models within the Capitalism,
     common in comparative political economy research.
 License: MIT + file LICENSE
 Encoding: UTF-8
+LazyData: true
+LazyDataCompression: xz
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Depends:
     R (>= 4.1.0)
 Imports:
@@ -30,3 +31,4 @@ Config/testthat/edition: 3
 VignetteBuilder: knitr
 URL: https://github.com/Gypsaman/CDREGM
 BugReports: https://github.com/Gypsaman/CDREGM/issues
+Config/roxygen2/version: 8.0.0
