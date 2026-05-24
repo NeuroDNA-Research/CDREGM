@@ -2,3 +2,5 @@
 
 S3method(print,cdr_model)
 export(cdr_growth)
+export(flag_path)
+export(get_country_indicators)
