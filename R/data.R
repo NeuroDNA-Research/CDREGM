@@ -24,10 +24,9 @@
 #' V-Dem project; see `attr(indicators, "sources")` for full provenance.
 #' Refresh with `source("data-raw/fetch_indicators.R")`.
 #'
-#' @format A data frame with 395 rows and 12 variables:
+#' @format A data frame with 395 rows and 10 variables:
 #' \describe{
 #'   \item{iso2c}{ISO 2-letter country code (character)}
-#'   \item{country}{Country name from World Bank (character)}
 #'   \item{year}{Reference year (integer)}
 #'   \item{gdp}{GDP, current USD — WB WDI `NY.GDP.MKTP.CD` (numeric)}
 #'   \item{gdp_per_capita}{GDP per capita, current USD — WB WDI `NY.GDP.PCAP.CD` (numeric)}
@@ -37,9 +36,6 @@
 #'   \item{democracy}{V-Dem electoral democracy index, 0–1 — `v2x_polyarchy` (numeric)}
 #'   \item{corruption}{WB WGI Control of Corruption estimate, –2.5 to +2.5 —
 #'     `GOV_WGI_CC.EST`; higher = less corrupt (numeric)}
-#'   \item{natural_resources}{Total natural resources rents as \% of GDP —
-#'     WB WDI `NY.GDP.TOTL.RT.ZS`; back-filled from nearest prior year when missing (numeric)}
-#'   \item{natural_resources_year}{Actual observation year for `natural_resources` when back-filled (integer)}
 #'   \item{population}{Total population — WB WDI `SP.POP.TOTL` (numeric)}
 #' }
 #' @source
@@ -49,6 +45,31 @@
 #'
 #' V-Dem Dataset v14: \url{https://www.v-dem.net/}
 "indicators"
+
+#' Country Reference Dataset
+#'
+#' ISO-2 country codes, names, and latitude (in decimal degrees) for the 79
+#' countries in the CDR research dataset.  Latitudes are sourced from
+#' \url{https://worldpopulationreview.com/country-rankings/latitude-by-country}.
+#'
+#' @format A data frame with 79 rows and 5 variables:
+#' \describe{
+#'   \item{code}{ISO 2-letter country code (character)}
+#'   \item{country}{Country name (character)}
+#'   \item{latitude}{Latitude in decimal degrees; negative values indicate the
+#'     Southern Hemisphere (numeric)}
+#'   \item{natural_resources}{Total natural resources rents as \% of GDP —
+#'     World Bank WDI \code{NY.GDP.TOTL.RT.ZS}; back-filled from nearest prior
+#'     year when the reference year is unavailable (numeric)}
+#'   \item{natural_resources_year}{Actual observation year for
+#'     \code{natural_resources} when back-filled (integer)}
+#' }
+#' @source
+#' Latitudes: \url{https://worldpopulationreview.com/country-rankings/latitude-by-country}
+#'
+#' Natural resources: World Bank WDI
+#' \url{https://databank.worldbank.org/source/world-development-indicators}
+"countries"
 
 #' Get the file path to a country flag image
 #'
