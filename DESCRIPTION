@@ -22,11 +22,13 @@ Depends:
     R (>= 4.1.0)
 Imports:
     stats,
-    utils
+    utils,
+    wbstats
 Suggests:
     testthat (>= 3.0.0),
     knitr,
-    rmarkdown
+    rmarkdown,
+    vdemdata
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 URL: https://github.com/Gypsaman/CDREGM
