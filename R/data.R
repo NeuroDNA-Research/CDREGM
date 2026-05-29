@@ -3,21 +3,16 @@
 #' Annual panel of economic and governance indicators for the 79 CDR countries,
 #' covering 2021–2025.  Downloaded from the World Bank WDI/WGI APIs and the
 #' V-Dem project; see `attr(indicators, "sources")` for full provenance.
+#' Missing values are `NA`; no back-filling is applied.
 #' Refresh with `source("data-raw/fetch_indicators.R")`.
 #'
-#' @format A data frame with 395 rows and 12 variables:
+#' @format A data frame with 395 rows and 7 variables:
 #' \describe{
 #'   \item{iso2c}{ISO 2-letter country code (character)}
 #'   \item{year}{Reference year (integer)}
 #'   \item{gdp}{GDP, current USD — WB WDI `NY.GDP.MKTP.CD` (numeric)}
-#'   \item{gdp_per_capita}{GDP per capita, current USD — WB WDI `NY.GDP.PCAP.CD` (numeric)}
 #'   \item{capitalization}{Market capitalisation of listed companies as \% of GDP —
-#'     WB WDI `CM.MKT.LCAP.GD.ZS`; back-filled from nearest prior year when missing (numeric)}
-#'   \item{capitalization_year}{Actual observation year for `capitalization` when back-filled (integer)}
-#'   \item{capitalization_pc}{Per-capita market capitalisation in USD — derived as
-#'     `gdp_per_capita * capitalization / 100` (numeric)}
-#'   \item{capitalization_pc_year}{Actual observation year for `capitalization_pc`,
-#'     same as `capitalization_year` (integer)}
+#'     WB WDI `CM.MKT.LCAP.GD.ZS`; `NA` when unavailable (numeric)}
 #'   \item{democracy}{V-Dem electoral democracy index, 0–1 — `v2x_polyarchy` (numeric)}
 #'   \item{corruption}{WB WGI Control of Corruption estimate, –2.5 to +2.5 —
 #'     `GOV_WGI_CC.EST`; higher = less corrupt (numeric)}

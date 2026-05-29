@@ -1,12 +1,8 @@
 #' Fetch Country-Level Economic and Governance Indicators
 #'
 #' Retrieves GDP, stock market capitalisation, democracy index, corruption
-#' index, natural resources rents, and population from live web sources
-#' (World Bank WDI/WGI and V-Dem).  When a specific `year` is requested,
-#' indicators whose most-recent observation pre-dates that year are
-#' back-filled from the nearest available prior year (within five years),
-#' and the actual observation year is recorded in a companion `*_year`
-#' column.
+#' index, and population from live web sources (World Bank WDI/WGI and V-Dem).
+#' Missing values are left as `NA`; no back-filling is performed.
 #'
 #' @param countries Character vector of ISO 2-letter country codes.
 #'   `NULL` (default) uses the 79 countries in the built-in [countries] dataset.
@@ -14,33 +10,21 @@
 #'   a panel covering the five most recently available years for each
 #'   indicator.
 #' @param indicators Character vector selecting which indicators to fetch.
-#'   Any subset of `c("gdp", "gdp_per_capita", "capitalization",
-#'   "capitalization_pc", "democracy", "corruption", "population")`.
-#'   Defaults to all seven.  `"capitalization_pc"` (per-capita market cap in
-#'   USD) is derived as `gdp_per_capita * capitalization / 100` and implicitly
-#'   requires both `"gdp_per_capita"` and `"capitalization"`.
+#'   Any subset of `c("gdp", "capitalization", "democracy", "corruption",
+#'   "population")`.  Defaults to all five.
 #'
 #' @return A `data.frame` with columns `iso2c`, `year`, and one column per
-#'   requested indicator.  `capitalization` also gets a companion
-#'   `capitalization_year` column showing the actual observation year when
-#'   back-filled.  The data frame carries a `sources` attribute — a named
-#'   character vector documenting the origin of each indicator column.
+#'   requested indicator.  Missing observations are `NA`.  The data frame
+#'   carries a `sources` attribute — a named character vector documenting the
+#'   origin of each indicator column.
 #'
 #' @section Data sources:
 #' \describe{
 #'   \item{gdp}{World Bank WDI indicator \code{NY.GDP.MKTP.CD} — GDP,
 #'     current US\$. Retrieved via \pkg{wbstats}.}
-#'   \item{gdp_per_capita}{World Bank WDI indicator \code{NY.GDP.PCAP.CD} —
-#'     GDP per capita, current US\$. Retrieved via \pkg{wbstats}.}
 #'   \item{capitalization}{World Bank WDI indicator \code{CM.MKT.LCAP.GD.ZS}
 #'     — market capitalisation of listed domestic companies as \% of GDP.
-#'     Retrieved via \pkg{wbstats}; filled from nearest prior year (≤ 5 yr)
-#'     when the requested year is unavailable.}
-#'   \item{capitalization_pc}{Per-capita market capitalisation in USD, derived
-#'     as \code{gdp_per_capita * capitalization / 100}.  Requires both
-#'     \code{"gdp_per_capita"} and \code{"capitalization"} to be fetched.
-#'     A companion \code{capitalization_pc_year} column records the actual
-#'     observation year (same as \code{capitalization_year}).}
+#'     Retrieved via \pkg{wbstats}.  Missing values are left as \code{NA}.}
 #'   \item{democracy}{V-Dem electoral democracy index \code{v2x_polyarchy}
 #'     (0 = least democratic, 1 = most democratic).  Retrieved via the
 #'     \pkg{vdemdata} package (install from GitHub:
@@ -79,20 +63,13 @@
 get_country_indicators <- function(
     countries  = NULL,
     year       = NULL,
-    indicators = c("gdp", "gdp_per_capita", "capitalization",
-                   "capitalization_pc", "democracy", "corruption", "population")
+    indicators = c("gdp", "capitalization", "democracy", "corruption", "population")
 ) {
   indicators <- match.arg(
     indicators,
-    choices  = c("gdp", "gdp_per_capita", "capitalization",
-                 "capitalization_pc", "democracy", "corruption", "population"),
+    choices    = c("gdp", "capitalization", "democracy", "corruption", "population"),
     several.ok = TRUE
   )
-
-  # capitalization_pc is derived; ensure its upstream columns are fetched
-  if ("capitalization_pc" %in% indicators) {
-    indicators <- union(indicators, c("gdp_per_capita", "capitalization"))
-  }
 
   if (is.null(countries)) {
     countries <- CDREGM::countries$code
@@ -109,18 +86,17 @@ get_country_indicators <- function(
     single   <- FALSE
   } else {
     year   <- as.integer(year)
-    start_yr <- year - 5L          # lookback window for gap-filling
+    start_yr <- year - 5L
     end_yr   <- year
     single   <- TRUE
   }
 
   # --- World Bank indicators ------------------------------------------------
   wb_map <- c(
-    gdp              = "NY.GDP.MKTP.CD",
-    gdp_per_capita   = "NY.GDP.PCAP.CD",
-    capitalization   = "CM.MKT.LCAP.GD.ZS",
-    corruption       = "GOV_WGI_CC.EST",
-    population       = "SP.POP.TOTL"
+    gdp            = "NY.GDP.MKTP.CD",
+    capitalization = "CM.MKT.LCAP.GD.ZS",
+    corruption     = "GOV_WGI_CC.EST",
+    population     = "SP.POP.TOTL"
   )
   wb_needed <- wb_map[intersect(names(wb_map), indicators)]
 
@@ -132,29 +108,6 @@ get_country_indicators <- function(
       start_yr   = start_yr,
       end_yr     = end_yr
     )
-  }
-
-  # --- GFDD capitalization fallback -----------------------------------------
-  # WDI CM.MKT.LCAP.GD.ZS has gaps for many frontier/non-reporting markets;
-  # GFDD.DM.01 is sourced directly from exchanges and fills most of them.
-  # GFDD data can lag WDI by several years, so fetch with a 5-yr wider window
-  # and use nearest-year fill rather than exact-year merge.
-  if ("capitalization" %in% indicators && !is.null(wb_df) &&
-      "capitalization" %in% names(wb_df) && any(is.na(wb_df$capitalization))) {
-    gfdd_df <- .fetch_gfdd_capitalization(countries, start_yr - 5L, end_yr)
-    if (!is.null(gfdd_df)) {
-      for (i in seq_len(nrow(wb_df))) {
-        if (!is.na(wb_df$capitalization[i])) next
-        iso  <- wb_df$iso2c[i]
-        yr   <- wb_df$year[i]
-        pool <- gfdd_df[gfdd_df$iso2c == iso &
-                        gfdd_df$year >= (yr - 5L) &
-                        gfdd_df$year <= yr &
-                        !is.na(gfdd_df$cap_gfdd), ]
-        if (nrow(pool) == 0L) next
-        wb_df$capitalization[i] <- pool$cap_gfdd[which.max(pool$year)]
-      }
-    }
   }
 
   # --- V-Dem democracy ------------------------------------------------------
@@ -179,24 +132,6 @@ get_country_indicators <- function(
   # Filter to the 79 CDR countries (iso2c match)
   result <- result[result$iso2c %in% countries, , drop = FALSE]
 
-  # --- Gap-fill lagged indicators ------------------------------------------
-  lagged <- intersect(c("capitalization"), indicators)
-  for (col in lagged) {
-    if (col %in% names(result)) {
-      filled <- .fill_latest(result, col, id_col = "iso2c", yr_col = "year")
-      result[[col]]                    <- filled$value
-      result[[paste0(col, "_year")]]   <- filled$actual_year
-    }
-  }
-
-  # --- Derive capitalization_pc ---------------------------------------------
-  if ("capitalization_pc" %in% indicators &&
-      "gdp_per_capita" %in% names(result) &&
-      "capitalization" %in% names(result)) {
-    result$capitalization_pc      <- result$gdp_per_capita * result$capitalization / 100
-    result$capitalization_pc_year <- result$capitalization_year
-  }
-
   # --- Single-year slice ----------------------------------------------------
   if (single) {
     result <- result[result$year == year, , drop = FALSE]
@@ -211,13 +146,8 @@ get_country_indicators <- function(
   rownames(result) <- NULL
 
   # Reorder columns: id cols first, then requested indicators
-  # Remove capitalization_pc from the loop if it was implicitly added upstream
-  display_indicators <- indicators
   id_cols  <- c("iso2c", "year")
-  ind_cols <- unlist(lapply(display_indicators, function(i) {
-    extra <- paste0(i, "_year")
-    c(i, if (extra %in% names(result)) extra)
-  }))
+  ind_cols <- indicators[indicators %in% names(result)]
   col_order <- c(id_cols, ind_cols)
   col_order <- col_order[col_order %in% names(result)]
   result    <- result[, col_order, drop = FALSE]
@@ -266,32 +196,6 @@ get_country_indicators <- function(
   raw[, setdiff(names(raw), drop), drop = FALSE]
 }
 
-.fetch_gfdd_capitalization <- function(countries, start_yr, end_yr,
-                                       batch_size = 40L) {
-  tryCatch({
-    batches <- split(countries, ceiling(seq_along(countries) / batch_size))
-    raw <- do.call(rbind, lapply(batches, function(batch) {
-      wbstats::wb_data(
-        indicator   = c(cap_gfdd = "GFDD.DM.01"),
-        country     = batch,
-        start_date  = start_yr,
-        end_date    = end_yr,
-        return_wide = TRUE
-      )
-    }))
-    raw$year <- as.integer(raw$date)
-    raw$date <- NULL
-    if ("iso3c" %in% names(raw))
-      raw$iso2c[is.na(raw$iso2c) & raw$iso3c == "NAM"] <- "NA"
-    drop <- intersect(c("iso3c", "country", "unit", "obs_status",
-                        "footnote", "last_updated"), names(raw))
-    raw[, setdiff(names(raw), drop), drop = FALSE]
-  }, error = function(e) {
-    message("GFDD capitalization fallback failed: ", conditionMessage(e))
-    NULL
-  })
-}
-
 .fetch_vdem_democracy <- function(countries, start_yr, end_yr) {
   if (!requireNamespace("vdemdata", quietly = TRUE)) {
     message(
@@ -322,42 +226,12 @@ get_country_indicators <- function(
   sub[, c("iso2c", "year", "democracy"), drop = FALSE]
 }
 
-# For each country, replace NA in `col` with the most-recent non-NA value
-# within `max_lag` years of each row's year.  Returns a list with:
-#   $value       — filled numeric vector
-#   $actual_year — year of the observation used (NA when no fill available)
-.fill_latest <- function(df, col, id_col = "iso2c", yr_col = "year",
-                         max_lag = 5L) {
-  value       <- df[[col]]
-  actual_year <- ifelse(is.na(value), NA_integer_, df[[yr_col]])
-
-  for (i in seq_len(nrow(df))) {
-    if (!is.na(value[i])) next
-    iso  <- df[[id_col]][i]
-    yr   <- df[[yr_col]][i]
-    pool <- df[df[[id_col]] == iso &
-               df[[yr_col]] >= (yr - max_lag) &
-               df[[yr_col]] <  yr &
-               !is.na(df[[col]]), ]
-    if (nrow(pool) == 0L) next
-    best <- pool[which.max(pool[[yr_col]]), ]
-    value[i]       <- best[[col]]
-    actual_year[i] <- best[[yr_col]]
-  }
-
-  list(value = value, actual_year = actual_year)
-}
-
 .indicator_sources <- function() {
   c(
     gdp =
       "World Bank WDI NY.GDP.MKTP.CD (GDP, current USD) via wbstats",
-    gdp_per_capita =
-      "World Bank WDI NY.GDP.PCAP.CD (GDP per capita, current USD) via wbstats",
     capitalization =
-      "World Bank WDI CM.MKT.LCAP.GD.ZS (market cap % of GDP) via wbstats; GFDD.DM.01 used as fallback where WDI is missing; back-filled from nearest prior year if still missing",
-    capitalization_pc =
-      "Derived: gdp_per_capita * capitalization / 100 (per-capita market capitalisation in USD)",
+      "World Bank WDI CM.MKT.LCAP.GD.ZS (market cap % of GDP) via wbstats; missing values are NA",
     democracy =
       "V-Dem v2x_polyarchy (electoral democracy index, 0-1) via vdemdata package",
     corruption =
