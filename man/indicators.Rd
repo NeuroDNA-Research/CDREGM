@@ -8,19 +8,19 @@
 A data frame with 395 rows and 12 variables:
 \describe{
 \item{iso2c}{ISO 2-letter country code (character)}
-\item{country}{Country name from World Bank (character)}
 \item{year}{Reference year (integer)}
 \item{gdp}{GDP, current USD — WB WDI \code{NY.GDP.MKTP.CD} (numeric)}
 \item{gdp_per_capita}{GDP per capita, current USD — WB WDI \code{NY.GDP.PCAP.CD} (numeric)}
 \item{capitalization}{Market capitalisation of listed companies as \\% of GDP —
 WB WDI \code{CM.MKT.LCAP.GD.ZS}; back-filled from nearest prior year when missing (numeric)}
 \item{capitalization_year}{Actual observation year for \code{capitalization} when back-filled (integer)}
+\item{capitalization_pc}{Per-capita market capitalisation in USD — derived as
+\code{gdp_per_capita * capitalization / 100} (numeric)}
+\item{capitalization_pc_year}{Actual observation year for \code{capitalization_pc},
+same as \code{capitalization_year} (integer)}
 \item{democracy}{V-Dem electoral democracy index, 0–1 — \code{v2x_polyarchy} (numeric)}
 \item{corruption}{WB WGI Control of Corruption estimate, –2.5 to +2.5 —
 \code{GOV_WGI_CC.EST}; higher = less corrupt (numeric)}
-\item{natural_resources}{Total natural resources rents as \\% of GDP —
-WB WDI \code{NY.GDP.TOTL.RT.ZS}; back-filled from nearest prior year when missing (numeric)}
-\item{natural_resources_year}{Actual observation year for \code{natural_resources} when back-filled (integer)}
 \item{population}{Total population — WB WDI \code{SP.POP.TOTL} (numeric)}
 }
 }

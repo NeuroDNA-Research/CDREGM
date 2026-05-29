@@ -7,29 +7,30 @@
 get_country_indicators(
   countries = NULL,
   year = NULL,
-  indicators = c("gdp", "gdp_per_capita", "capitalization", "democracy", "corruption",
-    "natural_resources", "population")
+  indicators = c("gdp", "gdp_per_capita", "capitalization", "capitalization_pc",
+    "democracy", "corruption", "population")
 )
 }
 \arguments{
 \item{countries}{Character vector of ISO 2-letter country codes.
-\code{NULL} (default) uses the 79 countries in the built-in \link{CDR} dataset.}
+\code{NULL} (default) uses the 79 countries in the built-in \link{countries} dataset.}
 
 \item{year}{Integer.  Reference year to retrieve.  \code{NULL} (default) returns
 a panel covering the five most recently available years for each
 indicator.}
 
 \item{indicators}{Character vector selecting which indicators to fetch.
-Any subset of \code{c("gdp", "gdp_per_capita", "capitalization", "democracy", "corruption", "natural_resources", "population")}.
-Defaults to all seven.}
+Any subset of \code{c("gdp", "gdp_per_capita", "capitalization", "capitalization_pc", "democracy", "corruption", "population")}.
+Defaults to all seven.  \code{"capitalization_pc"} (per-capita market cap in
+USD) is derived as \code{gdp_per_capita * capitalization / 100} and implicitly
+requires both \code{"gdp_per_capita"} and \code{"capitalization"}.}
 }
 \value{
-A \code{data.frame} with columns \code{iso2c}, \code{country}, \code{year}, and one
-column per requested indicator.  Indicators subject to data lags
-(\code{capitalization}, \code{natural_resources}) also get a companion \verb{*_year}
-column showing the actual observation year when it differs from the
-requested year.  The data frame carries a \code{sources} attribute — a
-named character vector documenting the origin of each indicator column.
+A \code{data.frame} with columns \code{iso2c}, \code{year}, and one column per
+requested indicator.  \code{capitalization} also gets a companion
+\code{capitalization_year} column showing the actual observation year when
+back-filled.  The data frame carries a \code{sources} attribute — a named
+character vector documenting the origin of each indicator column.
 }
 \description{
 Retrieves GDP, stock market capitalisation, democracy index, corruption
@@ -51,6 +52,11 @@ GDP per capita, current US\$. Retrieved via \pkg{wbstats}.}
 — market capitalisation of listed domestic companies as \\% of GDP.
 Retrieved via \pkg{wbstats}; filled from nearest prior year (≤ 5 yr)
 when the requested year is unavailable.}
+\item{capitalization_pc}{Per-capita market capitalisation in USD, derived
+as \code{gdp_per_capita * capitalization / 100}.  Requires both
+\code{"gdp_per_capita"} and \code{"capitalization"} to be fetched.
+A companion \code{capitalization_pc_year} column records the actual
+observation year (same as \code{capitalization_year}).}
 \item{democracy}{V-Dem electoral democracy index \code{v2x_polyarchy}
 (0 = least democratic, 1 = most democratic).  Retrieved via the
 \pkg{vdemdata} package (install from GitHub:
@@ -58,10 +64,6 @@ when the requested year is unavailable.}
 \item{corruption}{World Bank WGI indicator \code{GOV_WGI_CC.EST} — Control
 of Corruption governance estimate (–2.5 to +2.5; higher = less corrupt).
 Retrieved via \pkg{wbstats}.}
-\item{natural_resources}{World Bank WDI indicator \code{NY.GDP.TOTL.RT.ZS}
-— total natural resources rents as \\% of GDP.  Retrieved via
-\pkg{wbstats}; filled from nearest prior year (≤ 5 yr) when the
-requested year is unavailable.}
 \item{population}{World Bank WDI indicator \code{SP.POP.TOTL} — total
 population.  Retrieved via \pkg{wbstats}.}
 }

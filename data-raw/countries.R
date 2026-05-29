@@ -1,12 +1,15 @@
 ## Script to prepare the countries dataset for the package.
 ## Latitudes sourced from: https://worldpopulationreview.com/country-rankings/latitude-by-country
-## Country names and ISO-2 codes sourced from the CDR dataset.
+## Country names and ISO-2 codes sourced from datasets/CDR.csv (raw source file).
 ## natural_resources / natural_resources_year sourced from the indicators dataset.
 
-load("data/CDR.rda")
 load("data/indicators.rda")
 
-country_list <- unique(CDR[, c("Country", "code")])
+raw <- read.csv("datasets/CDR.csv", stringsAsFactors = FALSE, na.strings = "")
+raw$code[raw$Country == "Namibia" & is.na(raw$code)] <- "NA"
+raw$code[raw$Country == "Macedonia"]  <- "MK"
+raw$code[raw$Country == "Mauritius"]  <- "MU"
+country_list <- unique(raw[, c("Country", "code")])
 names(country_list) <- c("country", "code")
 
 # Latitude lookup (decimal degrees; negative = South hemisphere)

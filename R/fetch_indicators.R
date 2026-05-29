@@ -9,14 +9,16 @@
 #' column.
 #'
 #' @param countries Character vector of ISO 2-letter country codes.
-#'   `NULL` (default) uses the 79 countries in the built-in [CDR] dataset.
+#'   `NULL` (default) uses the 79 countries in the built-in [countries] dataset.
 #' @param year Integer.  Reference year to retrieve.  `NULL` (default) returns
 #'   a panel covering the five most recently available years for each
 #'   indicator.
 #' @param indicators Character vector selecting which indicators to fetch.
 #'   Any subset of `c("gdp", "gdp_per_capita", "capitalization",
-#'   "democracy", "corruption", "population")`.
-#'   Defaults to all six.
+#'   "capitalization_pc", "democracy", "corruption", "population")`.
+#'   Defaults to all seven.  `"capitalization_pc"` (per-capita market cap in
+#'   USD) is derived as `gdp_per_capita * capitalization / 100` and implicitly
+#'   requires both `"gdp_per_capita"` and `"capitalization"`.
 #'
 #' @return A `data.frame` with columns `iso2c`, `year`, and one column per
 #'   requested indicator.  `capitalization` also gets a companion
@@ -34,6 +36,11 @@
 #'     — market capitalisation of listed domestic companies as \% of GDP.
 #'     Retrieved via \pkg{wbstats}; filled from nearest prior year (≤ 5 yr)
 #'     when the requested year is unavailable.}
+#'   \item{capitalization_pc}{Per-capita market capitalisation in USD, derived
+#'     as \code{gdp_per_capita * capitalization / 100}.  Requires both
+#'     \code{"gdp_per_capita"} and \code{"capitalization"} to be fetched.
+#'     A companion \code{capitalization_pc_year} column records the actual
+#'     observation year (same as \code{capitalization_year}).}
 #'   \item{democracy}{V-Dem electoral democracy index \code{v2x_polyarchy}
 #'     (0 = least democratic, 1 = most democratic).  Retrieved via the
 #'     \pkg{vdemdata} package (install from GitHub:
@@ -73,18 +80,23 @@ get_country_indicators <- function(
     countries  = NULL,
     year       = NULL,
     indicators = c("gdp", "gdp_per_capita", "capitalization",
-                   "democracy", "corruption", "population")
+                   "capitalization_pc", "democracy", "corruption", "population")
 ) {
   indicators <- match.arg(
     indicators,
     choices  = c("gdp", "gdp_per_capita", "capitalization",
-                 "democracy", "corruption", "population"),
+                 "capitalization_pc", "democracy", "corruption", "population"),
     several.ok = TRUE
   )
 
+  # capitalization_pc is derived; ensure its upstream columns are fetched
+  if ("capitalization_pc" %in% indicators) {
+    indicators <- union(indicators, c("gdp_per_capita", "capitalization"))
+  }
+
   if (is.null(countries)) {
-    countries <- CDR$code
-    # Namibia's ISO2 code "NA" is stored as R's NA in the CDR dataset
+    countries <- CDREGM::countries$code
+    # Namibia's ISO2 code "NA" is stored as R's NA in the countries dataset
     countries[is.na(countries)] <- "NA"
   }
   countries <- unique(as.character(countries))
@@ -177,6 +189,14 @@ get_country_indicators <- function(
     }
   }
 
+  # --- Derive capitalization_pc ---------------------------------------------
+  if ("capitalization_pc" %in% indicators &&
+      "gdp_per_capita" %in% names(result) &&
+      "capitalization" %in% names(result)) {
+    result$capitalization_pc      <- result$gdp_per_capita * result$capitalization / 100
+    result$capitalization_pc_year <- result$capitalization_year
+  }
+
   # --- Single-year slice ----------------------------------------------------
   if (single) {
     result <- result[result$year == year, , drop = FALSE]
@@ -191,8 +211,10 @@ get_country_indicators <- function(
   rownames(result) <- NULL
 
   # Reorder columns: id cols first, then requested indicators
+  # Remove capitalization_pc from the loop if it was implicitly added upstream
+  display_indicators <- indicators
   id_cols  <- c("iso2c", "year")
-  ind_cols <- unlist(lapply(indicators, function(i) {
+  ind_cols <- unlist(lapply(display_indicators, function(i) {
     extra <- paste0(i, "_year")
     c(i, if (extra %in% names(result)) extra)
   }))
@@ -334,6 +356,8 @@ get_country_indicators <- function(
       "World Bank WDI NY.GDP.PCAP.CD (GDP per capita, current USD) via wbstats",
     capitalization =
       "World Bank WDI CM.MKT.LCAP.GD.ZS (market cap % of GDP) via wbstats; GFDD.DM.01 used as fallback where WDI is missing; back-filled from nearest prior year if still missing",
+    capitalization_pc =
+      "Derived: gdp_per_capita * capitalization / 100 (per-capita market capitalisation in USD)",
     democracy =
       "V-Dem v2x_polyarchy (electoral democracy index, 0-1) via vdemdata package",
     corruption =

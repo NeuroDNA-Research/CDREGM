@@ -1,22 +1,3 @@
-#' CDR Cross-Country Dataset
-#'
-#' Cross-sectional data for 80 countries covering GDP per capita, stock market
-#' capitalisation per capita, democracy, and rule-of-law scores used in the
-#' Capitalism, Democracy, and Rule of Law (CDR) economic growth research.
-#'
-#' @format A data frame with 80 rows and 6 variables:
-#' \describe{
-#'   \item{Country}{Country name (character)}
-#'   \item{GDP}{GDP per capita in current USD (numeric)}
-#'   \item{Capitalization_PC}{Stock market capitalisation per capita in USD (numeric)}
-#'   \item{Democracy}{Democracy index, 0 (authoritarian) to 1 (fully democratic) (numeric)}
-#'   \item{Ruleoflaw}{Rule of law index, 0 (weakest) to 1 (strongest) (numeric)}
-#'   \item{code}{ISO 2-letter country code (character)}
-#' }
-#' @source Garcia, C. & Llaugel, F. CDR Economic Growth Model research dataset.
-#'   See the research papers bundled with this package for methodology.
-"CDR"
-
 #' Country Indicator Panel Dataset
 #'
 #' Annual panel of economic and governance indicators for the 79 CDR countries,
@@ -24,7 +5,7 @@
 #' V-Dem project; see `attr(indicators, "sources")` for full provenance.
 #' Refresh with `source("data-raw/fetch_indicators.R")`.
 #'
-#' @format A data frame with 395 rows and 10 variables:
+#' @format A data frame with 395 rows and 12 variables:
 #' \describe{
 #'   \item{iso2c}{ISO 2-letter country code (character)}
 #'   \item{year}{Reference year (integer)}
@@ -33,6 +14,10 @@
 #'   \item{capitalization}{Market capitalisation of listed companies as \% of GDP —
 #'     WB WDI `CM.MKT.LCAP.GD.ZS`; back-filled from nearest prior year when missing (numeric)}
 #'   \item{capitalization_year}{Actual observation year for `capitalization` when back-filled (integer)}
+#'   \item{capitalization_pc}{Per-capita market capitalisation in USD — derived as
+#'     `gdp_per_capita * capitalization / 100` (numeric)}
+#'   \item{capitalization_pc_year}{Actual observation year for `capitalization_pc`,
+#'     same as `capitalization_year` (integer)}
 #'   \item{democracy}{V-Dem electoral democracy index, 0–1 — `v2x_polyarchy` (numeric)}
 #'   \item{corruption}{WB WGI Control of Corruption estimate, –2.5 to +2.5 —
 #'     `GOV_WGI_CC.EST`; higher = less corrupt (numeric)}
@@ -78,6 +63,7 @@
 #' countries (see `CDR$code`).
 #'
 #' @param code Character. ISO 2-letter country code (e.g. `"US"`, `"DE"`).
+#'   See `countries$code` for the full list of available codes.
 #' @return A character string with the full path to the PNG file, or `NA` if
 #'   no flag is available for the requested code.
 #' @examples

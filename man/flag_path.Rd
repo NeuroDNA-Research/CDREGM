@@ -7,7 +7,8 @@
 flag_path(code)
 }
 \arguments{
-\item{code}{Character. ISO 2-letter country code (e.g. \code{"US"}, \code{"DE"}).}
+\item{code}{Character. ISO 2-letter country code (e.g. \code{"US"}, \code{"DE"}).
+See \code{countries$code} for the full list of available codes.}
 }
 \value{
 A character string with the full path to the PNG file, or \code{NA} if
