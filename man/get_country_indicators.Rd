@@ -7,8 +7,7 @@
 get_country_indicators(
   countries = NULL,
   year = NULL,
-  indicators = c("gdp", "gdp_per_capita", "capitalization", "capitalization_pc",
-    "democracy", "corruption", "population")
+  indicators = c("gdp", "capitalization", "democracy", "corruption", "population")
 )
 }
 \arguments{
@@ -20,43 +19,27 @@ a panel covering the five most recently available years for each
 indicator.}
 
 \item{indicators}{Character vector selecting which indicators to fetch.
-Any subset of \code{c("gdp", "gdp_per_capita", "capitalization", "capitalization_pc", "democracy", "corruption", "population")}.
-Defaults to all seven.  \code{"capitalization_pc"} (per-capita market cap in
-USD) is derived as \code{gdp_per_capita * capitalization / 100} and implicitly
-requires both \code{"gdp_per_capita"} and \code{"capitalization"}.}
+Any subset of \code{c("gdp", "capitalization", "democracy", "corruption", "population")}.  Defaults to all five.}
 }
 \value{
 A \code{data.frame} with columns \code{iso2c}, \code{year}, and one column per
-requested indicator.  \code{capitalization} also gets a companion
-\code{capitalization_year} column showing the actual observation year when
-back-filled.  The data frame carries a \code{sources} attribute — a named
-character vector documenting the origin of each indicator column.
+requested indicator.  Missing observations are \code{NA}.  The data frame
+carries a \code{sources} attribute — a named character vector documenting the
+origin of each indicator column.
 }
 \description{
 Retrieves GDP, stock market capitalisation, democracy index, corruption
-index, natural resources rents, and population from live web sources
-(World Bank WDI/WGI and V-Dem).  When a specific \code{year} is requested,
-indicators whose most-recent observation pre-dates that year are
-back-filled from the nearest available prior year (within five years),
-and the actual observation year is recorded in a companion \verb{*_year}
-column.
+index, and population from live web sources (World Bank WDI/WGI and V-Dem).
+Missing values are left as \code{NA}; no back-filling is performed.
 }
 \section{Data sources}{
 
 \describe{
 \item{gdp}{World Bank WDI indicator \code{NY.GDP.MKTP.CD} — GDP,
 current US\$. Retrieved via \pkg{wbstats}.}
-\item{gdp_per_capita}{World Bank WDI indicator \code{NY.GDP.PCAP.CD} —
-GDP per capita, current US\$. Retrieved via \pkg{wbstats}.}
 \item{capitalization}{World Bank WDI indicator \code{CM.MKT.LCAP.GD.ZS}
 — market capitalisation of listed domestic companies as \\% of GDP.
-Retrieved via \pkg{wbstats}; filled from nearest prior year (≤ 5 yr)
-when the requested year is unavailable.}
-\item{capitalization_pc}{Per-capita market capitalisation in USD, derived
-as \code{gdp_per_capita * capitalization / 100}.  Requires both
-\code{"gdp_per_capita"} and \code{"capitalization"} to be fetched.
-A companion \code{capitalization_pc_year} column records the actual
-observation year (same as \code{capitalization_year}).}
+Retrieved via \pkg{wbstats}.  Missing values are left as \code{NA}.}
 \item{democracy}{V-Dem electoral democracy index \code{v2x_polyarchy}
 (0 = least democratic, 1 = most democratic).  Retrieved via the
 \pkg{vdemdata} package (install from GitHub:

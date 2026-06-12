@@ -5,19 +5,13 @@
 \alias{indicators}
 \title{Country Indicator Panel Dataset}
 \format{
-A data frame with 395 rows and 12 variables:
+A data frame with 395 rows and 7 variables:
 \describe{
 \item{iso2c}{ISO 2-letter country code (character)}
 \item{year}{Reference year (integer)}
 \item{gdp}{GDP, current USD — WB WDI \code{NY.GDP.MKTP.CD} (numeric)}
-\item{gdp_per_capita}{GDP per capita, current USD — WB WDI \code{NY.GDP.PCAP.CD} (numeric)}
 \item{capitalization}{Market capitalisation of listed companies as \\% of GDP —
-WB WDI \code{CM.MKT.LCAP.GD.ZS}; back-filled from nearest prior year when missing (numeric)}
-\item{capitalization_year}{Actual observation year for \code{capitalization} when back-filled (integer)}
-\item{capitalization_pc}{Per-capita market capitalisation in USD — derived as
-\code{gdp_per_capita * capitalization / 100} (numeric)}
-\item{capitalization_pc_year}{Actual observation year for \code{capitalization_pc},
-same as \code{capitalization_year} (integer)}
+WB WDI \code{CM.MKT.LCAP.GD.ZS}; \code{NA} when unavailable (numeric)}
 \item{democracy}{V-Dem electoral democracy index, 0–1 — \code{v2x_polyarchy} (numeric)}
 \item{corruption}{WB WGI Control of Corruption estimate, –2.5 to +2.5 —
 \code{GOV_WGI_CC.EST}; higher = less corrupt (numeric)}
@@ -38,6 +32,7 @@ indicators
 Annual panel of economic and governance indicators for the 79 CDR countries,
 covering 2021–2025.  Downloaded from the World Bank WDI/WGI APIs and the
 V-Dem project; see \code{attr(indicators, "sources")} for full provenance.
+Missing values are \code{NA}; no back-filling is applied.
 Refresh with \code{source("data-raw/fetch_indicators.R")}.
 }
 \keyword{datasets}
