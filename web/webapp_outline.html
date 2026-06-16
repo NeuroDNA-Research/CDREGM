@@ -1,0 +1,1869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CDR Economic Growth Model &mdash; Web App Outline</title>
+<style>
+  :root {
+    --c-color: #2563eb;
+    --d-color: #16a34a;
+    --r-color: #dc2626;
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --surface2: #263047;
+    --border: #334155;
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --accent: #f59e0b;
+    --accent2: #7c3aed;
+    --serif: 'Georgia', 'Times New Roman', serif;
+    --sans: 'Segoe UI', system-ui, sans-serif;
+    --mono: 'Courier New', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.7;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+    border-bottom: 2px solid var(--accent);
+    padding: 4rem 2rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(37,99,235,0.12) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 50%, rgba(220,38,38,0.10) 0%, transparent 60%);
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(245,158,11,0.15);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.3rem 1rem;
+    border-radius: 2rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+    position: relative;
+  }
+  .hero h1 span.c { color: var(--c-color); }
+  .hero h1 span.d { color: var(--d-color); }
+  .hero h1 span.r { color: var(--r-color); }
+  .hero-sub {
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  .hero-authors {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    position: relative;
+  }
+  .hero-authors strong { color: var(--text); }
+
+  .cdr-pills {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+    position: relative;
+  }
+  .pill {
+    padding: 0.5rem 1.5rem;
+    border-radius: 2rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+  }
+  .pill-c { background: rgba(37,99,235,0.2); border: 1.5px solid var(--c-color); color: #93c5fd; }
+  .pill-d { background: rgba(22,163,74,0.2); border: 1.5px solid var(--d-color); color: #86efac; }
+  .pill-r { background: rgba(220,38,38,0.2); border: 1.5px solid var(--r-color); color: #fca5a5; }
+
+  /* ── META BANNER ── */
+  .meta-banner {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+  .meta-item strong { color: var(--text); }
+
+  /* ── LAYOUT ── */
+  .layout {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 0;
+    min-height: 100vh;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 2rem 1rem;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  .sidebar h3 {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    padding-left: 0.5rem;
+  }
+  .nav-item {
+    display: block;
+    padding: 0.45rem 0.75rem;
+    border-radius: 6px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.83rem;
+    margin-bottom: 2px;
+    transition: all 0.15s;
+    border-left: 3px solid transparent;
+  }
+  .nav-item:hover { background: var(--surface2); color: var(--text); border-left-color: var(--accent); }
+  .nav-item .num {
+    display: inline-block;
+    width: 1.4rem;
+    font-size: 0.72rem;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .nav-group { margin-bottom: 1.5rem; }
+  .sidebar-pdf {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .pdf-tag {
+    display: block;
+    padding: 0.35rem 0.5rem;
+    font-size: 0.73rem;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+    border-radius: 4px;
+    border-left: 3px solid;
+    background: rgba(255,255,255,0.03);
+  }
+  .pdf-tag.p1 { border-color: #f59e0b; }
+  .pdf-tag.p2 { border-color: #7c3aed; }
+  .pdf-tag.p3 { border-color: #0ea5e9; }
+  .pdf-tag.p4 { border-color: #10b981; }
+  .pdf-tag.p5 { border-color: #6366f1; }
+
+  /* ── MAIN ── */
+  main { padding: 2.5rem 3rem; }
+
+  /* ── INTRO ── */
+  .intro-card {
+    background: linear-gradient(135deg, rgba(37,99,235,0.08), rgba(124,58,237,0.08));
+    border: 1px solid rgba(124,58,237,0.3);
+    border-radius: 12px;
+    padding: 1.75rem 2rem;
+    margin-bottom: 3rem;
+  }
+  .intro-card h2 { font-family: var(--serif); font-size: 1.3rem; margin-bottom: 0.75rem; color: var(--accent); }
+  .intro-card p { color: var(--text-muted); font-size: 0.93rem; line-height: 1.8; }
+
+  /* ── SECTION ── */
+  .section {
+    margin-bottom: 4rem;
+    scroll-margin-top: 2rem;
+  }
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-num {
+    flex-shrink: 0;
+    width: 2.8rem;
+    height: 2.8rem;
+    background: var(--surface2);
+    border: 2px solid var(--accent);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  .section-title-wrap h2 {
+    font-family: var(--serif);
+    font-size: 1.6rem;
+    font-weight: 400;
+    line-height: 1.3;
+  }
+  .section-title-wrap .subtitle {
+    font-style: italic;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-top: 0.2rem;
+  }
+
+  /* ── LEARNING OBJECTIVES ── */
+  .learning-obj {
+    background: rgba(22,163,74,0.07);
+    border-left: 3px solid var(--d-color);
+    border-radius: 0 8px 8px 0;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.88rem;
+  }
+  .learning-obj h4 {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #86efac;
+    margin-bottom: 0.5rem;
+  }
+  .learning-obj ul { padding-left: 1.2rem; color: var(--text-muted); }
+  .learning-obj li { margin-bottom: 0.3rem; }
+
+  /* ── CONTENT BLOCKS ── */
+  .content-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .content-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+  }
+  .content-block h4 {
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.6rem;
+    text-transform: uppercase;
+  }
+  .content-block p, .content-block ul {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  .content-block ul { padding-left: 1.1rem; }
+  .content-block li { margin-bottom: 0.3rem; }
+
+  .block-describe h4 { color: #93c5fd; }
+  .block-teach h4 { color: #86efac; }
+  .block-interact h4 { color: #f59e0b; }
+  .block-visual h4 { color: #c084fc; }
+
+  /* ── SOURCE CITATION ── */
+  .sources {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  .src {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-family: var(--mono);
+    font-weight: 600;
+    border: 1px solid;
+  }
+  .src.p1 { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.4); color: #fcd34d; }
+  .src.p2 { background: rgba(124,58,237,0.1); border-color: rgba(124,58,237,0.4); color: #c4b5fd; }
+  .src.p3 { background: rgba(14,165,233,0.1); border-color: rgba(14,165,233,0.4); color: #7dd3fc; }
+  .src.p4 { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.4); color: #6ee7b7; }
+  .src.p5 { background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.4); color: #a5b4fc; }
+  .src::before { content: '›'; font-size: 0.75rem; }
+
+  .source-bar {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin-top: 1rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .source-bar .label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    padding-top: 0.15rem;
+  }
+
+  /* ── EQUATION BOX ── */
+  .equation-box {
+    background: var(--surface2);
+    border: 1px solid rgba(245,158,11,0.3);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    margin: 1.25rem 0;
+    font-family: var(--mono);
+    overflow-x: auto;
+  }
+  .equation-box .eq-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    font-family: var(--sans);
+  }
+  .equation-box .eq {
+    font-size: 1rem;
+    color: #fde68a;
+    line-height: 1.8;
+  }
+  .equation-box .eq-note {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+    font-family: var(--sans);
+  }
+
+  /* ── STAT ROW ── */
+  .stat-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 1.25rem 0;
+  }
+  .stat-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    text-align: center;
+    min-width: 110px;
+  }
+  .stat-chip .val { font-size: 1.5rem; font-weight: 700; font-family: var(--mono); }
+  .stat-chip .lbl { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.2rem; }
+  .stat-chip.c-stat .val { color: #93c5fd; }
+  .stat-chip.d-stat .val { color: #86efac; }
+  .stat-chip.r-stat .val { color: #fca5a5; }
+  .stat-chip.n-stat .val { color: var(--text-muted); }
+  .stat-chip.acc-stat .val { color: var(--accent); }
+
+  /* ── TIMELINE ── */
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+    margin: 1.5rem 0;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0.4rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent), var(--accent2));
+  }
+  .tl-item {
+    position: relative;
+    margin-bottom: 1.25rem;
+    padding-left: 0.5rem;
+  }
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -1.7rem;
+    top: 0.45rem;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+  }
+  .tl-item .tl-year {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .tl-item .tl-theory { font-weight: 600; font-size: 0.9rem; }
+  .tl-item .tl-desc { font-size: 0.83rem; color: var(--text-muted); }
+
+  /* ── DEFINITION GRID ── */
+  .def-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+    margin: 1.25rem 0;
+  }
+  .def-card {
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 1.1rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .def-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+  }
+  .def-card.cap::before { background: var(--c-color); }
+  .def-card.dem::before { background: var(--d-color); }
+  .def-card.rol::before { background: var(--r-color); }
+  .def-card.gdp::before { background: var(--accent); }
+  .def-card.entr::before { background: var(--accent2); }
+  .def-card .term {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  .def-card.cap .term { color: #93c5fd; }
+  .def-card.dem .term { color: #86efac; }
+  .def-card.rol .term { color: #fca5a5; }
+  .def-card.gdp .term { color: #fde68a; }
+  .def-card.entr .term { color: #c4b5fd; }
+  .def-card .symbol {
+    font-family: var(--mono);
+    font-size: 2rem;
+    font-weight: 700;
+    opacity: 0.15;
+    position: absolute;
+    top: 0.5rem; right: 0.75rem;
+  }
+  .def-card .definition { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+
+  /* ── COUNTRY TABLE EXAMPLE ── */
+  .table-preview {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 1.25rem 0;
+  }
+  .table-preview table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+  .table-preview th {
+    background: var(--surface2);
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .table-preview td {
+    padding: 0.45rem 0.75rem;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: var(--text-muted);
+  }
+  .table-preview tr:hover td { background: var(--surface2); color: var(--text); }
+  .table-preview .high { color: #86efac; font-weight: 600; }
+  .table-preview .low { color: #fca5a5; }
+  .table-preview .mid { color: #fde68a; }
+
+  /* ── CASE STUDY ── */
+  .case-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 1.25rem 0;
+  }
+  .case-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem;
+    font-size: 0.85rem;
+  }
+  .case-card .country { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.3rem; }
+  .case-card .verdict {
+    display: inline-block;
+    font-size: 0.68rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .verdict-high { background: rgba(22,163,74,0.2); color: #86efac; }
+  .verdict-low { background: rgba(220,38,38,0.2); color: #fca5a5; }
+  .verdict-mid { background: rgba(245,158,11,0.2); color: #fde68a; }
+  .case-card .note { color: var(--text-muted); font-size: 0.82rem; line-height: 1.6; }
+
+  /* ── INTERACTIVE CALLOUT ── */
+  .interactive {
+    background: linear-gradient(135deg, rgba(245,158,11,0.07), rgba(124,58,237,0.07));
+    border: 1px dashed rgba(245,158,11,0.4);
+    border-radius: 10px;
+    padding: 1.25rem;
+    margin: 1.25rem 0;
+  }
+  .interactive h4 {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.6rem;
+  }
+  .interactive ul {
+    padding-left: 1.1rem;
+    font-size: 0.87rem;
+    color: var(--text-muted);
+  }
+  .interactive li { margin-bottom: 0.4rem; }
+
+  /* ── FIGURE PLACEHOLDER ── */
+  .figure-placeholder {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 2rem;
+    text-align: center;
+    margin: 1rem 0;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+  .figure-placeholder .fig-icon { font-size: 2.5rem; margin-bottom: 0.5rem; display: block; opacity: 0.5; }
+  .figure-placeholder .fig-title { font-weight: 600; color: var(--text); margin-bottom: 0.25rem; }
+  .figure-placeholder .fig-caption { font-size: 0.78rem; font-style: italic; }
+
+  .figure-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 1.25rem 0;
+  }
+
+  /* ── FINDING BOX ── */
+  .finding {
+    background: rgba(245,158,11,0.06);
+    border-left: 4px solid var(--accent);
+    padding: 1rem 1.25rem;
+    border-radius: 0 8px 8px 0;
+    margin: 1.25rem 0;
+    font-size: 0.9rem;
+    font-family: var(--serif);
+    font-style: italic;
+    color: #e2e8f0;
+    line-height: 1.7;
+  }
+  .finding .find-label {
+    font-family: var(--sans);
+    font-style: normal;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.4rem;
+  }
+
+  /* ── MODULE (PEDAGOGICAL) ── */
+  .module {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 1.25rem 0;
+  }
+  .module-header {
+    background: var(--surface2);
+    padding: 0.75rem 1.25rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .module-body { padding: 1.25rem; }
+  .module-body ul {
+    padding-left: 1.1rem;
+    font-size: 0.87rem;
+    color: var(--text-muted);
+  }
+  .module-body li { margin-bottom: 0.5rem; }
+  .module-body li strong { color: var(--text); }
+
+  /* ── SEPARATOR ── */
+  .sep {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border), transparent);
+    margin: 3rem 0;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 2rem 3rem;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+  footer h3 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+  .pdf-ref {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+    border-left: 4px solid;
+    color: var(--text-muted);
+  }
+  .pdf-ref.p1 { border-left-color: #f59e0b; }
+  .pdf-ref.p2 { border-left-color: #7c3aed; }
+  .pdf-ref.p3 { border-left-color: #0ea5e9; }
+  .pdf-ref.p4 { border-left-color: #10b981; }
+  .pdf-ref strong { color: var(--text); }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { position: static; height: auto; }
+    main { padding: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════ HERO ═══════════════════════════════════════ -->
+<div class="hero">
+  <div class="hero-badge">Web Application Outline &middot; Academic + Pedagogical</div>
+  <h1>The <span class="c">Capitalism</span>, <span class="d">Democracy</span>,<br>
+      <span class="r">Rule of Law</span> Economic Growth Model</h1>
+  <p class="hero-sub">A scientific framework for understanding how nations create wealth</p>
+  <p class="hero-authors">
+    Based on research by <strong>Dennis Ridley</strong> (Florida A&amp;M / Florida State University)
+    &amp; <strong>Felipe Llaugel</strong> (Universidad Dominicana O&amp;M)
+    &amp; <strong>Abdullah Khan</strong> (Claflin University)
+  </p>
+  <div class="cdr-pills">
+    <span class="pill pill-c">C &mdash; Capitalism</span>
+    <span class="pill pill-d">D &mdash; Democracy</span>
+    <span class="pill pill-r">R &mdash; Rule of Law</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ META ═══════════════════════════════════════ -->
+<div class="meta-banner">
+  <span><strong>Target audience:</strong> Graduate &amp; advanced undergraduate students, policy researchers, development economists</span>
+  <span><strong>Format:</strong> Single-page scrollable web application with interactive visualizations</span>
+  <span><strong>JEL codes:</strong> E02, P16</span>
+  <span><strong>Data:</strong> 79 countries &middot; 1995&ndash;2016 &middot; IMF / World Bank / Transparency International</span>
+</div>
+
+<!-- ═══════════════════════════════════════ LAYOUT ═══════════════════════════════════════ -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="nav-group">
+      <h3>Outline</h3>
+      <a class="nav-item" href="#s0"><span class="num">§0</span>App Overview</a>
+      <a class="nav-item" href="#s1"><span class="num">§1</span>The Mystery of Wealth</a>
+      <a class="nav-item" href="#s2"><span class="num">§2</span>History of Growth Theory</a>
+      <a class="nav-item" href="#s3"><span class="num">§3</span>CDR Framework</a>
+      <a class="nav-item" href="#s4"><span class="num">§4</span>CDR Index &amp; Data</a>
+      <a class="nav-item" href="#s5"><span class="num">§5</span>Graphical Evidence</a>
+      <a class="nav-item" href="#s6"><span class="num">§6</span>Statistical Model</a>
+      <a class="nav-item" href="#s7"><span class="num">§7</span>Entrepreneurship</a>
+      <a class="nav-item" href="#s8"><span class="num">§8</span>Global Time Invariance</a>
+      <a class="nav-item" href="#s9"><span class="num">§9</span>Growth Dynamics</a>
+      <a class="nav-item" href="#s10"><span class="num">§10</span>Policy &amp; Case Studies</a>
+      <a class="nav-item" href="#s11"><span class="num">§11</span>Micro&ndash;Macro Integration</a>
+      <a class="nav-item" href="#s12"><span class="num">§12</span>Pedagogical Module</a>
+      <a class="nav-item" href="#s13"><span class="num">§13</span>Human Collaboration Foundation</a>
+      <a class="nav-item" href="#s14"><span class="num">§14</span>AI as Collaboration Catalyst</a>
+    </div>
+
+    <div class="sidebar-pdf">
+      <h3>Source PDFs</h3>
+      <span class="pdf-tag p1">P1 &middot; 4D CDR Growth Model<br>(Ridley &amp; Llaugel)</span>
+      <span class="pdf-tag p2">P2 &middot; Advances in CDR Theory<br>(Ridley &amp; Llaugel, 2018)</span>
+      <span class="pdf-tag p3">P3 &middot; A New CDR Index<br>(Ridley &amp; Khan)</span>
+      <span class="pdf-tag p4">P4 &middot; Supply Side Unveiled<br>(Ridley / Llaugel)</span>
+      <span class="pdf-tag p5">P5 · AI in Human Collaboration<br>Skills (Ridley, Llaugel &amp; Garcia)</span>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main>
+
+    <!-- &ndash;&ndash; APP OVERVIEW &ndash;&ndash; -->
+    <div class="intro-card" id="s0">
+      <h2>App Overview &amp; Design Philosophy</h2>
+      <p>This web application presents the CDR (Capitalism, Democracy, Rule of Law) economic growth model as an integrated academic and pedagogical experience. The content is drawn from five peer-reviewed papers by Ridley, Llaugel, Khan, and Garcia. A fifth dimension — the human collaboration capacity that makes Rule of Law functional — is explored through research on AI-assisted collaboration skill development. The app is structured to move the learner progressively from historical context through theoretical foundations, empirical validation, and finally to policy implications &mdash; mirroring the scientific development of the CDR model itself.</p>
+      <p style="margin-top:0.75rem;">Each section pairs <strong>academic rigor</strong> (formal definitions, regression equations, statistical evidence) with <strong>pedagogical scaffolding</strong> (learning objectives, visualizations, interactive exercises, real country examples). The overall narrative arc is: <em>Why does wealth differ across nations? The answer lies in institutions, not resources.</em></p>
+      <div class="sources" style="margin-top:1rem;">
+        <span class="src p1">P1 &middot; Abstract, §1&ndash;5</span>
+        <span class="src p2">P2 &middot; §1&ndash;5, Appendices A&ndash;F</span>
+        <span class="src p3">P3 &middot; §1&ndash;6, Appendix A</span>
+        <span class="src p4">P4 &middot; §1&ndash;9, Appendix A</span>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- SECTION 1 -->
+    <!-- ══════════════════════════════════════════════════════ -->
+    <div class="section" id="s1">
+      <div class="section-header">
+        <div class="section-num">01</div>
+        <div class="section-title-wrap">
+          <h2>The Mystery of Wealth</h2>
+          <div class="subtitle">Why some nations prosper and others do not &mdash; a motivating introduction</div>
+        </div>
+      </div>
+
+      <div class="learning-obj">
+        <h4>Learning Objectives</h4>
+        <ul>
+          <li>Recognize the historical pattern of near-zero per-capita GDP growth prior to the industrial revolution</li>
+          <li>Understand why the sustained ~1.8% annual growth rate observed in developed nations was previously unexplained</li>
+          <li>Identify why natural resources alone fail to account for cross-country wealth differences</li>
+        </ul>
+      </div>
+
+      <div class="content-grid">
+        <div class="content-block block-describe">
+          <h4>Content: The Growth Enigma</h4>
+          <p>From the year 0 to ~1850, global per-capita GDP was virtually flat. After 1850, England, USA, Germany, and Japan began sustained growth. The mystery: what changed? The same 1.8% average growth rate observed in USA, England, and Germany since 1870 &mdash; despite vastly different geographies, cultures, and resources &mdash; demands a structural explanation.</p>
+        </div>
+        <div class="content-block block-describe">
+          <h4>Content: The Natural Resources Paradox</h4>
+          <p>Singapore, Hong Kong, Bermuda, Taiwan, and Japan have negligible natural resources yet rank among the wealthiest nations. Nigeria, Russia, and Saudi Arabia possess vast resources but lower per-capita GDP. This paradox motivates CDR theory: intangible institutions explain what tangible resources cannot.</p>
+        </div>
+        <div class="content-block block-interact">
+          <h4>Interactive Feature</h4>
+          <ul>
+            <li>Animated time-series plot of global per-capita GDP (0&ndash;2010 AD) &mdash; from Maddison 2010 data</li>
+            <li>Clickable "Did you know?" cards: Singapore, Norway, Nigeria, Russia comparisons</li>
+            <li>Opening question widget: "What do you think drives economic growth?" (poll)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="finding">
+        <div class="find-label">Key Insight</div>
+        "For the first 1,000 years AD, per-capita GDP grew at ~0.2% annually. After 1870, it grew at ~1.6%. The developed country convergence to 1.8% is not accidental &mdash; it is the expected endogenous growth rate derivable from the CDR model."
+      </div>
+
+      <div class="source-bar">
+        <span class="label">Sources</span>
+        <div class="sources">
+          <span class="src p2">P2 &middot; §2 Historical Background, Fig. 1 (Maddison 2010 data), pp. 2&ndash;3</span>
+          <span class="src p4">P4 &middot; §1 Introduction, Fig. 1 (US GDP 1870&ndash;2011), pp. 1&ndash;3</span>
+          <span class="src p3">P3 &middot; §1 Introduction, §4 Graphical Analysis §GDP vs Natural Resources, pp. 1, 9</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- SECTION 2 -->
+    <!-- ══════════════════════════════════════════════════════ -->
+    <div class="section" id="s2">
+      <div class="section-header">
+        <div class="section-num">02</div>
+        <div class="section-title-wrap">
+          <h2>A History of Economic Growth Theory</h2>
+          <div class="subtitle">From Malthus to CDR &mdash; a chronological survey of what each model got right and where it fell short</div>
+        </div>
+      </div>
+
+      <div class="learning-obj">
+        <h4>Learning Objectives</h4>
+        <ul>
+          <li>Situate the CDR model within the history of economic thought</li>
+          <li>Critically evaluate why classical and neoclassical models fail to fully explain cross-country growth</li>
+          <li>Understand how Schumpeter anticipated entrepreneurship's central role two centuries before CDR formalized it</li>
+        </ul>
+      </div>
+
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-year">15th c. / 18th c.</div>
+          <div class="tl-theory">Mercantilism &amp; Physiocracy</div>
+          <div class="tl-desc">Wealth as trade surplus or land productivity. No mechanism for sustained growth creation.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">1776</div>
+          <div class="tl-theory">Adam Smith &mdash; Classical Theory</div>
+          <div class="tl-desc">Division of labor creates surplus capital. Recognized gain from specialization and cooperation. Not a complete growth model but foundational for CDR's source-of-wealth concept.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">1798</div>
+          <div class="tl-theory">Malthus &mdash; Population Theory</div>
+          <div class="tl-desc">Proposed population growth would exhaust resources. Reverse is empirically true: population growth is positively correlated with economic growth. CDR supersedes Malthus.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">1817&ndash;1821</div>
+          <div class="tl-theory">Ricardo &mdash; Comparative Advantage</div>
+          <div class="tl-desc">Gain from trade. Treated labor as homogeneous &mdash; ignoring skilled/unskilled distinction and human capital ideas. CDR preserves Ricardo's homogeneous brawn definition while adding brain.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">1911</div>
+          <div class="tl-theory">Schumpeter &mdash; Creative Destruction</div>
+          <div class="tl-desc">Capital accumulation not the main driver; entrepreneurial creativity is. Required private property, competitive markets, and efficient finance &mdash; all embedded in CDR's C, D, R variables.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">1930s&ndash;1950s</div>
+          <div class="tl-theory">Keynes / Harrod-Domar</div>
+          <div class="tl-desc">Incomplete markets; fiscal policy as driver. Government spending included in CDR regression shows zero coefficient &mdash; not a growth determinant under CDR law.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">1956&ndash;1957</div>
+          <div class="tl-theory">Solow &mdash; Neoclassical Growth</div>
+          <div class="tl-desc">Economies converge to balanced growth path. Capital stock only &mdash; cannot capture entrepreneurship. There is no such thing as an aggregate production function (Cohen &amp; Harcourt, 2003). CDR complements rather than replaces micro production function.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">1980s&ndash;1990s</div>
+          <div class="tl-theory">Romer / Endogenous Growth</div>
+          <div class="tl-desc">Endogenous technological progress. Misapplied Pontryagin's principle. CDR provides the missing institutional framework that enables technological progress.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-year">2016&ndash;present</div>
+          <div class="tl-theory">Ridley et al. &mdash; CDR Model</div>
+          <div class="tl-desc">First global time-invariant model. Parsimonious (3 variables). Scientific law governing capital-to-GDP conversion. R&sup2; = 83%. Explains the source of wealth, its conversion, and its limits.</div>
+        </div>
+      </div>
+
+      <div class="interactive">
+        <h4>Interactive Feature: Theory Comparison Tool</h4>
+        <ul>
+          <li>Side-by-side table: each theory vs. CDR on five dimensions &mdash; parsimony, R&sup2;, predictive power, policy prescriptiveness, global invariance</li>
+          <li>Expandable cards for each theorist with brief biography and core contribution</li>
+          <li>Quiz: "Match the theory to its key limitation"</li>
+        </ul>
+      </div>
+
+      <div class="source-bar">
+        <span class="label">Sources</span>
+        <div class="sources">
+          <span class="src p2">P2 &middot; §2 Historical Background, §3 Chronological Review, pp. 1&ndash;6 (Table: Growth Concepts, Fig.1)</span>
+          <span class="src p3">P3 &middot; §2 Literature Review: Economic Freedom, Political Freedom, Parsimony, pp. 2&ndash;3</span>
+          <span class="src p4">P4 &middot; §1 Introduction (history of CDR development), §2 Supply-side wealth, pp. 1&ndash;4</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- SECTION 3 -->
+    <!-- ══════════════════════════════════════════════════════ -->
+    <div class="section" id="s3">
+      <div class="section-header">
+        <div class="section-num">03</div>
+        <div class="section-title-wrap">
+          <h2>The CDR Framework &mdash; Core Concepts</h2>
+          <div class="subtitle">Formal definitions, the CDR scientific law, and the principle of parsimony</div>
+        </div>
+      </div>
+
+      <div class="learning-obj">
+        <h4>Learning Objectives</h4>
+        <ul>
+          <li>State precise CDR definitions of Capitalism, Democracy, and Rule of Law distinguishing them from colloquial usage</li>
+          <li>Explain why D and R are heterogeneous exogenous catalysts rather than factor inputs</li>
+          <li>Apply Occam's Razor (Achem's Razor) to justify a 3-variable model for ~83% of GDP variance</li>
+        </ul>
+      </div>
+
+      <div class="def-grid">
+        <div class="def-card cap">
+          <div class="symbol">C</div>
+          <div class="term">Capitalism (C)</div>
+          <div class="definition">The mechanism for the collection and assembly of capital, measured by total market capitalization. Reflects entrepreneurship capital (exogenous new ideas) plus capital stock (endogenous prior ideas). C is partially endogenous; 2SLS corrects this bias via latitude as instrumental variable.</div>
+        </div>
+        <div class="def-card dem">
+          <div class="symbol">D</div>
+          <div class="term">Democracy (D)</div>
+          <div class="definition">Private workforce idea participation and periodic election of public representatives. An exogenous catalyst for the C&rarr;G conversion process. D creates new pathways for optimal capital deployment. Measured by democracy ranking (highest = 1, lowest = number of countries).</div>
+        </div>
+        <div class="def-card rol">
+          <div class="symbol">R</div>
+          <div class="term">Rule of Law (R)</div>
+          <div class="definition">The reverse of corruption; protection of shareholder and property rights. An exogenous catalyst that attracts capital by providing governance stability. Measured by inverse corruption ranking. Encompasses property rights &mdash; prerequisite for capital collateral and foreign direct investment.</div>
+        </div>
+        <div class="def-card gdp">
+          <div class="symbol">G</div>
+          <div class="term">GDPppp (G)</div>
+          <div class="definition">Real per-capita gross domestic product adjusted for purchasing power parity. The improvement in per-capita real GDP. Standardized: g = (G &minus; lowest G)/(highest G &minus; lowest G), ensuring 0 &le; g &le; 1 across all countries.</div>
+        </div>
+        <div class="def-card entr">
+          <div class="symbol">ê</div>
+          <div class="term">Entrepreneurship Capital</div>
+          <div class="definition">The exogenous component of C: pure human ideas of imagination and creativity. Separated from capital stock via 2SLS using latitude as IV. Contributes ~85% to GDP generation (vs. 15% from accumulated capital stock). The true source of new wealth creation.</div>
+        </div>
+      </div>
+
+      <div class="finding">
+        <div class="find-label">The CDR Scientific Law</div>
+        "High CDR countries are where ideas go to fly. Low CDR countries are where ideas go to die. The CDR model is the first and only scientific economic growth model &mdash; governed by the physical and chemical laws of nature, global time invariant."
+      </div>
+
+      <div class="content-grid">
+        <div class="content-block block-describe">
+          <h4>Catalysis Analogy</h4>
+          <p>D and R behave as heterogeneous exogenous catalysts &mdash; analogous to Berzelius (1835) chemical catalysts. They speed up the C&rarr;G conversion without being consumed in the process. At the end of a growth cycle, D and R remain intact, unchanged, ready for the next cycle. They produce no information themselves but provide a low-noise channel through which entrepreneurial information flows.</p>
+        </div>
+        <div class="content-block block-describe">
+          <h4>Parsimony (Occam's Razor)</h4>
+          <p>The CDR model uses only 3 policy variables to explain 83% of cross-country variation in GDPppp. While democracy and rule of law are complex constructs containing many sub-components, those components are statistically subsumed in C, D, and R. The principle: "Everything should be made as simple as possible, but not simpler."</p>
+        </div>
+        <div class="content-block block-teach">
+          <h4>Nomenclature Glossary</h4>
+          <p>Full app section includes interactive glossary with 20+ terms: Capitalism, Capital stock, Catalysis, CDR index, Collaboration, Company, Cooperation, Democracy, Economic development, Economic growth, Endogenous, Entrepreneurship, Exogenous, GDP, Human capital, Human labor, Natural resources rents, Property rights, Rule of Law, Virtue, Shareholder.</p>
+        </div>
+      </div>
+
+      <div class="source-bar">
+        <span class="label">Sources</span>
+        <div class="sources">
+          <span class="src p1">P1 &middot; §1 Introduction (definitions, catalysis), Nomenclature pp. 12&ndash;13</span>
+          <span class="src p2">P2 &middot; §4 CDR model definitions (bold italics), pp. 6&ndash;7</span>
+          <span class="src p3">P3 &middot; §3 CDR Index &mdash; Definitions, §Statistical Analysis Causation, pp. 3&ndash;5, 11&ndash;12</span>
+          <span class="src p4">P4 &middot; §3 Structures of CDR (Endogenous/Exogenous variables), Appendix A.2 Nomenclature, pp. 6, 15</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- SECTION 4 -->
+    <!-- ══════════════════════════════════════════════════════ -->
+    <div class="section" id="s4">
+      <div class="section-header">
+        <div class="section-num">04</div>
+        <div class="section-title-wrap">
+          <h2>The CDR Index &mdash; Measurement and Data</h2>
+          <div class="subtitle">How abstract institutional qualities are standardized into a globally comparable composite index</div>
+        </div>
+      </div>
+
+      <div class="learning-obj">
+        <h4>Learning Objectives</h4>
+        <ul>
+          <li>Apply the standardization formulas to convert raw country data into the [0,1] CDR variables</li>
+          <li>Identify the data sources for each variable and understand their limitations (e.g., C excludes privately traded capital)</li>
+          <li>Interpret the CDR index = CDRs (sum) + CDRp (product) decomposition</li>
+        </ul>
+      </div>
+
+      <div class="content-grid">
+        <div class="content-block block-describe">
+          <h4>Variable Standardization Formulas</h4>
+          <ul>
+            <li><strong>g</strong> = (G &minus; G<sub>min</sub>) / (G<sub>max</sub> &minus; G<sub>min</sub>)</li>
+            <li><strong>C</strong> = (Cap<sub>pc</sub> &minus; Cap<sub>min</sub>) / (Cap<sub>max</sub> &minus; Cap<sub>min</sub>)</li>
+            <li><strong>D</strong> = (D<sub>rank,low</sub> &minus; D<sub>rank</sub>) / (D<sub>rank,low</sub> &minus; D<sub>rank,high</sub>)</li>
+            <li><strong>R</strong> = (Corr<sub>rank,low</sub> &minus; Corr<sub>rank</sub>) / (Corr<sub>rank,low</sub> &minus; Corr<sub>rank,high</sub>)</li>
+            <li><strong>N</strong> = (NR<sub>pc</sub> &minus; NR<sub>min</sub>) / (NR<sub>max</sub> &minus; NR<sub>min</sub>)</li>
+          </ul>
+        </div>
+        <div class="content-block block-describe">
+          <h4>Data Sources</h4>
+          <ul>
+            <li><strong>GDPppp:</strong> IMF (constant international $2014)</li>
+            <li><strong>Capitalism:</strong> Index Mundi / total market capitalization (US$)</li>
+            <li><strong>Democracy:</strong> Democracy Ranking (rank-ordered, 1 = most democratic)</li>
+            <li><strong>Rule of Law:</strong> Transparency International Corruption Perceptions Index (inverted)</li>
+            <li><strong>Natural Resources:</strong> World Bank &mdash; total resource rents per capita</li>
+            <li><strong>Latitude:</strong> La Porta et al. (1999) &mdash; instrumental variable for 2SLS</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="equation-box">
+        <div class="eq-label">CDR Index Decomposition</div>
+        <div class="eq">CDR index = CDRs + CDRp</div>
+        <div class="eq" style="margin-top:0.5rem;">CDRs (sum index) = 1.53&middot;C + 0.14&middot;D + 0.23&middot;R</div>
+        <div class="eq">CDRp (product index) = &minus;1.21&middot;C&middot;D&middot;R</div>
+        <div class="eq-note">The negative CDRp term represents democratic friction &mdash; decision-making disagreement that reduces G from its theoretical maximum. All variables standardized to [0,1]. Data: 79 countries, year 2014 baseline; re-estimated 1995&ndash;2016 with identical results (global time invariance).</div>
+      </div>
+
+      <div class="table-preview">
+        <table>
+          <thead>
+            <tr>
+              <th>Country</th>
+              <th>GDPppp ($)</th>
+              <th>C</th>
+              <th>D</th>
+              <th>R</th>
+              <th>CDR index</th>
+              <th>N</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Singapore</td><td class="high">83,066</td><td>0.576</td><td>0.517</td><td>0.960</td><td class="high">0.829</td><td>0.000</td></tr>
+            <tr><td>Hong Kong</td><td class="high">55,097</td><td>0.866</td><td>0.919</td><td>0.927</td><td class="high">0.774</td><td>0.000</td></tr>
+            <tr><td>United States</td><td class="high">51,281</td><td>0.445</td><td>0.913</td><td>0.907</td><td class="high">0.572</td><td>0.017</td></tr>
+            <tr><td>Norway</td><td class="high">67,166</td><td>0.373</td><td>0.980</td><td>0.973</td><td class="high">0.501</td><td>0.172</td></tr>
+            <tr><td>Japan</td><td class="mid">37,519</td><td>0.223</td><td>0.899</td><td>0.920</td><td class="mid">0.456</td><td>0.000</td></tr>
+            <tr><td>China</td><td class="low">13,224</td><td>0.021</td><td>0.195</td><td>0.460</td><td class="low">0.162</td><td>0.018</td></tr>
+            <tr><td>Nigeria</td><td class="low">6,054</td><td>0.000</td><td>0.396</td><td>0.247</td><td class="low">0.112</td><td>0.023</td></tr>
+            <tr><td>Russia</td><td class="low">24,449</td><td>0.046</td><td>0.128</td><td>0.253</td><td class="low">0.145</td><td>0.110</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="interactive">
+        <h4>Interactive Feature: Country CDR Calculator</h4>
+        <ul>
+          <li>Dropdown to select any of 79 countries &mdash; displays full CDR profile with color-coded C, D, R bars</li>
+          <li>Slider inputs: hypothetically adjust C, D, R &rarr; see predicted GDPppp change via inverse transformation</li>
+          <li>Sortable full data table (79 countries) with flag icons and search filter</li>
+        </ul>
+      </div>
+
+      <div class="source-bar">
+        <span class="label">Sources</span>
+        <div class="sources">
+          <span class="src p1">P1 &middot; §3 Data (Tables 1 &amp; 2: 79-country data), §4 Analysis (variable definitions), pp. 3&ndash;6</span>
+          <span class="src p3">P3 &middot; §3 CDR Index Definitions, Table 1 (21-country standardized data), Appendix A (raw data), pp. 4&ndash;6, 17</span>
+          <span class="src p4">P4 &middot; §4 Global Time Invariant CDR model (standardization), Table 1 (year panel), pp. 6&ndash;8</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- SECTION 5 -->
+    <!-- ══════════════════════════════════════════════════════ -->
+    <div class="section" id="s5">
+      <div class="section-header">
+        <div class="section-num">05</div>
+        <div class="section-title-wrap">
+          <h2>Graphical Evidence &mdash; Seeing the CDR Effect</h2>
+          <div class="subtitle">Progressive visual demonstration that C, D, R individually predict GDP &mdash; and together predict it nearly perfectly</div>
+        </div>
+      </div>
+
+      <div class="learning-obj">
+        <h4>Learning Objectives</h4>
+        <ul>
+          <li>Visually distinguish the predictive strength of C, D, R individually versus combined CDR index</li>
+          <li>Compare CDR explanatory power against natural resources (CDR: 77%; N: 6%)</li>
+          <li>Interpret the 4D bubble chart where axes=C,D,R and bubble size=GDPppp</li>
+        </ul>
+      </div>
+
+      <div class="figure-row">
+        <div class="figure-placeholder">
+          <span class="fig-icon">📊</span>
+          <div class="fig-title">Fig. 1 &middot; GDP vs Capitalism</div>
+          <div class="fig-caption">Bubble chart: x=C, y=GDPppp, size=&prop;population. 21 flagged countries. Positive relationship &mdash; C explains 59% of variation.</div>
+        </div>
+        <div class="figure-placeholder">
+          <span class="fig-icon">📊</span>
+          <div class="fig-title">Fig. 2 &middot; GDP vs Democracy</div>
+          <div class="fig-caption">Bubble chart: x=D, y=GDPppp. Positive relationship &mdash; D explains 5% incremental variation.</div>
+        </div>
+        <div class="figure-placeholder">
+          <span class="fig-icon">📊</span>
+          <div class="fig-title">Fig. 3 &middot; GDP vs Rule of Law</div>
+          <div class="fig-caption">Bubble chart: x=R, y=GDPppp. Positive relationship &mdash; R explains 10% incremental variation.</div>
+        </div>
+      </div>
+      <div class="figure-row">
+        <div class="figure-placeholder">
+          <span class="fig-icon">📊</span>
+          <div class="fig-title">Fig. 4 &middot; GDP vs CDR Index</div>
+          <div class="fig-caption">Combined index: strongest relationship. CDR explains ~83% combined. Nearly linear &mdash; the CDR law.</div>
+        </div>
+        <div class="figure-placeholder">
+          <span class="fig-icon">📉</span>
+          <div class="fig-title">Fig. 5 &middot; GDP vs Natural Resources</div>
+          <div class="fig-caption">Near-flat trendline. High-resource countries (Russia, Nigeria) cluster low-GDP; low-resource (Singapore, Japan) cluster high-GDP. N explains only 6%.</div>
+        </div>
+        <div class="figure-placeholder">
+          <span class="fig-icon">🌐</span>
+          <div class="fig-title">Fig. 6 &middot; 4D Bubble Graph</div>
+          <div class="fig-caption">Axes: C (Capitalism, vertical), D and R (horizontal). Bubble size and color = GDPppp. Parsimonious CDR 3D + GDP as 4th dimension. Singapore and Switzerland as outliers.</div>
+        </div>
+      </div>
+
+      <div class="finding">
+        <div class="find-label">Remarkable Finding</div>
+        "The CDR contribution to explaining variation in GDP is 0.77/0.06 &asymp; 12.83 times the contribution from natural resources. Intangible assets are astonishingly more impactful than the tangible ones." &mdash; P3, §5 Correlation
+      </div>
+
+      <div class="content-block block-describe" style="margin-top:1rem;">
+        <h4>The Vexillological Chart</h4>
+        <p>P2 Appendix A reproduces a "G vs CDR index" scatter plot using country flag bubbles, where bubble size is proportional to the square root of population. 79 countries form a nearly straight line, confirming that the CDR-to-GDP relationship holds regardless of country size, geographic location, culture, or population characteristics.</p>
+      </div>
+
+      <div class="interactive">
+        <h4>Interactive Feature: Chart Explorer</h4>
+        <ul>
+          <li>Toggle between 6 charts using tabs &mdash; animated transition between axes</li>
+          <li>Hover over country bubbles: displays flag, name, exact CDR, GDPppp, natural resource rents</li>
+          <li>Filter countries by region or income level overlay</li>
+          <li>Compare natural resources vs CDR on split-screen</li>
+        </ul>
+      </div>
+
+      <div class="source-bar">
+        <span class="label">Sources</span>
+        <div class="sources">
+          <span class="src p3">P3 &middot; §4 Graphical Analysis &mdash; GDP vs C (Fig.1), D (Fig.2), R (Fig.3), CDR (Fig.4), N (Fig.5), pp. 7&ndash;9</span>
+          <span class="src p1">P1 &middot; §4 Analysis Fig.1 (4D bubble graph C,D,R,GDPppp), p. 5</span>
+          <span class="src p2">P2 &middot; Appendix A &mdash; G vs CDR index vexillological chart (Fig.2), p. 15</span>
+          <span class="src p4">P4 &middot; §4 Fig.3 &mdash; G vs CDR index (79 countries, year 2014), pp. 7&ndash;8</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- SECTION 6 -->
+    <!-- ══════════════════════════════════════════════════════ -->
+    <div class="section" id="s6">
+      <div class="section-header">
+        <div class="section-num">06</div>
+        <div class="section-title-wrap">
+          <h2>Statistical Model &mdash; OLS and 2SLS Estimation</h2>
+          <div class="subtitle">The regression framework, endogeneity correction, and coefficient interpretation</div>
+        </div>
+      </div>
+
+      <div class="learning-obj">
+        <h4>Learning Objectives</h4>
+        <ul>
+          <li>Interpret each coefficient in the CDR OLS regression &mdash; including the negative CDR friction term</li>
+          <li>Explain why latitude serves as a valid instrumental variable for purging endogenous capital stock from C</li>
+          <li>Distinguish OLS from 2SLS results and understand what the coefficient drop from 1.53 to 1.30 reveals</li>
+        </ul>
+      </div>
+
+      <div class="equation-box">
+        <div class="eq-label">OLS Model (Stage 1)</div>
+        <div class="eq">ĝ<sub>i</sub> = 1.53C<sub>i</sub> + 0.14D<sub>i</sub> + 0.23R<sub>i</sub> &minus; 1.21C<sub>i</sub>&middot;D<sub>i</sub>&middot;R<sub>i</sub> + 0.38N<sub>i</sub></div>
+        <div class="eq-note">|t| = (6.60) (1.69) (2.60) (4.40) (5.59) &middot; R&sup2;<sub>adj</sub> = 83% &middot; F ratio = 81 &middot; n = 79 countries</div>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-chip c-stat"><div class="val">59%</div><div class="lbl">C contribution</div></div>
+        <div class="stat-chip d-stat"><div class="val">5%</div><div class="lbl">D contribution</div></div>
+        <div class="stat-chip r-stat"><div class="val">10%</div><div class="lbl">R contribution</div></div>
+        <div class="stat-chip n-stat"><div class="val">3%</div><div class="lbl">C&middot;D&middot;R friction</div></div>
+        <div class="stat-chip n-stat"><div class="val">6%</div><div class="lbl">N (resources)</div></div>
+        <div class="stat-chip acc-stat"><div class="val">83%</div><div class="lbl">Total R&sup2;<sub>adj</sub></div></div>
+      </div>
+
+      <div class="equation-box">
+        <div class="eq-label">First-Stage 2SLS (Instrument: Latitude L<sub>i</sub>)</div>
+        <div class="eq">ê<sub>i</sub> = 0.04 &minus; 0.07L<sub>i</sub> &minus; 0.16D<sub>i</sub> + 0.22R<sub>i</sub> + 1.11C<sub>i</sub>&middot;D<sub>i</sub>&middot;R<sub>i</sub> &minus; 0.02N<sub>i</sub></div>
+        <div class="eq-note">|t| = (3.7) (4.6) (6.4) (27.1) (0.61) &middot; R&sup2;<sub>adj</sub> = 95%</div>
+      </div>
+
+      <div class="equation-box">
+        <div class="eq-label">Second-Stage 2SLS (Exogenous Entrepreneurship Capital ê)</div>
+        <div class="eq">ĝ<sub>i</sub> = 1.30ê<sub>i</sub> + 0.12D<sub>i</sub> + 0.28R<sub>i</sub> &minus; 0.98ê<sub>i</sub>&middot;D<sub>i</sub>&middot;R<sub>i</sub> + 0.39N<sub>i</sub></div>
+        <div class="eq-note">|t| = (2.66) (0.88) (1.95) (1.88) (4.45) &middot; R&sup2;<sub>adj</sub> = 74%<br>Coefficient drop 1.53&rarr;1.30: confirms ~85% of C is exogenous entrepreneurship capital; ~15% is endogenous capital stock from prior ideas.</div>
+      </div>
+
+      <div class="content-grid">
+        <div class="content-block block-describe">
+          <h4>The C&middot;D&middot;R Friction Term</h4>
+          <p>The negative coefficient on C&middot;D&middot;R (&minus;1.21 OLS, &minus;0.98 2SLS) represents democratic friction &mdash; the cost of consensus. In a 51% majority democracy, 49% disagree with every decision. This necessary friction subtracts from the theoretical maximum GDP achievable under perfect agreement. CDR is not rapacious capitalism but capitalism <em>in the presence</em> of democracy and rule of law.</p>
+        </div>
+        <div class="content-block block-describe">
+          <h4>Residuals &amp; Model Validation</h4>
+          <p>Residual plots (&epsilon; vs ĝ<sub>fitted</sub>) show no heteroscedasticity patterns. Histogram is bell-shaped. Chi-square goodness-of-fit test: &chi;<sup>2</sup> = 2.891 &lt; &chi;<sup>2</sup><sub>,<sub>0</sub>.<sub>0</sub>Γéà = 14.067 &mdash; residuals are normally distributed. Durbin-Watson = 2.0. Model is apt. The remaining 17% unexplained variation attributed to unpredictable events (natural disasters) and unobserved private market capitalization.</p>
+        </div>
+        <div class="content-block block-interact">
+          <h4>Interactive Feature</h4>
+          <ul>
+            <li>Animated regression line building up coefficient by coefficient</li>
+            <li>Partial R&sup2; decomposition visualization (stacked bar)</li>
+            <li>Residuals scatter plot with country labels on hover</li>
+            <li>Coefficient interpretation tooltip on hover for each term</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="source-bar">
+        <span class="label">Sources</span>
+        <div class="sources">
+          <span class="src p1">P1 &middot; §4 Analysis (OLS + 2SLS equations, partial correlations), pp. 6&ndash;7</span>
+          <span class="src p3">P3 &middot; §5 Statistical Analysis (Table 2 regression, correlation, causation, economic interpretation), pp. 10&ndash;13</span>
+          <span class="src p2">P2 &middot; Appendix A (OLS model), Appendix B (2SLS), pp. 15&ndash;16</span>
+          <span class="src p4">P4 &middot; §4 Global Time Invariant CDR model (OLS + 2SLS, Table 2), pp. 6&ndash;11</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- SECTION 7 -->
+    <!-- ══════════════════════════════════════════════════════ -->
+    <div class="section" id="s7">
+      <div class="section-header">
+        <div class="section-num">07</div>
+        <div class="section-title-wrap">
+          <h2>Entrepreneurship &mdash; The True Source of Wealth</h2>
+          <div class="subtitle">New human capital ideas vs. capital stock from prior ideas; the information theory of economics</div>
+        </div>
+      </div>
+
+      <div class="learning-obj">
+        <h4>Learning Objectives</h4>
+        <ul>
+          <li>Distinguish entrepreneurship capital (exogenous, imagination &amp; creativity) from capital stock (endogenous, accumulated prior ideas)</li>
+          <li>Explain why entrepreneurship capital contributes ~6&times; more to GDP than capital stock</li>
+          <li>Describe the D+R information channel through which entrepreneurial ideas are detected and acted on</li>
+        </ul>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-chip acc-stat"><div class="val">85%</div><div class="lbl">Entrepreneurship capital contribution to G</div></div>
+        <div class="stat-chip n-stat"><div class="val">15%</div><div class="lbl">Capital stock contribution to G</div></div>
+        <div class="stat-chip acc-stat"><div class="val">6&times;</div><div class="lbl">New ideas vs. old capital stock</div></div>
+        <div class="stat-chip c-stat"><div class="val">~21%</div><div class="lbl">Optimal reinvestment in capital stock (= World Bank GFCF)</div></div>
+      </div>
+
+      <div class="content-grid">
+        <div class="content-block block-describe">
+          <h4>Information Theory of Economics</h4>
+          <p>D and R provide a stable, low-noise information channel. Entrepreneurial ideas appear as disequilibrium signals. In low D, low R environments, noise drowns the signal &mdash; ideas die. In high D, high R environments (high signal-to-noise ratio), ideas are detected and acted on. This is Gilder's (2013) information theory of capitalism formalized within CDR structure.</p>
+        </div>
+        <div class="content-block block-describe">
+          <h4>The Chicken&ndash;Duck Example (Pedagogical)</h4>
+          <p>A coastal community subsists on chicken. Annual flooding drowns all chickens &mdash; severe food shortage. <em>Status quo:</em> no entrepreneurship. <em>Act of entrepreneurship:</em> farmer notices ducks float. Switches to ducks. Community lifted from poverty. Zero change in natural resources; 100% of wealth increase from one creative idea. CDR model: wealth comes from mind, not matter.</p>
+        </div>
+        <div class="content-block block-describe">
+          <h4>The Garbage Bag Example (Pedagogical)</h4>
+          <p>1950: Harry Wasylyk and Larry Hansen invented the plastic garbage bag &mdash; placing a plastic bag in a trash can. Worker's job changed from cleaning to simply collecting. Surplus capital created by the imaginative idea of a lowly home trash collector. As the idea spread, it traveled from bottom to top (Union Carbide). CDR: supply creates its own demand.</p>
+        </div>
+      </div>
+
+      <div class="figure-placeholder">
+        <span class="fig-icon">💡</span>
+        <div class="fig-title">Figure: Democratic Law-Abiding Entrepreneurial GDP-Creating Process</div>
+        <div class="fig-caption">Three-box flow diagram (from P3 Fig.7 / P2 Appendix C Fig.4): [Entrepreneurship &beta;<sub>N</sub>N + &epsilon;<sub>CDR</sub>] &rarr; Catalyst [Democracy + Rule of Law &beta;<sub>0</sub> + &beta;<sub>D</sub>D + &beta;<sub>R</sub>R] &rarr; [Capitalism &beta;<sub>C</sub>ê + &beta;<sub>CDR</sub>ê&middot;D&middot;R] &rarr; G. Arrows show Innovation &rarr; Catalyst &rarr; Investment flow.</div>
+      </div>
+
+      <div class="interactive">
+        <h4>Interactive Feature: Wealth Creation Simulation</h4>
+        <ul>
+          <li>Step-through animated story of the chicken&rarr;duck entrepreneurship example</li>
+          <li>Slider: adjust D and R of a hypothetical country &rarr; see how information noise changes &rarr; effect on idea detection probability</li>
+          <li>Reinvestment calculator: given a country's D and R, compute optimal capital stock reinvestment fraction f (should be ~17.5% + 3.5% depreciation = 21%, consistent with World Bank GFCF)</li>
+        </ul>
+      </div>
+
+      <div class="source-bar">
+        <span class="label">Sources</span>
+        <div class="sources">
+          <span class="src p2">P2 &middot; Appendix C (Entrepreneurship: information theory, Fig.4), Appendix D (Elasticity), pp. 17&ndash;18</span>
+          <span class="src p3">P3 &middot; §Entrepreneurship (chicken-duck example, dead capital, shale example), §Discussion, pp. 13&ndash;15</span>
+          <span class="src p4">P4 &middot; §2 Supply-side wealth (garbage bag, supply-side examples), §5 New vs. old capital (2SLS results), §8 Entrepreneurship elasticity, pp. 3&ndash;4, 10&ndash;13</span>
+          <span class="src p1">P1 &middot; §4.1 Parametric derivation (2SLS decoupling), p. 7</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- SECTION 8 -->
+    <!-- ══════════════════════════════════════════════════════ -->
+    <div class="section" id="s8">
+      <div class="section-header">
+        <div class="section-num">08</div>
+        <div class="section-title-wrap">
+          <h2>Global Time Invariance &mdash; A Scientific Law</h2>
+          <div class="subtitle">CDR parameters are stable across 22 years (1995&ndash;2016) and across all countries &mdash; qualifying CDR as a scientific law</div>
+        </div>
+      </div>
+
+      <div class="learning-obj">
+        <h4>Learning Objectives</h4>
+        <ul>
+          <li>Explain what "global time invariance" means and why it is the key criterion distinguishing a scientific law from an empirical model</li>
+          <li>Interpret the CDR parameters-over-time plot showing stability of &beta;<sub>C</sub>, &beta;<sub>D</sub>, &beta;<sub>R</sub>, &beta;<sub>CDR</sub>, &beta;<sub>N</sub> from 1995&ndash;2016</li>
+          <li>Connect global invariance to the claim that capital-to-GDP conversion follows physical and chemical laws of nature</li>
+        </ul>
+      </div>
+
+      <div class="finding">
+        <div class="find-label">CDR Scientific Law Statement</div>
+        "The CDR model is global time invariant. After adjusting for factors of production, capital to GDPppp conversion is the same everywhere in the world, determined by the physical and chemical laws of nature. The CDR model is the first and only scientific economic growth model." &mdash; P1, Abstract
+      </div>
+
+      <div class="content-grid">
+        <div class="content-block block-describe">
+          <h4>What Was Tested</h4>
+          <p>The 2014 CDR model was re-estimated using rolling windows: 2016 only, 2015&ndash;2016, 2014&ndash;2016, 2013&ndash;2016, &hellip;, 1995&ndash;2016. For all 22 years, &beta;<sub>D</sub>, &beta;<sub>R</sub>, &beta;<sub>N</sub> are approximately constant. &beta;<sub>C</sub> and &beta;<sub>CDR</sub> are approximately constant for the most recent 9 years; for earlier years when capitalization data were unavailable, they were held constant &mdash; yet the model converges forward.</p>
+        </div>
+        <div class="content-block block-describe">
+          <h4>Why This Qualifies as Law</h4>
+          <p>Global invariance means the CDR model can be used as a forecasting model: G for any country in any year can be estimated when C, D, R, and the global min/max G are known. The CDR law is analogous to physical laws: "technology functions according to fixed laws of science &mdash; in that sense, the world is flat and parametrically globally invariant." (Kuhn, 2012)</p>
+        </div>
+      </div>
+
+      <div class="figure-placeholder">
+        <span class="fig-icon">📈</span>
+        <div class="fig-title">Figure: CDR Parameters Over Time (1995&ndash;2016)</div>
+        <div class="fig-caption">Line chart showing &beta;<sub>C</sub> (blue diamonds), &beta;<sub>D</sub> (red squares), &beta;<sub>R</sub> (green triangles), &beta;<sub>CDR</sub> (&times;marks), &beta;<sub>N</sub> (&lowast;), R&sup2;<sub>adj</sub> (orange circles) &mdash; all converging and stable. Source: P2 Appendix E Fig.6; P4 §4 Table 1.</div>
+      </div>
+
+      <div class="source-bar">
+        <span class="label">Sources</span>
+        <div class="sources">
+          <span class="src p1">P1 &middot; Abstract ("global time invariant"), §1 Introduction, p. 1</span>
+          <span class="src p2">P2 &middot; Appendix E: The Global Time Invariant CDR model (Fig.6 parameters over time), §4 Discussion (time invariance), pp. 19, 9</span>
+          <span class="src p4">P4 &middot; §4 Global Time Invariant CDR model (Table 1: year panel 2008&ndash;2014), §1 Introduction (forecasting model), pp. 6&ndash;8</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- SECTION 9 -->
+    <!-- ══════════════════════════════════════════════════════ -->
+    <div class="section" id="s9">
+      <div class="section-header">
+        <div class="section-num">09</div>
+        <div class="section-title-wrap">
+          <h2>Growth Dynamics &mdash; Expected Value and Limits</h2>
+          <div class="subtitle">Parametric derivation of the theoretical 1.8% steady-state growth rate and the 30% single-year maximum</div>
+        </div>
+      </div>
+
+      <div class="learning-obj">
+        <h4>Learning Objectives</h4>
+        <ul>
+          <li>Derive the theoretical endogenous growth rate (~1.8%) from CDR regression coefficients</li>
+          <li>Explain the connection between 1.8% and Euler's constant: &asymp; &frac14;e&sup2;</li>
+          <li>Interpret the parametric integral derivation of maximum endogenous growth (~30%) and its economic meaning (overheating threshold)</li>
+        </ul>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-chip acc-stat"><div class="val">1.8%</div><div class="lbl">Long-run expected endogenous growth rate (= &frac14;e&sup2;)</div></div>
+        <div class="stat-chip acc-stat"><div class="val">30%</div><div class="lbl">Theoretical maximum single-year growth (overheating threshold)</div></div>
+        <div class="stat-chip n-stat"><div class="val">&minus;12.9%</div><div class="lbl">US contraction 1932 (Great Depression worst year)</div></div>
+        <div class="stat-chip n-stat"><div class="val">25%</div><div class="lbl">Libya 2017 &mdash; highest empirical growth found</div></div>
+      </div>
+
+      <div class="equation-box">
+        <div class="eq-label">Expected Endogenous Growth in g (Parametric Derivation)</div>
+        <div class="eq">Expected growth = (1/2)[&beta;<sub>0</sub> + (&beta;&#770;<sub>C</sub>&minus;&beta;&#770;<sub>ê</sub>) + &beta;<sub>D</sub> + &beta;<sub>R</sub> + &beta;&#770;<sub>CDR</sub> + &beta;<sub>N</sub>]</div>
+        <div class="eq">= (1/2)(&minus;0.00051 + (1.534346&minus;1.295617) + 0.116963 + 0.275395 &minus; 0.98133 + 0.388146)</div>
+        <div class="eq">= 0.018698 per unit &asymp; <strong>1.8%</strong></div>
+        <div class="eq-note">95% CI: 1.8 &plusmn; 1.96 &times; 2.3% = {&minus;2.7%, 6.3%}. The mature country convergence rate (USA, UK, Germany) falls within this interval.</div>
+      </div>
+
+      <div class="equation-box">
+        <div class="eq-label">Theoretical Maximum Endogenous Growth (Parametric Integral over CDRN hyperspace)</div>
+        <div class="eq">Max growth = &beta;<sub>0</sub> + (&beta;<sub>C</sub>&minus;&beta;<sub>ê</sub>)/2 + &beta;<sub>D</sub>/2 + &beta;<sub>R</sub>/2 + &beta;&#770;<sub>CDR</sub>&middot;ê/4 + &beta;<sub>N</sub>/2</div>
+        <div class="eq">&asymp; 0.3 = <strong>30%</strong> (when ê = 0.85)</div>
+        <div class="eq-note">The CDR friction term is divided by 4 rather than 2, reducing the drag &mdash; allowing the theoretical maximum. Sustained 30% growth would cause economic overheating (excess demand over supply capacity). This limit has never been formally calculated before in economics.</div>
+      </div>
+
+      <div class="finding">
+        <div class="find-label">Key Result</div>
+        "This theoretical 1.8% is numerically equal to what economists have observed empirically as the steady-state rate to which countries converge as they develop. This derivation explains the previously observed but unexplained 1.8% and brings that mystery to an end." &mdash; P1, §4.1
+      </div>
+
+      <div class="interactive">
+        <h4>Interactive Feature: Growth Simulator</h4>
+        <ul>
+          <li>Animated derivation walkthrough &mdash; step-by-step coefficient summation leading to 1.8%</li>
+          <li>Show connection to Euler's number: e &asymp; 2.718, &frac14;e&sup2; &asymp; 0.018</li>
+          <li>Growth rate slider: demonstrate what sustained 10%, 20%, 30% growth implies for overheating risk</li>
+          <li>Historical comparisons panel: US WWII growth spurt (17.7% in 1941), Great Depression contraction, Libya 2017</li>
+        </ul>
+      </div>
+
+      <div class="source-bar">
+        <span class="label">Sources</span>
+        <div class="sources">
+          <span class="src p1">P1 &middot; §4.1 Expected endogenous growth derivation (1.8%), §4.2 Parametric integral average, §4.3 Maximum growth (30%), §4.4 Discussion (overheating), §5 Conclusions, pp. 6&ndash;11</span>
+          <span class="src p2">P2 &middot; §4 Parametric derivation optimal growth rate (3.7% for full CDR model), §5 Conclusions, pp. 11&ndash;13</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- SECTION 10 -->
+    <!-- ══════════════════════════════════════════════════════ -->
+    <div class="section" id="s10">
+      <div class="section-header">
+        <div class="section-num">10</div>
+        <div class="section-title-wrap">
+          <h2>Policy Implications and Country Case Studies</h2>
+          <div class="subtitle">What governments can actually do &mdash; raising CDR profiles, immigration, natural resource curse, STEM limits</div>
+        </div>
+      </div>
+
+      <div class="learning-obj">
+        <h4>Learning Objectives</h4>
+        <ul>
+          <li>Identify concrete policy levers for raising C, D, and R &mdash; and why N cannot be changed by policy</li>
+          <li>Analyze the "Dutch disease" through the CDR lens and explain how high CDR can offset natural resource curse effects</li>
+          <li>Evaluate immigration policy implications: immigrants bring C<sub>e</sub> (entrepreneurship capital) and can immediately contribute to GDP under high-CDR environments</li>
+        </ul>
+      </div>
+
+      <div class="case-grid">
+        <div class="case-card">
+          <div class="country">🇸🇬 Singapore</div>
+          <span class="verdict verdict-high">High CDR &mdash; Highest GDP</span>
+          <div class="note">Zero natural resources. CDR = 0.829. GDPppp = $83,066. Proof that institutional quality &mdash; not endowment &mdash; drives wealth. Bonus pay for government leaders tied to economic performance is a case study in incentive alignment.</div>
+        </div>
+        <div class="case-card">
+          <div class="country">🇰🇷 South Korea</div>
+          <span class="verdict verdict-high">CDR transition success</span>
+          <div class="note">1950: severe poverty. Adopted democracy &rarr; rapid growth until convergence to ~1.8%. Now a high-CDR country. Contrast: North Korea, same geography, same genetics &mdash; low CDR, persistent poverty.</div>
+        </div>
+        <div class="case-card">
+          <div class="country">🇳🇴 Norway</div>
+          <span class="verdict verdict-high">High CDR + High N</span>
+          <div class="note">Unlike oil-rich low-CDR countries, Norway places all oil revenues in a national endowment. Citizens benefit from earnings on the endowment only. High CDR prevents Dutch disease. Ranks first globally in charitable giving as % of GDP.</div>
+        </div>
+        <div class="case-card">
+          <div class="country">🇳🇬 Nigeria</div>
+          <span class="verdict verdict-low">Low CDR &mdash; Low GDP despite oil</span>
+          <div class="note">Nigerian sweet crude is the best quality oil in the world &mdash; yet massive poverty persists. CDR = 0.112. Oil pollution, corruption, and social ill effects dominate. Classic resource curse compounded by low CDR.</div>
+        </div>
+        <div class="case-card">
+          <div class="country">🇷🇺 Russia</div>
+          <span class="verdict verdict-low">Grab strategy reversal</span>
+          <div class="note">Post-communism, Russia briefly adopted CDR policies but reverted to a "grab strategy." Despite vast gas and oil reserves, low CDR keeps GDPppp low. The cost of corruption corrodes the fabric of society.</div>
+        </div>
+        <div class="case-card">
+          <div class="country">🇵🇱 Poland / 🇨🇱 Chile</div>
+          <span class="verdict verdict-mid">CDR adoption &mdash; rapid breakout</span>
+          <div class="note">Poland and Chile adopted CDR policies and quickly separated from their geographic neighbors. Chile's CDR index rose above regional neighbors in Latin America. Poland broke from Eastern European peers after 1989.</div>
+        </div>
+      </div>
+
+      <div class="content-grid">
+        <div class="content-block block-describe">
+          <h4>Immigration Implications</h4>
+          <p>C = C<sub>e</sub> (entrepreneurship) + C<sub>k</sub> (capital stock) + C<sub>t</sub> (trained knowledge). A poorly educated immigrant to a high-CDR country brings labor (L) plus their C<sub>e</sub> and can immediately contribute to GDP. As they acquire C<sub>t</sub> through education, contributions grow. An immigrant from a low-CDR country who was unable to contribute there will add the same GDP as an American-born peer under American CDR. Empirically: Kane &amp; Rutledge (2019) confirm overall positive correlation between immigration and US economic performance 1980&ndash;2015.</p>
+        </div>
+        <div class="content-block block-describe">
+          <h4>STEM vs CDR</h4>
+          <p>The further behind a low-CDR country is, the more it needs to catch up via STEM education. But CDR shows that entrepreneurship capital (ideas) contributes 6&times; more than capital stock (skills). STEM is necessary but not sufficient for economic growth. CDR is necessary and sufficient. A country needs both entrepreneurship capital and capital stock &mdash; and entrepreneurship requires democracy and rule of law to flourish.</p>
+        </div>
+        <div class="content-block block-describe">
+          <h4>Can CDR be Taught?</h4>
+          <p>Gilder (2013) suggests that capitalism, democracy, and rule of law are themselves inventions &mdash; and just as inventions can be taught, CDR institutions can be learned through formal education. Ridley &amp; Llaugel (2018) propose introducing CDR economics to students from oppressed communities: showing that wealth comes from human imagination shifts self-perception from factory worker to potential entrepreneur.</p>
+        </div>
+      </div>
+
+      <div class="source-bar">
+        <span class="label">Sources</span>
+        <div class="content-block block-describe">
+          <h4>The Missing Piece: Collaboration Capacity</h4>
+          <p>CDR theory identifies Rule of Law (R) as a catalyst for economic growth — but how does R actually take hold in a society? Research reveals that legal reform alone is insufficient. A society cannot sustain genuine rule of law without the underlying human capacity for <strong>collaboration</strong>: shared goals, joint accountability, and mutual trust that go beyond transactional cooperation.</p>
+          <p>A critical distinction: <em>Cooperation</em> is transaction-based and self-interested — it yields ordinary returns. <em>Collaboration</em> is grounded in shared intention and mutual accountability — it generates a <strong>Collaboration Dividend</strong>, an extraordinary surplus that underpins advanced institutions and sustained CDR growth. This is the behavioral foundation R requires to function.</p>
+          <p>Singapore's CDR success illustrates this concretely: its high R score was built through <em>mandatory collaborative sports and music education</em> that transformed population-level collaboration capacity within a single generation. The institutional scores followed the behavioral change — not the other way around.</p>
+          <div class="sources" style="margin-top:0.75rem;">
+            <span class="src p5">P5 · §2 Cooperation vs. Collaboration, §3 CDR&#8211;Collaboration Link, §5 Singapore Case Study</span>
+          </div>
+        </div>
+
+        <div class="sources">
+          <span class="src p2">P2 &middot; §4 Implications for Immigration, Discussion (CDR can be taught, property rights difficulty), pp. 9&ndash;10</span>
+          <span class="src p3">P3 &middot; §4 Comparison of Selected Countries (Norway, Poland, Chile, China, Russia), §Discussion, §Conclusions, pp. 9&ndash;10, 15&ndash;16</span>
+          <span class="src p4">P4 &middot; §1 Introduction (CDR history, Magna Carta &rarr; industrial revolution), §9 Conclusions (Dutch disease offset), pp. 1&ndash;2, 13&ndash;14</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- SECTION 11 -->
+    <!-- ══════════════════════════════════════════════════════ -->
+    <div class="section" id="s11">
+      <div class="section-header">
+        <div class="section-num">11</div>
+        <div class="section-title-wrap">
+          <h2>Micro&ndash;Macro Integration &mdash; A Unified Economic Theory</h2>
+          <div class="subtitle">How the CDR macro growth model integrates with the micro-economic Cobb-Douglas production function</div>
+        </div>
+      </div>
+
+      <div class="learning-obj">
+        <h4>Learning Objectives</h4>
+        <ul>
+          <li>Explain the fallacy of composition that prevents a simple aggregation of micro production functions into a macroeconomic aggregate</li>
+          <li>Describe the conformal mapping from macro CDR space to micro Cobb-Douglas units</li>
+          <li>State the global monetary value of production formula integrating CDR with micro production across m countries</li>
+        </ul>
+      </div>
+
+      <div class="content-grid">
+        <div class="content-block block-describe">
+          <h4>Why No Aggregate Production Function Exists</h4>
+          <p>A production function Q=f(K,L) relates physical inputs to physical outputs from a single machine. There can be no macroeconomic production function when inputs are different types of items or outputs are made by different constructs (Cohen &amp; Harcourt, 2003). The CDR model sidesteps this: G=f(C,D,R) is defined at the aggregate without requiring aggregation from micro units. It then maps conformally into micro domains where Cobb-Douglas is valid for each single production unit.</p>
+        </div>
+        <div class="content-block block-describe">
+          <h4>The Integration Formula</h4>
+          <p>For m countries, each with n<sub>i</sub> micro production units, total global output is:<br>
+          &Sigma;<sub>i=1</sub><sup>m</sup> &Sigma;<sub>j=1</sub><sup>n<sub>i</sub></sup> A<sub>ij</sub> {f<sub>ij</sub>[f(C<sub>i</sub>,D<sub>i</sub>,R<sub>i</sub>)(G<sub>max</sub>&minus;G<sub>min</sub>)+G<sub>min</sub>]}^&alpha;<sub>ij</sub> &middot; W<sub>ij</sub>^(1&minus;&alpha;<sub>ij</sub>)<br>
+          where A<sub>ij</sub> is total factor productivity and &alpha;<sub>ij</sub>/1&minus;&alpha;<sub>ij</sub> are output elasticities of capital and labor. This homeomorphic mapping preserves economic relationships across scales.</p>
+        </div>
+      </div>
+
+      <div class="content-block block-describe" style="margin-top:1rem;">
+        <h4>Brain &amp; Brawn Framework (Figure 2, P4)</h4>
+        <p>The wealth creation diagram distinguishes: <strong>BRAIN</strong> (conceptual wealth: new human capital ideas + market capitalization C = new + capital stock) from <strong>BRAWN</strong> (physical production: distribution via f<sub>ij</sub>&middot;─£<sub>i</sub> &rarr; micro production process f(k<sub>ij</sub>,W<sub>ij</sub>) &rarr; realized wealth aggregate). CDR G potential (macroeconomic) is the bridge connecting intellectual source to physical output.</p>
+      </div>
+
+      <div class="source-bar">
+        <span class="label">Sources</span>
+        <div class="sources">
+          <span class="src p2">P2 &middot; Appendix F: Integrating CDR macro with micro production function, pp. 20</span>
+          <span class="src p4">P4 &middot; §2 Supply-side wealth (Brain/Brawn Fig.2), §3 Structures of CDR (endogenous/exogenous), pp. 3&ndash;6</span>
+          <span class="src p3">P3 &middot; §Discussion (production function fallacy, plus-sum capitalism), p. 15</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- SECTION 12 -->
+    <!-- ══════════════════════════════════════════════════════ -->
+    <div class="section" id="s12">
+      <div class="section-header">
+        <div class="section-num">12</div>
+        <div class="section-title-wrap">
+          <h2>Pedagogical Module &mdash; Teaching CDR Economics</h2>
+          <div class="subtitle">Discussion questions, conceptual exercises, assessment tools, and key takeaways for course use</div>
+        </div>
+      </div>
+
+      <div class="module">
+        <div class="module-header">Core Conceptual Questions</div>
+        <div class="module-body">
+          <ul>
+            <li><strong>Q1.</strong> Why does the CDR model standardize all variables to [0,1]? What would happen if raw dollar values were used as regression inputs?</li>
+            <li><strong>Q2.</strong> The coefficient of C&middot;D&middot;R is negative (&minus;1.21). Does this mean democracy hurts economic growth? Explain using the catalysis framework.</li>
+            <li><strong>Q3.</strong> Singapore has zero natural resources and high GDP; Nigeria has massive oil reserves and low GDP. How does CDR theory explain this? What would Nigeria need to change?</li>
+            <li><strong>Q4.</strong> Why is latitude a valid instrumental variable for purging endogenous capital stock from C? What assumption must hold, and how is it justified?</li>
+            <li><strong>Q5.</strong> If a country could instantaneously set C=D=R=1, what would CDR theory predict about GDP growth? Would this be sustainable?</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="module">
+        <div class="module-header">Applied Exercises</div>
+        <div class="module-body">
+          <ul>
+            <li><strong>Exercise 1.</strong> Using the standardization formulas and Table 1 data, compute the CDR index for two countries of your choice. Compare your computed CDR to their reported GDPppp.</li>
+            <li><strong>Exercise 2.</strong> Using the OLS equation ĝ = 1.53C + 0.14D + 0.23R &minus; 1.21&middot;C&middot;D&middot;R + 0.38N, compute the predicted GDPppp for a country with C=0.5, D=0.8, R=0.7, N=0.05, given G<sub>max</sub> = $83,066 and G<sub>min</sub> = $1,112.</li>
+            <li><strong>Exercise 3.</strong> A country's Rule of Law score improves from R=0.25 to R=0.60 (other variables held constant). Compute the marginal change in predicted g. Translate to dollars using the inverse transformation.</li>
+            <li><strong>Exercise 4.</strong> Calculate the entrepreneurship capital elasticity of g for a country with D=R=0.7 and reinvestment fraction f=0.1. Use the formula from P2 Appendix D / P4 §8.</li>
+            <li><strong>Exercise 5.</strong> Plot GDP growth rates for South Korea (1960&ndash;present) and explain the CDR interpretation: rapid growth during CDR adoption &rarr; convergence to ~1.8% as CDR matures.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="module">
+        <div class="module-header">Key Takeaways &mdash; Summary Card</div>
+        <div class="module-body">
+          <ul>
+            <li><strong>1.</strong> GDP is governed by a scientific law: G = f(C, D, R) &mdash; global time invariant, parsimonious, R&sup2; = 83%.</li>
+            <li><strong>2.</strong> The source of all wealth is human imagination and creativity (entrepreneurship capital), not natural resources or physical labor.</li>
+            <li><strong>3.</strong> Capitalism, Democracy, and Rule of Law are the only policy-controllable determinants of GDP. Natural resources, geography, culture, population size are negligible.</li>
+            <li><strong>4.</strong> Entrepreneurship capital (new ideas) contributes ~6&times; more to GDP than capital stock (old ideas). CDR contributes ~13&times; more than natural resources.</li>
+            <li><strong>5.</strong> The theoretical steady-state growth rate is ~1.8% (= &frac14;e&sup2;). The theoretical maximum single-year growth is ~30%. Sustained growth above ~1.8% will eventually cause overheating.</li>
+            <li><strong>6.</strong> Democracy creates friction (negative C&middot;D&middot;R interaction) &mdash; this is necessary and unavoidable in a democratic system. The optimal response is to accelerate democratic decision-making, not reduce democracy.</li>
+            <li><strong>7.</strong> High CDR countries are where ideas go to fly. Low CDR countries are where ideas go to die.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="module">
+        <div class="module-header">Discussion Prompts for Advanced Seminars</div>
+        <div class="module-body">
+          <ul>
+            <li><strong>D1.</strong> The CDR model excludes government spending (its coefficient is statistically insignificant). How does this challenge both Keynesian and supply-side fiscal policy prescriptions?</li>
+            <li><strong>D2.</strong> CDR theory suggests wealth is unlimited because it originates in human imagination, which is unlimited (Simon, 1981). Evaluate this claim against resource-constrained growth frameworks.</li>
+            <li><strong>D3.</strong> "It is in the positive-sum self-interest of rich countries to help poor countries develop their CDR institutions." Evaluate this claim using the plus-sum capitalism framework from P3 §Discussion.</li>
+            <li><strong>D4.</strong> Property rights are described as essential to rule of law. De Soto (2000) found 90% of countries have no property rights for the common person. What are the specific barriers to implementing property rights in developing countries?</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="source-bar">
+        <span class="label">Sources</span>
+        <div class="sources">
+          <span class="src p2">P2 &middot; §4 Discussion (CDR education, oppressed communities), §5 Conclusions, pp. 8&ndash;13</span>
+          <span class="src p3">P3 &middot; §6 Conclusions (policy prescriptions, entrepreneurship education), pp. 15&ndash;16</span>
+          <span class="src p4">P4 &middot; Appendix A.1 Summary of CDR Findings, pp. 15</span>
+          <span class="src p1">P1 &middot; §5 Conclusions, Nomenclature, pp. 11&ndash;12</span>
+        </div>
+      </div>
+    </div>
+
+  
+    <div class="sep"></div>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <!-- SECTION 13 -->
+    <!-- ════════════════════════════════════════════════════════ -->
+    <div class="section" id="s13">
+      <div class="section-header">
+        <div class="section-num">13</div>
+        <div class="section-title-wrap">
+          <h2>The Human Collaboration Foundation</h2>
+          <div class="subtitle">Why collaboration — not legal text — is the behavioral engine of Rule of Law</div>
+        </div>
+      </div>
+
+      <div class="learning-obj">
+        <h4>Learning Objectives</h4>
+        <ul>
+          <li>Distinguish cooperation from collaboration and explain why only collaboration generates the Collaboration Dividend</li>
+          <li>Explain the biological basis of collaboration capacity and why environmental stressors suppress it across generations</li>
+          <li>Connect the global collaboration deficit to the persistent failure of Rule of Law reforms in many nations</li>
+        </ul>
+      </div>
+
+      <div class="content-block block-describe">
+        <h4>Cooperation vs. Collaboration</h4>
+        <p>These two terms are often used interchangeably, but they describe fundamentally different human behaviors with very different economic consequences.</p>
+        <p><strong>Cooperation</strong> is transaction-based: two parties align their self-interests temporarily to complete an exchange. It produces ordinary, predictable returns — the baseline of market activity.</p>
+        <p><strong>Collaboration</strong> is rooted in shared goals, joint intention, and mutual accountability. Collaborators co-create outcomes neither could achieve alone and share the resulting <strong>Collaboration Dividend</strong> — an extraordinary economic surplus above what transactional relationships yield. It is this dividend that fuels the advanced institutions, trust networks, and innovation ecosystems that underpin high-CDR societies.</p>
+      </div>
+
+      <div class="content-block block-describe">
+        <h4>The Biological Basis of Collaboration</h4>
+        <p>Collaboration capacity is not merely cultural — it has a <strong>genetic component</strong>, much like language acquisition. The relevant genes exist in nearly all humans, but they must be <em>activated</em> through structured social environments during development.</p>
+        <p>Critically, environmental stressors can suppress this activation — and the suppression can persist across generations through <strong>epigenetic</strong> mechanisms (changes in gene expression, not DNA sequence). Stressors documented to diminish collaboration capacity include:</p>
+        <ul>
+          <li>Forced labor and bonded servitude</li>
+          <li>Systemic discrimination and exclusion</li>
+          <li>Chronic exposure to toxic environmental conditions</li>
+          <li>Sustained economic precarity and threat environments</li>
+        </ul>
+        <p>This explains a counterintuitive CDR finding: populations that have experienced generational trauma may score low on R not because of bad laws, but because the <em>human behavioral substrate</em> that makes rule of law functional has been suppressed. Recovery is possible — but it requires deliberate social investment, not just legal reform.</p>
+      </div>
+
+      <div class="content-block block-teach">
+        <h4>The Collaboration Crisis</h4>
+        <p>Research estimates that roughly <strong>90% of the world's population</strong> operates with diminished collaboration capacity — a direct legacy of historical stressors including colonialism, forced labor, and generational poverty. This is not a moral failing; it is a measurable biological and social outcome.</p>
+        <p>The policy implication is stark: nations attempting to import Rule of Law through legal transplant (adopting another country's constitution or court system) routinely fail because the underlying human collaboration infrastructure is absent. The legal text can be copied; the collaborative trust that makes it function cannot be.</p>
+        <p><strong>Pedagogical Connection:</strong> Singapore's mandatory collaborative education (sports, ensemble music, team-based learning) in the post-independence era did more than build citizenship — it rebuilt collaboration capacity at the population level within one school generation, providing the behavioral foundation for the Rule of Law gains that followed.</p>
+      </div>
+
+      <div class="content-block block-visual">
+        <h4>Visual: The CDR&#8211;Collaboration Link</h4>
+        <p><em>[Diagram placeholder: Show the causal chain — Collaboration Capacity → Rule of Law (R) → CDR Index → GDP per capita. Illustrate how epigenetic suppression and recovery affect the input to R, not just R itself.]</em></p>
+      </div>
+
+      <div class="section-sources">
+        <div class="sources">
+          <span class="src p5">P5 · §1 Introduction, §2 Cooperation vs. Collaboration, §3 Epigenetic Foundations, §4 The Collaboration Crisis, pp. 1&#8211;7</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <!-- SECTION 14 -->
+    <!-- ════════════════════════════════════════════════════════ -->
+    <div class="section" id="s14">
+      <div class="section-header">
+        <div class="section-num">14</div>
+        <div class="section-title-wrap">
+          <h2>AI as Collaboration Catalyst</h2>
+          <div class="subtitle">How AI can scaffold human collaboration skill development — without replacing human agency</div>
+        </div>
+      </div>
+
+      <div class="learning-obj">
+        <h4>Learning Objectives</h4>
+        <ul>
+          <li>Explain why AI cannot be a genuine collaborator, and what role it can legitimately play</li>
+          <li>Describe the three-stage model of collaboration development: Invocation, Recovery, and Enhancement</li>
+          <li>Understand the three-layer AI architecture for supporting collaboration and its ethical safeguards</li>
+          <li>Connect AI-assisted collaboration development to CDR policy and national economic growth strategy</li>
+        </ul>
+      </div>
+
+      <div class="content-block block-describe">
+        <h4>What AI Cannot Do — and What It Can</h4>
+        <p>Genuine collaboration requires <strong>shared intentionality</strong> (caring about the same outcome), <strong>moral agency</strong> (being accountable for outcomes), and <strong>intrinsic motivation</strong> (acting from values, not instructions). AI systems lack all three. A language model does not want anything; it cannot be held accountable; it has no stake in the outcome.</p>
+        <p>This matters because it defines AI's legitimate role: not as a collaborator, but as a <strong>structural scaffold</strong> — external support that creates conditions for humans to exercise and develop their own collaboration capacity. Think of AI in this role like a coach, a conductor, or a training simulator: it provides structure and feedback, but the human skill must develop from within.</p>
+      </div>
+
+      <div class="content-block block-teach">
+        <h4>Three-Stage Collaboration Development Model</h4>
+        <p>Collaboration capacity deficits exist on a spectrum. AI-assisted intervention must be matched to the learner's starting point:</p>
+        <table class="eq-table" style="width:100%; margin-top:1rem;">
+          <thead>
+            <tr>
+              <th>Stage</th>
+              <th>Definition</th>
+              <th>AI Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Invocation</strong></td>
+              <td>Activating latent collaboration capacity that was never exercised — skills present but dormant</td>
+              <td>Structured prompts, guided interaction sequences, real-time participation feedback</td>
+            </tr>
+            <tr>
+              <td><strong>Recovery</strong></td>
+              <td>Rehabilitating skills suppressed by trauma, chronic stress, or adverse environments</td>
+              <td>Safe low-stakes practice environments, gradual complexity increase, emotional safety monitoring</td>
+            </tr>
+            <tr>
+              <td><strong>Enhancement</strong></td>
+              <td>Refining collaboration skills among already-capable individuals or teams</td>
+              <td>Optimization feedback, advanced pattern recognition, cross-cultural collaboration support</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="margin-top:0.75rem;">Each stage has different design requirements. The goal across all three is the same: internalization of collaboration skills so that the AI scaffold can eventually be withdrawn.</p>
+      </div>
+
+      <div class="content-block block-describe">
+        <h4>Three-Layer AI Architecture</h4>
+        <p>A practical AI collaboration support system operates through three distinct functional layers:</p>
+        <ul>
+          <li><strong>Observation Layer</strong> — Monitors structural interaction patterns: turn-taking frequency and balance, pronoun usage (I vs. we), response latency, participation persistence, and conflict escalation signals. Uses NLP and linguistic feature analysis. Crucially, it analyzes <em>structure</em>, not semantic content — protecting privacy and avoiding manipulation of beliefs.</li>
+          <li><strong>State Estimation Layer</strong> — Uses Hidden Markov Models (HMM) to infer the group's current collaboration condition as a latent state (e.g., stable collaboration, emerging imbalance, fragmentation risk). Treats collaboration as an emergent group property, not an individual trait — enabling early detection of deterioration before it becomes visible.</li>
+          <li><strong>Intervention Layer</strong> — Applies rule-based responses to estimated states. Interventions are deliberately conservative and reversible: redistributing speaking turns, introducing temporary pacing, summarizing shared context to re-anchor the group, or suggesting structured role rotation. The system modifies <em>interaction structure only</em> — never outcomes, beliefs, or preferences.</li>
+        </ul>
+      </div>
+
+      <div class="content-block block-teach">
+        <h4>Applications: Where This Changes CDR Outcomes</h4>
+        <ul>
+          <li><strong>Education</strong> — AI-assisted collaboration environments can simulate structured social interaction, provide immediate feedback, and reduce interpersonal risk — enabling collaboration skill development at scale in schools and vocational programs, even where traditional mentorship is scarce.</li>
+          <li><strong>Workplace &amp; Organizational Design</strong> — Real-time collaboration monitoring enables diverse team composition, adaptive conflict de-escalation, and job design that integrates scaffolding — expanding the effective labor pool and building the institutional trust that raises R scores.</li>
+          <li><strong>National Development Strategy</strong> — Just as mobile telecommunications allowed developing nations to bypass landline infrastructure, AI-assisted collaboration training could allow nations to accelerate Rule of Law emergence without waiting for multi-generational cultural change. This is <em>institutional leapfrogging</em> — a new policy lever for the CDR framework.</li>
+        </ul>
+      </div>
+
+      <div class="content-block block-describe">
+        <h4>Ethical Safeguards</h4>
+        <p>The power of collaboration AI creates corresponding responsibilities. Key safeguards the framework requires:</p>
+        <ul>
+          <li><strong>Transparency and consent</strong> — Participants must know monitoring is occurring and what it measures</li>
+          <li><strong>Cultural adaptation</strong> — Collaboration norms vary across cultures; AI systems must be locally calibrated, not universalized from a single dominant model</li>
+          <li><strong>Scaffold withdrawal plan</strong> — Permanent AI dependence defeats the purpose; systems must be designed to gradually reduce support as intrinsic capacity develops</li>
+          <li><strong>Not a substitute for structural justice</strong> — Skill recovery is necessary but insufficient; ongoing environmental stressors (discrimination, precarity) must also be addressed</li>
+        </ul>
+        <p style="margin-top:0.75rem;"><em>Principle: AI amplifies human collaboration capacity. It does not make decisions, impose outcomes, or substitute for human agency.</em></p>
+      </div>
+
+      <div class="content-block block-visual">
+        <h4>Visual: Three-Layer Architecture Diagram</h4>
+        <p><em>[Diagram placeholder: Show the three layers as a vertical stack — Observation (input: interaction data) → State Estimation (HMM latent states) → Intervention (rule-based nudges) → Output: Group collaboration trajectory over time. Annotate with examples of metrics and interventions at each layer.]</em></p>
+      </div>
+
+      <div class="section-sources">
+        <div class="sources">
+          <span class="src p5">P5 · §4 AI as Scaffold, §5 Three-Stage Model, §6 Three-Layer Architecture, §7 Applications, §8 Ethical Safeguards, pp. 7&#8211;15</span>
+        </div>
+      </div>
+    </div>
+</main>
+</div>
+
+<!-- ═══════════════════════════════════════ FOOTER ═══════════════════════════════════════ -->
+<footer>
+  <h3>Source Documents</h3>
+  <div class="pdf-ref p1">
+    <strong>[P1] Ridley, A.D. &amp; Llaugel, F.</strong> "The Four-Dimensional Scientific CDR Economic Growth Model: expected value, average, and limits to growth." 13 pp. &mdash; <em>Provides: 4D bubble visualization; first derivation of 1.8% expected growth and 30% maximum growth limit via parametric integration; OLS + 2SLS model with latitude IV; 79-country data; nomenclature.</em>
+  </div>
+  <div class="pdf-ref p2">
+    <strong>[P2] Ridley, A.D. &amp; Llaugel, F. (2018)</strong> "Advances in the CDR economic theory of entrepreneurship and GDP: from survey of economic growth models to unified theory." Copyright 7/1/2018. 20 pp. + Appendices A&ndash;F. &mdash; <em>Provides: historical survey from Malthus to CDR; implications for immigration; 3.7% growth derivation; entrepreneurship elasticity (Appendix D); global time invariance (Appendix E); macro&ndash;micro integration (Appendix F); information theory of entrepreneurship (Appendix C).</em>
+  </div>
+  <div class="pdf-ref p3">
+    <strong>[P3] Ridley, A.D. &amp; Khan, A.</strong> "A New CDR Index and its Implications for Entrepreneurship and Economic Growth." 20 pp. + Appendix A. &mdash; <em>Provides: formal CDR index construction; 5-chart graphical analysis (GDP vs C, D, R, CDR, N); Table 1 (21-country flagged standardized data); regression Table 2; Dutch disease discussion; country comparisons (Norway, Poland, Chile, China, Russia, Nigeria, Singapore); entrepreneurship information theory; world corruption map.</em>
+  </div>
+  <div class="pdf-ref p4">
+    <strong>[P4] Ridley, A.D.</strong> "Advances in Capitalism/Democracy/Rule of law economic theory of Entrepreneurship: supply side unveiled." 20 pp. + Appendices A1&ndash;A3. &mdash; <em>Provides: supply-side economics (Brain/Brawn framework, Fig.2); Granger causality test for D and R (§6); total and marginal contributions to g (§7); entrepreneurship capital elasticity and reinvestment strategy (§8); year panel Table 1 (2008&ndash;2014); World Corruption Map (Appendix A.3); summary of 11 CDR findings (Appendix A.1).</em>
+  </div>
+  <div class="pdf-ref p5">
+    <strong>[P5] Ridley, D., Llaugel, F., &amp; Garcia, C. A. (2026)</strong> "Artificial Intelligence in Human Collaboration Skills Invocation, Recovery and Enhancement." <em>Theoretical Economics Letters</em>, <em>16</em>(1), 249&ndash;268. DOI: 10.4236/tel.2026.161017 &mdash; <em>Provides: biological and epigenetic foundations of collaboration capacity; cooperation vs. collaboration distinction and the Collaboration Dividend; three-stage AI scaffolding model (Invocation, Recovery, Enhancement); three-layer architecture (Observation, State Estimation, Intervention); applications to education, workplace, and national development; ethical safeguards for AI-assisted collaboration.</em>
+  </div>
+    <p style="margin-top:1.5rem; color:var(--text-muted); font-size:0.78rem;">Outline generated from sequential reading of all 5 PDFs &middot; Research directory: /home/cesar/research/CDREGM/research/ &middot; Built for academic &amp; pedagogical web application planning</p>
+</footer>
+
+</body>
+</html>
