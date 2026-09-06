@@ -139,11 +139,11 @@ cdr_ols <- function(data = NULL) {
 print.cdr_ols <- function(x, ...) {
   s <- summary(x$fit)
   cat("CDR OLS Growth Model (CDRN)\n")
-  cat(sprintf("R² = %.3f   Adj-R² = %.3f   n = %d\n\n",
+  cat(sprintf("R2 = %.3f   Adj-R2 = %.3f   n = %d\n\n",
               s$r.squared, s$adj.r.squared, nrow(x$data)))
   print(x$coef_table, digits = 4, row.names = FALSE)
   cat(sprintf(
-    "\nPartial R²:  C = %.3f   D = %.3f   R = %.3f\n",
+    "\nPartial R2:  C = %.3f   D = %.3f   R = %.3f\n",
     x$partial_r2["C"], x$partial_r2["D"], x$partial_r2["R"]
   ))
   invisible(x)

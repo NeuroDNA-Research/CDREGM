@@ -10,4 +10,8 @@ research/
 datasets/
 TODO.md
 data-raw/
+CDREGM.Rcheck/
+CDREGM_*.tar.gz
+tmp/*
+!tmp/implementation.md
 

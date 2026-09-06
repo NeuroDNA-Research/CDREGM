@@ -21,7 +21,7 @@
 #' @section Data sources:
 #' \describe{
 #'   \item{gdp}{World Bank WDI indicator \code{NY.GDP.MKTP.CD} — GDP,
-#'     current US\$. Retrieved via \pkg{wbstats}.}
+#'     current US dollars. Retrieved via \pkg{wbstats}.}
 #'   \item{capitalization}{World Bank WDI indicator \code{CM.MKT.LCAP.GD.ZS}
 #'     — market capitalisation of listed domestic companies as \% of GDP.
 #'     Retrieved via \pkg{wbstats}.  Missing values are left as \code{NA}.}

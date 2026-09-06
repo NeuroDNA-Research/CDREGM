@@ -5,3 +5,9 @@
 ^codecov\.yml$
 ^data-raw$
 ^datasets$
+^tmp$
+^web$
+^research$
+^demo_.*\.R$
+^LICENSE\.md$
+^\.claude$
