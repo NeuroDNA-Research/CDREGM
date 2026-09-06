@@ -26,12 +26,15 @@ Imports:
     wbstats
 Suggests:
     AER,
+    gganimate,
     ggplot2,
     knitr,
     lmtest,
+    maps,
     plm,
     plotly,
     rmarkdown,
+    shiny,
     testthat (>= 3.0.0),
     vdemdata
 Config/testthat/edition: 3

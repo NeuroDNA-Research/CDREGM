@@ -3,5 +3,6 @@
 utils::globalVariables(c(
   ".data",
   "gdp", "population", "natural_resources",
-  "g", "C_std", "D_std", "R_std", "N_std", "CDR"
+  "g", "C_std", "D_std", "R_std", "N_std", "CDR",
+  "long", "lat", "group", "value", "year"
 ))

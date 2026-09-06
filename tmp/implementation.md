@@ -164,7 +164,7 @@ CDRN and CDRNL are better predictors but biased; CDRN's main role is pedagogical
 **Tier 3 — Research Core:** [Done]
 `cdr_endogenous_rate`, `cdr_elasticity`, `cdr_bootstrap`, `cdr_robustness`, `cdr_panel`, `cdr_simulate`, `cdr_growth_gap`, `cdr_plot_3d`, `cdr_plot_coefficient_path`
 
-**Tier 4 — Policy and Dissemination:**
+**Tier 4 — Policy and Dissemination:** [Done]
 `cdr_explorer` (Shiny), `cdr_country_report`, `cdr_plot_map`, `cdr_plot_animated`, `cdr_democratic_friction`, `cdr_reform_path`, `cdr_peer_group`
 
 **Tier 5 — Advanced Econometrics:**
@@ -223,3 +223,27 @@ New files: `R/cdr_tier3_utils.R` (published constants + helpers), `R/globals.R`,
 
 Also added `.Rbuildignore` (keeps `tmp/`, `web/`, `demo_*.R`, `research/`,
 `*.Rproj` out of the package tarball).
+
+### Tier 4 — Policy and Dissemination (2026-09-06)
+
+New Suggests: `gganimate`, `maps`, `shiny` (`rmarkdown` already present).
+New files: `R/cdr_tier4_utils.R`, `R/cdr_democratic_friction.R`,
+`R/cdr_peer_group.R`, `R/cdr_reform_path.R`, `R/cdr_plot_map.R`,
+`R/cdr_plot_animated.R`, `R/cdr_country_report.R`, `R/cdr_explorer.R`,
+`inst/rmd/country_report.Rmd`, `inst/shiny/explorer/app.R`.
+Tests: `tests/testthat/test-cdr_tier4.R` (113 pass / 4 skip total).
+
+`.cdr_coef(model, data)` resolves the shared `model` argument to a
+coefficient vector — accepts `NULL` (fit `cdr_ols`), a `cdr_ols`, the
+string `"published"` (CDRN OLS: C 1.53, D 0.14, R 0.23, CDR -1.21, N 0.38),
+or a named vector.
+
+| Function | Signature | Returns / behaviour |
+|---|---|---|
+| `cdr_democratic_friction` | `(data, model = NULL)` | data frame per country: `cdr`, `friction_growth` (`b_CDR·cdr`, negative), `friction_usd_pc` (× GDP/capita), `d_contribution`, `r_contribution`, `net_institutional`. Shows D and R stay net positive once the interaction cost is subtracted. Sorted by \|friction\|. |
+| `cdr_peer_group` | `(country, k = 5, data, vars = c("C_std","D_std","R_std"), metric = c("euclidean","mahalanobis"))` | `cdr_peer_group`: the `k` nearest countries with `distance`, the `vars`, and `g`; self excluded; target in `attr(, "target")`. |
+| `cdr_reform_path` | `(country, target_g, data, model = NULL, cost = c(1,1,1), step = 0.02, max_iter = 500)` | `cdr_reform_path`: gradient ascent on the fitted growth surface (steepest ascent in growth per unit cost), N fixed, box-constrained to [0,1]. `$path`, `$reached`, `$iterations`, `$total_change`, `$total_cost`. |
+| `cdr_plot_map` | `(data, fill = c("cdr_index","C_std","D_std","R_std","g"), year, title)` | `ggplot` world choropleth. ISO2 → base-R map region via `maps::iso3166`. Requires `ggplot2` + `maps`. |
+| `cdr_plot_animated` | `(data, x = "C_std", y = "R_std", min_countries = 10)` | `gganim`: bubbles moving through CDR space over years, size = GDP, colour = `g`. Requires `ggplot2` + `gganimate`. Only 2022–2024 of data. |
+| `cdr_country_report` | `(country, data, output_file, output_format = "html_document", quiet = TRUE)` | Renders `inst/rmd/country_report.Rmd` (index + rank, peer group, growth gap, friction). Returns the file path. Requires `rmarkdown` + pandoc. |
+| `cdr_explorer` | `(...)` | `shiny::runApp()` on `inst/shiny/explorer/app.R` — scatter, CDR index table, country profile, counterfactual sliders. Requires `shiny`. |
