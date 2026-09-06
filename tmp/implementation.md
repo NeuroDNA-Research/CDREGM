@@ -167,7 +167,7 @@ CDRN and CDRNL are better predictors but biased; CDRN's main role is pedagogical
 **Tier 4 — Policy and Dissemination:** [Done]
 `cdr_explorer` (Shiny), `cdr_country_report`, `cdr_plot_map`, `cdr_plot_animated`, `cdr_democratic_friction`, `cdr_reform_path`, `cdr_peer_group`
 
-**Tier 5 — Advanced Econometrics:**
+**Tier 5 — Advanced Econometrics:** [Done]
 `cdr_spatial`, `cdr_bayes`, `cdr_gmm`, `cdr_quantile`, `cdr_structural_break`, `cdr_convergence_clubs`
 
 ---
@@ -247,3 +247,34 @@ or a named vector.
 | `cdr_plot_animated` | `(data, x = "C_std", y = "R_std", min_countries = 10)` | `gganim`: bubbles moving through CDR space over years, size = GDP, colour = `g`. Requires `ggplot2` + `gganimate`. Only 2022–2024 of data. |
 | `cdr_country_report` | `(country, data, output_file, output_format = "html_document", quiet = TRUE)` | Renders `inst/rmd/country_report.Rmd` (index + rank, peer group, growth gap, friction). Returns the file path. Requires `rmarkdown` + pandoc. |
 | `cdr_explorer` | `(...)` | `shiny::runApp()` on `inst/shiny/explorer/app.R` — scatter, CDR index table, country profile, counterfactual sliders. Requires `shiny`. |
+
+### Tier 5 — Advanced Econometrics (2026-09-06)
+
+New Suggests: `quantreg`, `sandwich`, `spatialreg`, `spdep`, `strucchange`.
+New files: `R/cdr_tier5_utils.R` (`.cdr_tsls`, `.cdr_knn_weights`,
+`.cdr_moran` — all base R), `R/cdr_quantile.R`, `R/cdr_bayes.R`,
+`R/cdr_spatial.R`, `R/cdr_gmm.R`, `R/cdr_structural_break.R`,
+`R/cdr_convergence_clubs.R`. Tests: `tests/testthat/test-cdr_tier5.R`
+(145 pass / 4 skip total).
+
+Design choice: the spatial-autocorrelation test, the spatial-lag model,
+and the Bayesian regression are all implemented in base R so they run
+with no heavy dependency; `spatialreg` (ML SAR/SEM) and `rstanarm` (MCMC)
+are optional add-ons, not requirements.
+
+| Function | Signature | Returns / behaviour |
+|---|---|---|
+| `cdr_quantile` | `(data, tau = c(.1,.25,.5,.75,.9))` | `cdr_quantile`: `$fit` (`quantreg::rq`), `$ols`, `$coefficients` (terms x [tau…, OLS]). On this data `C_std` flips from +0.14 at tau=0.1 to -0.15 at tau=0.9 (heterogeneous effects). Requires `quantreg`. |
+| `cdr_bayes` | `(data, prior_mean = "published", prior_scale = 0.5, prior_shape/rate = 1e-3, n_draws = 4000, seed)` | `cdr_bayes`: analytic Normal-Inverse-Gamma conjugate posterior, no MCMC. Prior centred on the published coefficients; `prior_scale` sets strength. `$posterior` (term, mean, sd, q2.5, q97.5), `$draws`, `$sigma`. |
+| `cdr_spatial` | `(data, weights = c("cdr","latitude"), k = 5, n_perm = 999)` | `cdr_spatial`: Moran's I on growth and the CDR index (analytic + permutation p, base R), spatial-lag `rho` by spatial 2SLS (`Wg` instrumented by `WX`, `W^2X`). ML SAR/SEM added if `spatialreg` + `spdep` present. Neighbours = k-NN in CDR space or by \|latitude\| (no longitude in the data). |
+| `cdr_gmm` | `(data, lag_g = 1)` | `cdr_gmm`: Arellano-Bond difference GMM via `plm::pgmm` (returns `NULL` — panel too short: only 2022–2024 of growth), plus the level-CDR vs Solow log-linear adjusted-R^2 contrast. Requires `plm`. |
+| `cdr_structural_break` | `(data, breakpoint = NULL)` | `cdr_structural_break`: joint F-test of coefficient equality across years (year-interacted model), Chow test at `breakpoint` (default median year), per-year coefficient table, and `strucchange::breakpoints` on the year-mean growth series if available. On this data: joint p = 0.14, Chow at 2023 p = 0.035. |
+| `cdr_convergence_clubs` | `(data, variable = "gdp_pc", r = 0.3)` | `cdr_convergence_clubs`: Phillips-Sul log-t regression (base R). `$b` (log-t slope), `$se`, `$t_stat`, `$converges` (b's one-sided t > -1.65). HAC SE via `sandwich` only when the series is long enough (it isn't here). Full club clustering needs `ConvergenceClubs` and a longer T. |
+
+**Data-length caveat (applies to Tiers 3–5):** the bundled panel covers
+2021–2025 with usable growth only for 2022–2024. Anything that needs a
+long T — `cdr_gmm` (dynamic GMM), `cdr_panel` (within estimator),
+`cdr_structural_break`, `cdr_convergence_clubs`, `cdr_plot_coefficient_path`,
+`cdr_plot_animated` — is mechanically correct but statistically thin on
+this data and will sharpen once `cdr_update_data()` / a historical panel
+(Tier 3 data-infrastructure items, not yet built) extends the series.

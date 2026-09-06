@@ -33,8 +33,13 @@ Suggests:
     maps,
     plm,
     plotly,
+    quantreg,
     rmarkdown,
+    sandwich,
     shiny,
+    spatialreg,
+    spdep,
+    strucchange,
     testthat (>= 3.0.0),
     vdemdata
 Config/testthat/edition: 3
