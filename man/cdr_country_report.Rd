@@ -18,8 +18,8 @@ cdr_country_report(
 \item{data}{A panel from \code{\link[=cdr_build_panel]{cdr_build_panel()}}, or \code{NULL} to build it
 inside the report.}
 
-\item{output_file}{Output path.  Default \verb{cdr_report_<ISO2>.<ext>} in
-the working directory.}
+\item{output_file}{Output path.  Default \verb{cdr_report_<ISO2>.<ext>} in a
+temporary directory.}
 
 \item{output_format}{An \code{rmarkdown} output format.  Default
 \code{"html_document"}.}

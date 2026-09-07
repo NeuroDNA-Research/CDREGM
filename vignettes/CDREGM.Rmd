@@ -11,48 +11,73 @@ vignette: >
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
-## Overview
+## The CDR framework
 
-**CDREGM** provides tools for estimating economic growth models within the
-*Capitalism, Democracy, and Rule of Law* (CDR) framework.  The central
-premise is that institutional quality — measured along three dimensions —
-is a first-order determinant of long-run per-capita income growth.
+**CDREGM** implements the *Capitalism, Democracy, and Rule of Law* (CDR)
+growth model of Ridley and co-authors. Three standardized institutional
+variables --- capitalism `C` (market capitalization), democracy `D`
+(V-Dem electoral democracy), and rule of law `R` (control of corruption)
+--- together with natural resources `N` and, as an instrument, absolute
+latitude `L`, explain cross-country differences in growth. The model
+carries an interaction term `C * D * R` whose negative coefficient is
+read as *democratic friction*: the cost of decision-making disagreement
+when all three institutions are strong at once.
 
-| Dimension        | Typical proxy variables                          |
-|------------------|--------------------------------------------------|
-| Capitalism       | Property-rights index, economic-freedom score    |
-| Democracy        | Polity IV, Freedom House political-rights score  |
-| Rule of Law      | World Governance Indicators, ICRG law & order    |
-
-## Basic usage
-
-```{r basic}
+```{r pkg}
 library(CDREGM)
-
-set.seed(42)
-n <- 100
-df <- data.frame(
-  growth      = rnorm(n, 2, 1.5),
-  prop_rights = runif(n, 0, 10),
-  democracy   = runif(n, 0, 10),
-  rule_of_law = runif(n, 0, 10),
-  ln_gdp0     = rnorm(n, 8, 1)
-)
-
-m <- cdr_growth(
-  data       = df,
-  gdp_growth = "growth",
-  cdr_vars   = c("prop_rights", "democracy", "rule_of_law"),
-  controls   = "ln_gdp0"
-)
-
-summary(m$fit)
 ```
 
-## Interpreting coefficients
+## Building the panel
 
-A positive coefficient on a CDR variable indicates that higher institutional
-quality is associated with faster growth, holding other factors constant.
-Consult the vignette `vignette("panel-data", package = "CDREGM")` (planned)
-for fixed-effects and GMM extensions.
+`cdr_build_panel()` merges the bundled `indicators` and `countries`
+datasets and adds the min-max standardized columns used throughout.
+
+```{r panel}
+panel <- cdr_build_panel()
+head(panel[, c("iso2c", "year", "C_std", "D_std", "R_std", "CDR")])
 ```
+
+## Estimating the model
+
+```{r ols}
+m <- cdr_ols(panel)
+m
+```
+
+`cdr_index()` ranks countries by the friction-adjusted composite index:
+
+```{r index}
+head(cdr_index(panel))
+```
+
+## Structural quantities
+
+The parametric endogenous growth rate and the theoretical growth ceiling
+reproduce the published values when the paper's coefficients are used:
+
+```{r endog}
+cdr_endogenous_rate(coefficients = "published")
+```
+
+## Policy tools
+
+```{r policy}
+head(cdr_growth_gap(panel))
+
+cdr_simulate("Poland", c(R_std = 0.1), data = panel, n_rep = 200, seed = 1)
+```
+
+## Diagnostics and reporting
+
+```{r diag}
+cdr_diagnostic_suite(panel)
+
+cdr_explain_model(m)
+```
+
+Further tools cover panel and GMM estimation (`cdr_panel()`,
+`cdr_gmm()`), quantile and Bayesian regression (`cdr_quantile()`,
+`cdr_bayes()`), spatial dependence (`cdr_spatial()`), visualization
+(`cdr_plot_3d()`, `cdr_plot_map()`), an interactive explorer
+(`cdr_explorer()`), and data maintenance (`cdr_update_data()`,
+`cdr_historical_panel()`).

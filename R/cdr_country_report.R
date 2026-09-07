@@ -7,8 +7,8 @@
 #' @param country ISO-2 code or country name.
 #' @param data A panel from [cdr_build_panel()], or `NULL` to build it
 #'   inside the report.
-#' @param output_file Output path.  Default `cdr_report_<ISO2>.<ext>` in
-#'   the working directory.
+#' @param output_file Output path.  Default `cdr_report_<ISO2>.<ext>` in a
+#'   temporary directory.
 #' @param output_format An `rmarkdown` output format.  Default
 #'   `"html_document"`.
 #' @param quiet Passed to [rmarkdown::render()].  Default `TRUE`.
@@ -39,7 +39,7 @@ cdr_country_report <- function(country, data = NULL, output_file = NULL,
     ext <- switch(output_format,
                   html_document = "html", pdf_document = "pdf",
                   word_document = "docx", "html")
-    output_file <- file.path(getwd(),
+    output_file <- file.path(tempdir(),
                              paste0("cdr_report_", tgt$iso2c, ".", ext))
   }
 

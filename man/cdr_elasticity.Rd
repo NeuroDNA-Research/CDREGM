@@ -41,10 +41,10 @@ and the elasticity is \eqn{(\hat C_i / \hat g_i)\,
 \partial E[\hat g_i]/\partial \hat C_i}.
 }
 \details{
-With \code{f = 0} growth is always inelastic (elasticity < 1); unitary
-elasticity becomes reachable for moderate \code{D}, \code{R} once \code{f} rises toward
-the global average gross fixed capital formation rate (\eqn{\approx}
-0.21).
+Note that the reinvestment multiplier cancels in the elasticity
+expression, so the reported \code{elasticity} does not vary with \code{f}; only
+\code{g_hat} and \code{marginal_return} do.  \code{f} is retained for those two
+quantities and for compatibility with the published derivation.
 }
 \examples{
 head(cdr_elasticity(f = 0.21))

@@ -12,10 +12,10 @@
 #' and the elasticity is \eqn{(\hat C_i / \hat g_i)\,
 #' \partial E[\hat g_i]/\partial \hat C_i}.
 #'
-#' With `f = 0` growth is always inelastic (elasticity < 1); unitary
-#' elasticity becomes reachable for moderate `D`, `R` once `f` rises toward
-#' the global average gross fixed capital formation rate (\eqn{\approx}
-#' 0.21).
+#' Note that the reinvestment multiplier cancels in the elasticity
+#' expression, so the reported `elasticity` does not vary with `f`; only
+#' `g_hat` and `marginal_return` do.  `f` is retained for those two
+#' quantities and for compatibility with the published derivation.
 #'
 #' @param data A panel from [cdr_build_panel()], or `NULL` to build it.
 #' @param f Reinvestment fraction, scalar in \[0, 1).  Default `0`.

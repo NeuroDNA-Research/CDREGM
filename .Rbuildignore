@@ -10,4 +10,8 @@
 ^research$
 ^demo_.*\.R$
 ^LICENSE\.md$
+^TODO\.md$
 ^\.claude$
+^\.vscode$
+^CDREGM\.Rcheck$
+^CDREGM_.*\.tar\.gz$

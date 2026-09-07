@@ -300,3 +300,63 @@ frames), `R/cdr_data_quality.R`, `R/cdr_iso_lookup.R`,
 | `cdr_add_country` | `(code, indicators_row, country_row = NULL, indicators, countries)` | `list(indicators, countries, panel, extrapolation)`. Appends the rows, rebuilds the standardized panel, and **warns** when the new country's `capitalization` / `democracy` / `corruption` / \|latitude\| / `natural_resources` fall outside the original 79-country range. `country_row` required only for a code not already in `countries`. |
 | `cdr_historical_panel` | `(start_year = 2000, end_year = NULL, codes = NULL, cache_dir = tempdir(), refresh = FALSE)` | Long annual panel (same columns as `indicators`) via `.fetch_wb_indicators` + `.fetch_vdem_democracy`, cached as `cdr_historical_<start>_<end>.rds`. Cache path in `attr(, "cache")`. This is the fix for the data-length caveat above. |
 | `cdr_update_data` | `(codes = NULL, start_year = NULL, end_year = NULL, path = NULL)` | Maintenance: re-downloads the indicator panel + natural-resource rents, carries latitudes over, returns `list(indicators, countries)`. `path` writes xz-compressed `.rda` files for `data-raw/`. |
+
+### Tier 7 — Policy tools, integration, diagnostics (2026-09-07)
+
+New Suggests: `broom`. New files: `R/cdr_tier7_utils.R`
+(`.cdr_tsls_published`, `.cdr_elasticity_at`, `.cdr_income_group`),
+`R/cdr_marginal_returns.R`, `R/cdr_growth_accounting.R`,
+`R/cdr_optimal_reinvestment.R`, `R/cdr_immigration_impact.R`,
+`R/cdr_benchmarking.R`, `R/cdr_broom.R`, `R/cdr_diagnostic_suite.R`,
+`R/cdr_explain_model.R`, `R/cdr_plots_extra.R`. Tests:
+`tests/testthat/test-cdr_tier7.R` (211 pass / 4 skip total).
+
+| Function | Signature | Returns / behaviour |
+|---|---|---|
+| `cdr_max_growth` | `(data, model = NULL, level = 0.95)` | Named vector `fit`/`lwr`/`upr`: OLS-predicted growth at `C = D = R = 1`, N at the sample mean. Under the fitted (weak) model the friction term makes this negative; `cdr_ols` coefficients are the driver. |
+| `cdr_marginal_returns` | `(data, model = NULL)` | `cdr_marginal_returns` data frame: `dg_dC = b_C + b_CDR·D·R` (and D, R analogues) at each country's current values; `best` = largest. Sorted by max marginal return. |
+| `cdr_growth_accounting` | `(country, from_year, to_year, data, model = NULL)` | `cdr_growth_accounting`: exact Shapley decomposition of the change in fitted g into `C`/`D`/`R`/`N` contributions that sum to the total (24 orderings; the interaction makes ordering matter). |
+| `cdr_optimal_reinvestment` | `(data, coefficients = <published 2SLS>, target = 1, c_hat = 0.85)` | `cdr_optimal_reinvestment`: per-country entrepreneurship elasticity of growth and an `elastic` flag. **Note:** the reinvestment multiplier `f` cancels in the structural elasticity, so there is no well-posed per-country optimal `f`; the paper's ~0.21 world rate is returned as `attr(, "world_rate")`. `cdr_elasticity` doc updated with the same caveat. |
+| `cdr_immigration_impact` | `(origin, destination, n, data, year = NULL, capital = 1)` | `cdr_immigration_impact`: `destination_gain = n·gdp_pc(dest)·capital`, `origin_loss = n·gdp_pc(orig)`, `world_gain` the difference (current USD). |
+| `cdr_benchmarking` | `(country, data, metrics = c("C_std","D_std","R_std","CDR","g"))` | `cdr_benchmarking`: the country's value, income-peer mean + z-score, and (via `countrycode`) region-peer mean + z-score for each metric. Income groups from World Bank GNI-per-capita thresholds applied to GDP per capita. |
+| `tidy_cdr_ols` / `glance_cdr_ols` | `(x, conf.int = FALSE, conf.level = 0.95)` / `(x)` | broom-shaped data frames; also registered as `broom::tidy` / `broom::glance` S3 methods for `cdr_ols` (delayed registration, `broom` in Suggests). |
+| `cdr_diagnostic_suite` | `(data, model = NULL)` | `cdr_diagnostic_suite` data frame: Breusch-Pagan, Durbin-Watson, Shapiro-Wilk, max VIF, Cook's-D influential count, each with a pass/warn/fail verdict. `lmtest` used when present, base-R fallback otherwise; SW/VIF/Cook's-D are base R. |
+| `cdr_explain_model` | `(model = NULL, data = NULL)` | `cdr_explanation`: a plain-English paragraph set — fit, each coefficient's direction and size, the friction interpretation, the partial-R² ranking. |
+| `cdr_plot_scatter` | `(data, x = "C_std", label_n = 5)` | `ggplot`: g vs a CDR variable (or `"cdr_index"`), OLS fit line, top-|resid| countries labelled. |
+| `cdr_plot_decomposition` | `(data, model = NULL, n = 25)` | `ggplot`: stacked bars of `b_C·C`, `b_D·D`, `b_R·R`, friction, `b_N·N` per country. |
+
+---
+
+## CRAN readiness (2026-09-07)
+
+`R CMD check --as-cran`: **0 errors, 0 warnings, 1 NOTE** (the unavoidable
+"New submission" note). Verified clean: examples, tests (211 pass / 4
+skip), vignette build + rebuild, Rd, non-ASCII, portable file names, S3
+registration, `dependencies in R code`.
+
+Two sub-items inside the NOTE are environmental, not defects:
+
+* `vdemdata` "not in mainstream repositories" — it is a soft dependency
+  (`requireNamespace` guard in `get_country_indicators()`; the bundled
+  `indicators` already carries the democracy variable). Declared via
+  `Additional_repositories: https://vdeminstitute.r-universe.dev` and
+  explained in `cran-comments.md`.
+* "invalid URL" for `info.worldbank.org` / the r-universe — the check
+  sandbox has no network; both resolve on a connected machine.
+
+Added for submission: rewritten `vignettes/CDREGM.Rmd` (uses the real
+`cdr_build_panel` → `cdr_ols` → `cdr_index` workflow, not the old
+`cdr_growth` placeholder), `NEWS.md`, `cran-comments.md`. `.Rbuildignore`
+extended (`TODO.md`, `.vscode`, check artifacts). DESCRIPTION Description
+rewritten and URLs pointed at `github.com/NeuroDNA-Research/CDREGM`.
+`cdr_country_report()` now defaults its output to `tempdir()` (CRAN
+policy: no writing to the working directory). Fixed non-ASCII in
+`R/cdr_core.R` print strings and an escaped `$` in a roxygen block.
+
+### Still deferred (out of scope for 0.1.0)
+
+`I-05` `WDI` backend option, `R-03`/`R-04` (`cdr_executive_summary`,
+`cdr_replication_report`), `E-02` `cdr_teach_standardization`, `C-05`
+`cdr_income_mobility`, `F-17` `cdr_lasso_comparison`, `V-02`/`V-04` native
+alternatives, and the remaining `V-*` one-off plots (`V-07`, `V-08`,
+`V-10`–`V-14`). None are load-bearing; they can land in a 0.2.0.

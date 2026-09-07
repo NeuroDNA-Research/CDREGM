@@ -6,13 +6,13 @@
 \alias{CDREGM-package}
 \title{CDREGM: Capitalism, Democracy and Rule of Law Economic Growth Models}
 \description{
-Implements economic growth models within the Capitalism, Democracy, and Rule of Law (CDR) framework. Provides tools for estimating, comparing, and visualising the joint effects of institutional quality, democratic governance, and property-rights protection on long-run economic growth. Supports panel-data estimation, robustness diagnostics, and replication workflows common in comparative political economy research.
+Tools for estimating, extending, and visualising the Capitalism, Democracy, and Rule of Law (CDR) economic growth model of Ridley and Khan (2018) and Ridley and Llaugel (2018), in which three standardised institutional variables and their interaction explain cross-country growth. Provides the ordinary least squares and two-stage least squares estimators, the composite CDR index, the parametric endogenous growth rate, and a wide range of downstream analyses: bootstrap and robustness checks, panel and dynamic-panel models, quantile and Bayesian regression, spatial dependence tests, counterfactual policy simulation, reform-path optimisation, country reports, and an interactive explorer. A bundled 79-country panel of World Bank and V-Dem indicators supports out-of-the-box use, with helpers to refresh or extend it.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/Gypsaman/CDREGM}
-  \item Report bugs at \url{https://github.com/Gypsaman/CDREGM/issues}
+  \item \url{https://github.com/NeuroDNA-Research/CDREGM}
+  \item Report bugs at \url{https://github.com/NeuroDNA-Research/CDREGM/issues}
 }
 
 }
