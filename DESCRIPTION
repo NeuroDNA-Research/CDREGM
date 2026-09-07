@@ -26,6 +26,7 @@ Imports:
     wbstats
 Suggests:
     AER,
+    countrycode,
     gganimate,
     ggplot2,
     knitr,

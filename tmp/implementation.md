@@ -170,6 +170,9 @@ CDRN and CDRNL are better predictors but biased; CDRN's main role is pedagogical
 **Tier 5 — Advanced Econometrics:** [Done]
 `cdr_spatial`, `cdr_bayes`, `cdr_gmm`, `cdr_quantile`, `cdr_structural_break`, `cdr_convergence_clubs`
 
+**Tier 6 — Data Infrastructure (Category 3):** [Done]
+`cdr_build_panel` (Tier 2), `cdr_update_data`, `cdr_data_quality`, `cdr_add_country`, `cdr_historical_panel`, `cdr_merge_external`, `cdr_iso_lookup`
+
 ---
 
 ## Implementation Log
@@ -276,5 +279,24 @@ are optional add-ons, not requirements.
 long T — `cdr_gmm` (dynamic GMM), `cdr_panel` (within estimator),
 `cdr_structural_break`, `cdr_convergence_clubs`, `cdr_plot_coefficient_path`,
 `cdr_plot_animated` — is mechanically correct but statistically thin on
-this data and will sharpen once `cdr_update_data()` / a historical panel
-(Tier 3 data-infrastructure items, not yet built) extends the series.
+this data and will sharpen once `cdr_historical_panel()` extends the series.
+
+### Tier 6 — Data Infrastructure (2026-09-07)
+
+New Suggests: `countrycode` (`wbstats` already Imports). New files:
+`R/utils.R` (`%||%`), `R/cdr_tier6_utils.R` (`.cdr_standardize_panel` —
+runs origin's `cdr_build_panel` standardization from explicit data
+frames), `R/cdr_data_quality.R`, `R/cdr_iso_lookup.R`,
+`R/cdr_merge_external.R`, `R/cdr_add_country.R`, `R/cdr_historical_panel.R`,
+`R/cdr_update_data.R`. Tests: `tests/testthat/test-cdr_tier6.R`
+(174 pass / 4 skip total; the network paths of `cdr_historical_panel` and
+`cdr_update_data` are `skip_on_cran` + `skip_if_offline`).
+
+| Function | Signature | Returns / behaviour |
+|---|---|---|
+| `cdr_data_quality` | `(data = indicators, flag = "capitalization")` | `cdr_data_quality`: `$overall` (fraction NA per variable), `$by_year` (var x year matrix), `$flagged` (country-year cells missing `flag`). On the bundled data: capitalization ~33–39% missing per year, 192 flagged cells. |
+| `cdr_iso_lookup` | `(x, origin = NULL)` | Character vector of ISO-2 codes. Auto-detects format (2-letter → iso2c, 3-letter → iso3c, numeric → UN, else country name via `countrycode::countryname`, so "Deutschland" → "DE"). Warns + `NA` for unmatched. Requires `countrycode`. |
+| `cdr_merge_external` | `(external, key = NULL, name = NULL, data, year = NULL)` | CDR panel left-joined with `external`'s columns, keyed by an ISO-2 column (`key`) or a name column resolved via `cdr_iso_lookup` (`name`). Non-joining external rows in `attr(, "unmatched")`. |
+| `cdr_add_country` | `(code, indicators_row, country_row = NULL, indicators, countries)` | `list(indicators, countries, panel, extrapolation)`. Appends the rows, rebuilds the standardized panel, and **warns** when the new country's `capitalization` / `democracy` / `corruption` / \|latitude\| / `natural_resources` fall outside the original 79-country range. `country_row` required only for a code not already in `countries`. |
+| `cdr_historical_panel` | `(start_year = 2000, end_year = NULL, codes = NULL, cache_dir = tempdir(), refresh = FALSE)` | Long annual panel (same columns as `indicators`) via `.fetch_wb_indicators` + `.fetch_vdem_democracy`, cached as `cdr_historical_<start>_<end>.rds`. Cache path in `attr(, "cache")`. This is the fix for the data-length caveat above. |
+| `cdr_update_data` | `(codes = NULL, start_year = NULL, end_year = NULL, path = NULL)` | Maintenance: re-downloads the indicator panel + natural-resource rents, carries latitudes over, returns `list(indicators, countries)`. `path` writes xz-compressed `.rda` files for `data-raw/`. |
