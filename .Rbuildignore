@@ -8,6 +8,8 @@
 ^tmp$
 ^web$
 ^research$
+^paper$
+^Generalized four-dimensional scientific cdr economic growth model\.pdf$
 ^demo_.*\.R$
 ^LICENSE\.md$
 ^TODO\.md$
