@@ -738,7 +738,7 @@
 
     <div class="sidebar-pdf">
       <h3>Source PDFs</h3>
-      <span class="pdf-tag p1">P1 &middot; 4D CDR Growth Model<br>(Ridley &amp; Llaugel)</span>
+      <span class="pdf-tag p1">P1 &middot; 4D CDR Growth Model<br>(Ridley &amp; Llaugel, 2022)</span>
       <span class="pdf-tag p2">P2 &middot; Advances in CDR Theory<br>(Ridley &amp; Llaugel, 2018)</span>
       <span class="pdf-tag p3">P3 &middot; A New CDR Index<br>(Ridley &amp; Khan)</span>
       <span class="pdf-tag p4">P4 &middot; Supply Side Unveiled<br>(Ridley / Llaugel)</span>
@@ -1228,10 +1228,16 @@
         <div class="eq-note">|t| = (2.66) (0.88) (1.95) (1.88) (4.45) &middot; R&sup2;<sub>adj</sub> = 74%<br>Coefficient drop 1.53&rarr;1.30: confirms ~85% of C is exogenous entrepreneurship capital; ~15% is endogenous capital stock from prior ideas.</div>
       </div>
 
+      <div class="equation-box">
+        <div class="eq-label">Extension: Adding Geography (Ridley &amp; Llaugel 2022, §4.3&ndash;4.4)</div>
+        <div class="eq">R&sup2;<sub>adj</sub> = 83% (C, D, R alone) &rarr; 90% (C, D, R + geography), n = 79 countries</div>
+        <div class="eq-note">Adding a geography control alongside C, D, and R raises explained variance from 83% to 90% across the same 79-country sample. This does not reopen the natural-resources paradox from §1 &mdash; geography here captures residual variation in trade access, climate, and disease burden left over once institutional quality is accounted for, not an independent wealth endowment.</div>
+      </div>
+
       <div class="content-grid">
         <div class="content-block block-describe">
           <h4>The C&middot;D&middot;R Friction Term</h4>
-          <p>The negative coefficient on C&middot;D&middot;R (&minus;1.21 OLS, &minus;0.98 2SLS) represents democratic friction &mdash; the cost of consensus. In a 51% majority democracy, 49% disagree with every decision. This necessary friction subtracts from the theoretical maximum GDP achievable under perfect agreement. CDR is not rapacious capitalism but capitalism <em>in the presence</em> of democracy and rule of law.</p>
+          <p>The negative coefficient on C&middot;D&middot;R (&minus;1.21 OLS, &minus;0.98 2SLS) represents democratic friction &mdash; the cost of consensus. In a 51% majority democracy, 49% disagree with every decision. This necessary friction subtracts from the theoretical maximum GDP achievable under perfect agreement. CDR is not rapacious capitalism but capitalism <em>in the presence</em> of democracy and rule of law. The negative sign does not mean that strong Capitalism, Democracy, and Rule of Law working together reduce growth &mdash; only that their joint strength carries a decision-making cost when excessive delays in decision-making and over-regulation are present (Ridley &amp; Llaugel 2022, §4.3&ndash;4.4).</p>
         </div>
         <div class="content-block block-describe">
           <h4>Residuals &amp; Model Validation</h4>
@@ -1405,6 +1411,7 @@
           <li>Derive the theoretical endogenous growth rate (~1.8%) from CDR regression coefficients</li>
           <li>Explain the connection between 1.8% and Euler's constant: &asymp; &frac14;e&sup2;</li>
           <li>Interpret the parametric integral derivation of maximum endogenous growth (~30%) and its economic meaning (overheating threshold)</li>
+          <li>Read the CDR growth field as a vector field &mdash; interpret its curl (institutional "twisting" cost) and divergence (outward expansionary pull), and derive the geometric return on investment</li>
         </ul>
       </div>
 
@@ -1413,6 +1420,7 @@
         <div class="stat-chip acc-stat"><div class="val">30%</div><div class="lbl">Theoretical maximum single-year growth (overheating threshold)</div></div>
         <div class="stat-chip n-stat"><div class="val">&minus;12.9%</div><div class="lbl">US contraction 1932 (Great Depression worst year)</div></div>
         <div class="stat-chip n-stat"><div class="val">25%</div><div class="lbl">Libya 2017 &mdash; highest empirical growth found</div></div>
+        <div class="stat-chip acc-stat"><div class="val">9.6%</div><div class="lbl">Geometric ROI = divergence / &#124;curl&#124; at C=D=R=1</div></div>
       </div>
 
       <div class="equation-box">
@@ -1435,12 +1443,23 @@
         "This theoretical 1.8% is numerically equal to what economists have observed empirically as the steady-state rate to which countries converge as they develop. This derivation explains the previously observed but unexplained 1.8% and brings that mystery to an end." &mdash; P1, §4.1
       </div>
 
+      <div class="equation-box">
+        <div class="eq-label">The CDR Field as a Vector Quantity &mdash; Curl, Divergence &amp; Geometric Return on Investment (P1 §4.3&ndash;4.4)</div>
+        <div class="eq">F(C,D,R) = F<sub>C</sub>&thinsp;i + F<sub>D</sub>&thinsp;j + F<sub>R</sub>&thinsp;k</div>
+        <div class="eq">&nabla;&times;F = (&part;F<sub>R</sub>/&part;D &minus; &part;F<sub>D</sub>/&part;R)i &minus; (&part;F<sub>R</sub>/&part;C &minus; &part;F<sub>C</sub>/&part;R)j + (&part;F<sub>D</sub>/&part;C &minus; &part;F<sub>C</sub>/&part;D)k</div>
+        <div class="eq">Evaluated at C = D = R = 1, ê = 0.85, with &beta;<sub>D</sub> = 0.116963, &beta;<sub>R</sub> = 0.275395, &beta;<sub>CDR</sub> = &minus;0.98133:</div>
+        <div class="eq">&nabla;&times;F &asymp; &minus;0.16&thinsp;i &minus; 0.80&thinsp;j + 0.96&thinsp;k &middot; &nabla;&middot;F &asymp; 0.18511</div>
+        <div class="eq">ROI<sub>geometric</sub> = divergence / |curl| = 0.18511 / (|&minus;0.16| + |&minus;0.80| + |0.96|) = 0.18511 / 1.92 &asymp; <strong>9.6%</strong></div>
+        <div class="eq-note">Treating F as the marginal-return vector of the CDR growth field, curl measures how the marginal return to one pillar twists against the others &mdash; the geometric expression of the decision-making friction discussed in §6 &mdash; while divergence measures the field's net outward, expansionary pull. Analogous to defining investment return as profit over investment, Ridley &amp; Llaugel (2022) define a geometric return on investment as divergence over total curl magnitude: even at full institutional saturation (C=D=R=1), only about a tenth of the CDR field's raw expansionary force survives as realizable growth &mdash; the rest is absorbed by the coordination "twist" among Capitalism, Democracy, and Rule of Law. See P1 §4.3&ndash;4.4 for the full derivation.</div>
+      </div>
+
       <div class="interactive">
         <h4>Interactive Feature: Growth Simulator</h4>
         <ul>
           <li>Animated derivation walkthrough &mdash; step-by-step coefficient summation leading to 1.8%</li>
           <li>Show connection to Euler's number: e &asymp; 2.718, &frac14;e&sup2; &asymp; 0.018</li>
           <li>Growth rate slider: demonstrate what sustained 10%, 20%, 30% growth implies for overheating risk</li>
+          <li>3D vector-field viewer: rotate the CDR field at a chosen (C,D,R) point, toggle curl vs. divergence overlays, and read off the resulting geometric ROI</li>
           <li>Historical comparisons panel: US WWII growth spurt (17.7% in 1941), Great Depression contraction, Libya 2017</li>
         </ul>
       </div>
@@ -1448,7 +1467,7 @@
       <div class="source-bar">
         <span class="label">Sources</span>
         <div class="sources">
-          <span class="src p1">P1 &middot; §4.1 Expected endogenous growth derivation (1.8%), §4.2 Parametric integral average, §4.3 Maximum growth (30%), §4.4 Discussion (overheating), §5 Conclusions, pp. 6&ndash;11</span>
+          <span class="src p1">P1 &middot; §4.1 Expected endogenous growth derivation (1.8%), §4.2 Parametric integral average, §4.3 Maximum growth (30%) &amp; the CDR vector field (curl/divergence, geometric ROI), §4.4 Discussion (overheating, decision-making cost, geography extension to 90% R&sup2;), §5 Conclusions, pp. 6&ndash;11</span>
           <span class="src p2">P2 &middot; §4 Parametric derivation optimal growth rate (3.7% for full CDR model), §5 Conclusions, pp. 11&ndash;13</span>
         </div>
       </div>
@@ -1848,7 +1867,7 @@
 <footer>
   <h3>Source Documents</h3>
   <div class="pdf-ref p1">
-    <strong>[P1] Ridley, A.D. &amp; Llaugel, F.</strong> "The Four-Dimensional Scientific CDR Economic Growth Model: expected value, average, and limits to growth." 13 pp. &mdash; <em>Provides: 4D bubble visualization; first derivation of 1.8% expected growth and 30% maximum growth limit via parametric integration; OLS + 2SLS model with latitude IV; 79-country data; nomenclature.</em>
+    <strong>[P1] Ridley, A.D. &amp; Llaugel, F. (2022)</strong> "The Four-Dimensional Scientific CDR Economic Growth Model: expected value, average, and limits to growth." 13 pp. &mdash; <em>Provides: 4D bubble visualization; first derivation of 1.8% expected growth and 30% maximum growth limit via parametric integration; OLS + 2SLS model with latitude IV; 79-country data; nomenclature; §4.3&ndash;4.4: CDR field curl/divergence and geometric return on investment, geography-augmented R&sup2; (83% &rarr; 90%), and the decision-making-cost reading of the C&middot;D&middot;R friction term.</em>
   </div>
   <div class="pdf-ref p2">
     <strong>[P2] Ridley, A.D. &amp; Llaugel, F. (2018)</strong> "Advances in the CDR economic theory of entrepreneurship and GDP: from survey of economic growth models to unified theory." Copyright 7/1/2018. 20 pp. + Appendices A&ndash;F. &mdash; <em>Provides: historical survey from Malthus to CDR; implications for immigration; 3.7% growth derivation; entrepreneurship elasticity (Appendix D); global time invariance (Appendix E); macro&ndash;micro integration (Appendix F); information theory of entrepreneurship (Appendix C).</em>

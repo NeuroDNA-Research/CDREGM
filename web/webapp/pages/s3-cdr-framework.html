@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>&sect;3 CDR Framework &mdash; CDR Growth Model</title>
+<link rel="stylesheet" href="../assets/css/styles.css">
+<style>
+  .glossary-item { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 0.5rem; overflow: hidden; }
+  .glossary-term { width: 100%; text-align: left; background: var(--surface2); color: var(--text); border: none; padding: 0.6rem 0.9rem; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; }
+  .glossary-def { display: none; padding: 0.75rem 0.9rem; font-size: 0.83rem; color: var(--text-muted); background: var(--surface); }
+  .glossary-item.open .glossary-def { display: block; }
+  .glossary-item.open .glossary-term { color: var(--accent); }
+</style>
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar-mount"></nav>
+  <main>
+    <div class="section" id="s3">
+      <div class="section-header">
+        <div class="section-num">03</div>
+        <div class="section-title-wrap">
+          <h1>The CDR Framework &mdash; Core Concepts</h1>
+          <div class="subtitle">Formal definitions, the CDR scientific law, and the principle of parsimony</div>
+        </div>
+      </div>
+
+      <div class="learning-obj">
+        <h4>Learning Objectives</h4>
+        <ul>
+          <li>State precise CDR definitions of Capitalism, Democracy, and Rule of Law distinguishing them from colloquial usage</li>
+          <li>Explain why D and R are heterogeneous exogenous catalysts rather than factor inputs</li>
+          <li>Apply Occam's Razor to justify a 3-variable model for ~83% of GDP variance</li>
+        </ul>
+      </div>
+
+      <div class="def-grid">
+        <div class="def-card cap"><div class="symbol">C</div><div class="term">Capitalism (C)</div><div class="definition">The mechanism for the collection and assembly of capital, measured by total market capitalization. Reflects entrepreneurship capital (exogenous new ideas) plus capital stock (endogenous prior ideas). C is partially endogenous; 2SLS corrects this bias via latitude as instrumental variable.</div></div>
+        <div class="def-card dem"><div class="symbol">D</div><div class="term">Democracy (D)</div><div class="definition">Private workforce idea participation and periodic election of public representatives. An exogenous catalyst for the C&rarr;G conversion process. D creates new pathways for optimal capital deployment. Measured by democracy ranking (highest = 1, lowest = number of countries).</div></div>
+        <div class="def-card rol"><div class="symbol">R</div><div class="term">Rule of Law (R)</div><div class="definition">The reverse of corruption; protection of shareholder and property rights. An exogenous catalyst that attracts capital by providing governance stability. Measured by inverse corruption ranking. Encompasses property rights &mdash; prerequisite for capital collateral and foreign direct investment.</div></div>
+        <div class="def-card gdp"><div class="symbol">G</div><div class="term">GDPppp (G)</div><div class="definition">Real per-capita gross domestic product adjusted for purchasing power parity. Standardized: g = (G &minus; lowest G)/(highest G &minus; lowest G), ensuring 0 &le; g &le; 1 across all countries.</div></div>
+        <div class="def-card entr"><div class="symbol">&ecirc;</div><div class="term">Entrepreneurship Capital</div><div class="definition">The exogenous component of C: pure human ideas of imagination and creativity. Separated from capital stock via 2SLS using latitude as IV. Contributes ~85% to GDP generation (vs. 15% from accumulated capital stock). The true source of new wealth creation.</div></div>
+      </div>
+
+      <div class="finding">
+        <div class="find-label">The CDR Scientific Law</div>
+        "High CDR countries are where ideas go to fly. Low CDR countries are where ideas go to die. The CDR model is the first and only scientific economic growth model &mdash; governed by the physical and chemical laws of nature, global time invariant."
+      </div>
+
+      <div class="content-grid">
+        <div class="content-block block-describe">
+          <h4>Catalysis Analogy</h4>
+          <p>D and R behave as heterogeneous exogenous catalysts &mdash; analogous to Berzelius (1835) chemical catalysts. They speed up the C&rarr;G conversion without being consumed in the process. At the end of a growth cycle, D and R remain intact, unchanged, ready for the next cycle. They produce no information themselves but provide a low-noise channel through which entrepreneurial information flows.</p>
+        </div>
+        <div class="content-block block-describe">
+          <h4>Parsimony (Occam's Razor)</h4>
+          <p>The CDR model uses only 3 policy variables to explain 83% of cross-country variation in GDPppp. While democracy and rule of law are complex constructs containing many sub-components, those components are statistically subsumed in C, D, and R. The principle: "Everything should be made as simple as possible, but not simpler."</p>
+        </div>
+      </div>
+
+      <div class="widget">
+        <h4>Interactive Nomenclature Glossary <span class="widget-badge">click to expand</span></h4>
+        <div id="glossary"></div>
+      </div>
+
+      <div class="source-bar">
+        <span class="label">Sources</span>
+        <div class="sources">
+          <span class="src p1">P1 &middot; &sect;1 Introduction (definitions, catalysis), Nomenclature pp. 12&ndash;13</span>
+          <span class="src p2">P2 &middot; &sect;4 CDR model definitions (bold italics), pp. 6&ndash;7</span>
+          <span class="src p3">P3 &middot; &sect;3 CDR Index &mdash; Definitions, &sect;Statistical Analysis Causation, pp. 3&ndash;5, 11&ndash;12</span>
+          <span class="src p4">P4 &middot; &sect;3 Structures of CDR (Endogenous/Exogenous variables), Appendix A.2 Nomenclature, pp. 6, 15</span>
+        </div>
+      </div>
+
+      <div class="pager" id="pager-mount"></div>
+    </div>
+  </main>
+</div>
+<footer id="site-footer"></footer>
+
+<script>const SITE_ROOT = "../";</script>
+<script src="../assets/js/layout.js"></script>
+<script>
+const GLOSSARY = [
+  ["Capitalism", "The mechanism for collecting and assembling capital, measured by total market capitalization."],
+  ["Capital stock", "The endogenous, accumulated-prior-ideas component of C — roughly 15% of C's contribution to growth."],
+  ["Catalysis", "The chemistry-inspired analogy for D and R: they accelerate the C&rarr;G conversion without being consumed."],
+  ["CDR index", "Composite standardized index: CDR index = CDRs (sum term) + CDRp (product/friction term)."],
+  ["Collaboration", "Shared-goal, mutual-accountability behavior that generates a Collaboration Dividend — the behavioral foundation of Rule of Law (see &sect;13)."],
+  ["Company", "A micro production unit through which capital and labor are combined; the Cobb-Douglas level of analysis (see &sect;11)."],
+  ["Cooperation", "Transaction-based, self-interest-aligned exchange that yields ordinary market returns — distinct from collaboration."],
+  ["Democracy", "Private workforce idea participation plus periodic election of representatives; an exogenous catalyst."],
+  ["Economic development", "The qualitative maturation of institutions (rising C, D, R) that underlies sustained economic growth."],
+  ["Economic growth", "The quantitative increase in standardized per-capita GDP (g) over time."],
+  ["Endogenous", "Determined within the economic system itself — e.g., capital stock accumulated from prior ideas."],
+  ["Entrepreneurship", "The exogenous component of C: pure imagination and creativity, the true source of new wealth."],
+  ["Exogenous", "Determined outside the system — D, R, and entrepreneurship capital (&ecirc;) act as exogenous inputs."],
+  ["GDP", "Gross domestic product, standardized to g = (G &minus; G<sub>min</sub>)/(G<sub>max</sub> &minus; G<sub>min</sub>)."],
+  ["Human capital", "Skills, knowledge, and ideas embodied in people; entrepreneurship capital is its purest, most exogenous form."],
+  ["Human labor", "Raw labor input, treated as homogeneous \"brawn\" in the CDR framework, following Ricardo."],
+  ["Natural resources rents", "Income from extraction of natural resources per capita (N) — found to explain only ~6% of GDP variation."],
+  ["Property rights", "Legal protection of ownership; a prerequisite for capital collateral and FDI, subsumed within R."],
+  ["Rule of Law", "The reverse of corruption; protection of shareholder and property rights."],
+  ["Virtue", "The ethical/trust foundation underlying voluntary compliance with law and contract, without which R cannot function."],
+  ["Shareholder", "An owner of capital whose rights — protected under R — incentivize investment and risk-taking."]
+];
+
+document.addEventListener("DOMContentLoaded", () => {
+  initLayout("s3");
+  const mount = document.getElementById("glossary");
+  GLOSSARY.forEach(([term, def]) => {
+    const item = document.createElement("div");
+    item.className = "glossary-item";
+    item.innerHTML = `<button class="glossary-term" type="button">${term}<span>+</span></button><div class="glossary-def">${def}</div>`;
+    item.querySelector(".glossary-term").addEventListener("click", () => item.classList.toggle("open"));
+    mount.appendChild(item);
+  });
+});
+</script>
+</body>
+</html>

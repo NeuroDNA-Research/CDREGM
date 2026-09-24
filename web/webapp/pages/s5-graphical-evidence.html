@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>&sect;5 Graphical Evidence &mdash; CDR Growth Model</title>
+<link rel="stylesheet" href="../assets/css/styles.css">
+<style>
+  .tab-bar { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .tab-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); font-size: 0.8rem; padding: 0.4rem 0.9rem; border-radius: 2rem; cursor: pointer; }
+  .tab-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(245,158,11,0.1); }
+</style>
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar-mount"></nav>
+  <main>
+    <div class="section" id="s5">
+      <div class="section-header">
+        <div class="section-num">05</div>
+        <div class="section-title-wrap">
+          <h1>Graphical Evidence &mdash; Seeing the CDR Effect</h1>
+          <div class="subtitle">Progressive visual demonstration that C, D, R individually predict GDP &mdash; and together predict it nearly perfectly</div>
+        </div>
+      </div>
+
+      <div class="learning-obj">
+        <h4>Learning Objectives</h4>
+        <ul>
+          <li>Visually distinguish the predictive strength of C, D, R individually versus combined CDR index</li>
+          <li>Compare CDR explanatory power against natural resources (CDR: 77%; N: 6%)</li>
+          <li>Interpret a scatter of C, D, R, CDR index, and N each against GDPppp</li>
+        </ul>
+      </div>
+
+      <div class="widget">
+        <h4>Chart Explorer <span class="widget-badge">live, real 8-country data</span></h4>
+        <div class="tab-bar" id="chartTabs">
+          <button class="tab-btn active" data-var="C">GDP vs Capitalism</button>
+          <button class="tab-btn" data-var="D">GDP vs Democracy</button>
+          <button class="tab-btn" data-var="R">GDP vs Rule of Law</button>
+          <button class="tab-btn" data-var="cdr">GDP vs CDR Index</button>
+          <button class="tab-btn" data-var="N">GDP vs Natural Resources</button>
+        </div>
+        <div class="chart-container"><canvas id="scatterChart"></canvas></div>
+        <div class="widget-note" id="scatterNote"></div>
+      </div>
+
+      <div class="finding">
+        <div class="find-label">Remarkable Finding</div>
+        "The CDR contribution to explaining variation in GDP is 0.77/0.06 &asymp; 12.83 times the contribution from natural resources. Intangible assets are astonishingly more impactful than the tangible ones." &mdash; P3, &sect;5 Correlation
+      </div>
+
+      <div class="content-block block-describe">
+        <h4>The Vexillological Chart</h4>
+        <p>P2 Appendix A reproduces a "G vs CDR index" scatter plot using country flag bubbles, where bubble size is proportional to the square root of population. 79 countries form a nearly straight line, confirming that the CDR-to-GDP relationship holds regardless of country size, geographic location, culture, or population characteristics. The 8-country subset above (flag markers) shows the same pattern.</p>
+      </div>
+
+      <div class="figure-row">
+        <div class="figure-placeholder">
+          <span class="fig-icon">🌐</span>
+          <div class="fig-title">Fig. 6 &middot; 4D Bubble Graph</div>
+          <div class="fig-caption">Axes: C (Capitalism, vertical), D and R (horizontal). Bubble size and color = GDPppp. Parsimonious CDR 3D + GDP as 4th dimension. Singapore and Switzerland as outliers. Full interactive 3D version not yet built &mdash; see P1 &sect;4 Fig. 1.</div>
+        </div>
+      </div>
+
+      <div class="source-bar">
+        <span class="label">Sources</span>
+        <div class="sources">
+          <span class="src p3">P3 &middot; &sect;4 Graphical Analysis &mdash; GDP vs C (Fig.1), D (Fig.2), R (Fig.3), CDR (Fig.4), N (Fig.5), pp. 7&ndash;9</span>
+          <span class="src p1">P1 &middot; &sect;4 Analysis Fig.1 (4D bubble graph C,D,R,GDPppp), p. 5</span>
+          <span class="src p2">P2 &middot; Appendix A &mdash; G vs CDR index vexillological chart (Fig.2), p. 15</span>
+          <span class="src p4">P4 &middot; &sect;4 Fig.3 &mdash; G vs CDR index (79 countries, year 2014), pp. 7&ndash;8</span>
+        </div>
+      </div>
+
+      <div class="pager" id="pager-mount"></div>
+    </div>
+  </main>
+</div>
+<footer id="site-footer"></footer>
+
+<script>const SITE_ROOT = "../";</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="../assets/js/layout.js"></script>
+<script src="../assets/js/data.js"></script>
+<script>
+const VAR_LABELS = { C: "Capitalism (C)", D: "Democracy (D)", R: "Rule of Law (R)", cdr: "CDR Index", N: "Natural Resources (N)" };
+const VAR_NOTES = {
+  C: "C alone explains roughly 59% of GDP variation across the sample (§6).",
+  D: "D alone explains roughly 5% incremental variation — a weaker but positive relationship (§6).",
+  R: "R alone explains roughly 10% incremental variation (§6).",
+  cdr: "The combined CDR index (C, D, R together) explains ~83% of GDP variation — nearly linear, \"the CDR law.\"",
+  N: "Natural resource rents explain only ~6% of variation — high-resource countries (Russia, Nigeria) cluster low-GDP; low-resource countries (Singapore, Japan) cluster high-GDP."
+};
+
+let chart;
+function buildChart(varKey) {
+  try {
+  const ctx = document.getElementById("scatterChart");
+  const points = CDR_COUNTRIES.map(c => ({ x: c[varKey], y: c.gdp, label: `${c.flag} ${c.name}` }));
+  if (chart) chart.destroy();
+  chart = new Chart(ctx, {
+    type: "scatter",
+    data: {
+      datasets: [{
+        label: VAR_LABELS[varKey] + " vs GDPppp",
+        data: points,
+        backgroundColor: "#f59e0b",
+        pointRadius: 7,
+        pointHoverRadius: 9
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: "#e2e8f0" } },
+        tooltip: { callbacks: { label: (ctx) => `${ctx.raw.label}: ${VAR_LABELS[varKey]}=${ctx.raw.x.toFixed(3)}, GDPppp=$${ctx.raw.y.toLocaleString()}` } }
+      },
+      scales: {
+        x: { title: { display: true, text: VAR_LABELS[varKey] + " (standardized 0–1)", color: "#94a3b8" }, ticks: { color: "#94a3b8" }, grid: { color: "rgba(148,163,184,0.08)" } },
+        y: { title: { display: true, text: "GDPppp ($)", color: "#94a3b8" }, ticks: { color: "#94a3b8" }, grid: { color: "rgba(148,163,184,0.08)" } }
+      }
+    }
+  });
+  document.getElementById("scatterNote").textContent = VAR_NOTES[varKey] + " (8 published example countries shown; full panel is 79 countries — see sources below.)";
+  } catch (e) { console.error("Scatter chart failed to render:", e); }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  initLayout("s5");
+  buildChart("C");
+  document.querySelectorAll("#chartTabs .tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll("#chartTabs .tab-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      buildChart(btn.dataset.var);
+    });
+  });
+});
+</script>
+</body>
+</html>

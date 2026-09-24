@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>&sect;6 Statistical Model &mdash; CDR Growth Model</title>
+<link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar-mount"></nav>
+  <main>
+    <div class="section" id="s6">
+      <div class="section-header">
+        <div class="section-num">06</div>
+        <div class="section-title-wrap">
+          <h1>Statistical Model &mdash; OLS and 2SLS Estimation</h1>
+          <div class="subtitle">The regression framework, endogeneity correction, and coefficient interpretation</div>
+        </div>
+      </div>
+
+      <div class="learning-obj">
+        <h4>Learning Objectives</h4>
+        <ul>
+          <li>Interpret each coefficient in the CDR OLS regression &mdash; including the negative CDR friction term</li>
+          <li>Explain why latitude serves as a valid instrumental variable for purging endogenous capital stock from C</li>
+          <li>Distinguish OLS from 2SLS results and understand what the coefficient drop from 1.53 to 1.30 reveals</li>
+        </ul>
+      </div>
+
+      <div class="equation-box">
+        <div class="eq-label">OLS Model (Stage 1)</div>
+        <div class="eq">ĝ<sub>i</sub> = 1.53C<sub>i</sub> + 0.14D<sub>i</sub> + 0.23R<sub>i</sub> &minus; 1.21C<sub>i</sub>&middot;D<sub>i</sub>&middot;R<sub>i</sub> + 0.38N<sub>i</sub></div>
+        <div class="eq-note">|t| = (6.60) (1.69) (2.60) (4.40) (5.59) &middot; R&sup2;<sub>adj</sub> = 83% &middot; F ratio = 81 &middot; n = 79 countries</div>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-chip c-stat"><div class="val">59%</div><div class="lbl">C contribution</div></div>
+        <div class="stat-chip d-stat"><div class="val">5%</div><div class="lbl">D contribution</div></div>
+        <div class="stat-chip r-stat"><div class="val">10%</div><div class="lbl">R contribution</div></div>
+        <div class="stat-chip n-stat"><div class="val">3%</div><div class="lbl">C&middot;D&middot;R friction</div></div>
+        <div class="stat-chip n-stat"><div class="val">6%</div><div class="lbl">N (resources)</div></div>
+        <div class="stat-chip acc-stat"><div class="val">83%</div><div class="lbl">Total R&sup2;<sub>adj</sub></div></div>
+      </div>
+
+      <div class="equation-box">
+        <div class="eq-label">First-Stage 2SLS (Instrument: Latitude L<sub>i</sub>)</div>
+        <div class="eq">&ecirc;<sub>i</sub> = 0.04 &minus; 0.07L<sub>i</sub> &minus; 0.16D<sub>i</sub> + 0.22R<sub>i</sub> + 1.11C<sub>i</sub>&middot;D<sub>i</sub>&middot;R<sub>i</sub> &minus; 0.02N<sub>i</sub></div>
+        <div class="eq-note">|t| = (3.7) (4.6) (6.4) (27.1) (0.61) &middot; R&sup2;<sub>adj</sub> = 95%</div>
+      </div>
+
+      <div class="equation-box">
+        <div class="eq-label">Second-Stage 2SLS (Exogenous Entrepreneurship Capital &ecirc;)</div>
+        <div class="eq">ĝ<sub>i</sub> = 1.30&ecirc;<sub>i</sub> + 0.12D<sub>i</sub> + 0.28R<sub>i</sub> &minus; 0.98&ecirc;<sub>i</sub>&middot;D<sub>i</sub>&middot;R<sub>i</sub> + 0.39N<sub>i</sub></div>
+        <div class="eq-note">|t| = (2.66) (0.88) (1.95) (1.88) (4.45) &middot; R&sup2;<sub>adj</sub> = 74%<br>Coefficient drop 1.53&rarr;1.30: confirms ~85% of C is exogenous entrepreneurship capital; ~15% is endogenous capital stock from prior ideas.</div>
+      </div>
+
+      <div class="equation-box">
+        <div class="eq-label">Extension: Adding Geography (Ridley &amp; Llaugel 2022, &sect;4.3&ndash;4.4)</div>
+        <div class="eq">R&sup2;<sub>adj</sub> = 83% (C, D, R alone) &rarr; 90% (C, D, R + geography), n = 79 countries</div>
+        <div class="eq-note">Adding a geography control alongside C, D, and R raises explained variance from 83% to 90% across the same 79-country sample. This does not reopen the natural-resources paradox from &sect;1 &mdash; geography here captures residual variation in trade access, climate, and disease burden left over once institutional quality is accounted for, not an independent wealth endowment.</div>
+      </div>
+
+      <div class="content-grid">
+        <div class="content-block block-describe">
+          <h4>The C&middot;D&middot;R Friction Term</h4>
+          <p>The negative coefficient on C&middot;D&middot;R (&minus;1.21 OLS, &minus;0.98 2SLS) represents democratic friction &mdash; the cost of consensus. In a 51% majority democracy, 49% disagree with every decision. This necessary friction subtracts from the theoretical maximum GDP achievable under perfect agreement. CDR is not rapacious capitalism but capitalism <em>in the presence</em> of democracy and rule of law. The negative sign does not mean that strong Capitalism, Democracy, and Rule of Law working together reduce growth &mdash; only that their joint strength carries a decision-making cost when excessive delays in decision-making and over-regulation are present (Ridley &amp; Llaugel 2022, &sect;4.3&ndash;4.4).</p>
+        </div>
+        <div class="content-block block-describe">
+          <h4>Residuals &amp; Model Validation</h4>
+          <p>Residual plots (&epsilon; vs ĝ<sub>fitted</sub>) show no heteroscedasticity patterns. Histogram is bell-shaped. Chi-square goodness-of-fit test: &chi;&sup2; = 2.891 &lt; &chi;&sup2;<sub>crit</sub> = 14.067 &mdash; residuals are normally distributed. Durbin-Watson = 2.0. Model is apt. The remaining 17% unexplained variation attributed to unpredictable events (natural disasters) and unobserved private market capitalization.</p>
+        </div>
+      </div>
+
+      <div class="widget">
+        <h4>Live 2SLS Pipeline Calculator <span class="widget-badge">real OLS &amp; 2SLS formulas</span></h4>
+        <div class="widget-row">
+          <div class="widget-field"><label>Capitalism (C) <span class="field-val" id="s6C">0.50</span></label><input type="range" id="s6sliderC" min="0" max="1" step="0.001" value="0.5"></div>
+          <div class="widget-field"><label>Democracy (D) <span class="field-val" id="s6D">0.50</span></label><input type="range" id="s6sliderD" min="0" max="1" step="0.001" value="0.5"></div>
+          <div class="widget-field"><label>Rule of Law (R) <span class="field-val" id="s6R">0.50</span></label><input type="range" id="s6sliderR" min="0" max="1" step="0.001" value="0.5"></div>
+          <div class="widget-field"><label>Natural Resources (N) <span class="field-val" id="s6N">0.05</span></label><input type="range" id="s6sliderN" min="0" max="1" step="0.001" value="0.05"></div>
+          <div class="widget-field"><label>Latitude instrument (L, standardized) <span class="field-val" id="s6L">0.00</span></label><input type="range" id="s6sliderL" min="-1" max="1" step="0.001" value="0"></div>
+        </div>
+        <div class="widget-output">
+          <div class="out-item"><div class="out-val" id="s6ehat">&mdash;</div><div class="out-lbl">Stage 1: &ecirc; (entrepreneurship capital)</div></div>
+          <div class="out-item"><div class="out-val" id="s6olsG">&mdash;</div><div class="out-lbl">OLS ĝ (using C directly)</div></div>
+          <div class="out-item"><div class="out-val" id="s6s2G">&mdash;</div><div class="out-lbl">2SLS ĝ (using &ecirc;)</div></div>
+          <div class="out-item"><div class="out-val" id="s6olsGDP">&mdash;</div><div class="out-lbl">OLS predicted GDPppp</div></div>
+          <div class="out-item"><div class="out-val" id="s6s2GDP">&mdash;</div><div class="out-lbl">2SLS predicted GDPppp</div></div>
+        </div>
+        <div class="widget-note">Stage 1 purges the endogenous (capital-stock) portion of C using latitude as an instrument. Stage 2 re-estimates growth using only the exogenous entrepreneurship-capital component &ecirc;. The gap between the OLS and 2SLS predictions is the portion of naive C-based prediction attributable to already-accumulated capital stock rather than new ideas.</div>
+      </div>
+
+      <div class="source-bar">
+        <span class="label">Sources</span>
+        <div class="sources">
+          <span class="src p1">P1 &middot; &sect;4 Analysis (OLS + 2SLS equations, partial correlations), pp. 6&ndash;7</span>
+          <span class="src p3">P3 &middot; &sect;5 Statistical Analysis (Table 2 regression, correlation, causation, economic interpretation), pp. 10&ndash;13</span>
+          <span class="src p2">P2 &middot; Appendix A (OLS model), Appendix B (2SLS), pp. 15&ndash;16</span>
+          <span class="src p4">P4 &middot; &sect;4 Global Time Invariant CDR model (OLS + 2SLS, Table 2), pp. 6&ndash;11</span>
+        </div>
+      </div>
+
+      <div class="pager" id="pager-mount"></div>
+    </div>
+  </main>
+</div>
+<footer id="site-footer"></footer>
+
+<script>const SITE_ROOT = "../";</script>
+<script src="../assets/js/layout.js"></script>
+<script src="../assets/js/data.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  initLayout("s6");
+
+  const el = id => document.getElementById(id);
+  const sliders = { C: el("s6sliderC"), D: el("s6sliderD"), R: el("s6sliderR"), N: el("s6sliderN"), L: el("s6sliderL") };
+  const labels = { C: el("s6C"), D: el("s6D"), R: el("s6R"), N: el("s6N"), L: el("s6L") };
+
+  function recompute() {
+    const C = parseFloat(sliders.C.value), D = parseFloat(sliders.D.value), R = parseFloat(sliders.R.value),
+          N = parseFloat(sliders.N.value), L = parseFloat(sliders.L.value);
+    labels.C.textContent = C.toFixed(3); labels.D.textContent = D.toFixed(3); labels.R.textContent = R.toFixed(3);
+    labels.N.textContent = N.toFixed(3); labels.L.textContent = L.toFixed(2);
+
+    const ehat = STAGE1.const + STAGE1.L * L + STAGE1.D * D + STAGE1.R * R + STAGE1.CDR * (C * D * R) + STAGE1.N * N;
+    const olsG = olsGHat({ C, D, R, N });
+    const s2G = stage2GHat({ ehat, D, R, N });
+
+    el("s6ehat").textContent = ehat.toFixed(3);
+    el("s6olsG").textContent = olsG.toFixed(3);
+    el("s6s2G").textContent = s2G.toFixed(3);
+    el("s6olsGDP").textContent = fmtUSD(inverseGDP(olsG));
+    el("s6s2GDP").textContent = fmtUSD(inverseGDP(s2G));
+  }
+
+  Object.values(sliders).forEach(s => s.addEventListener("input", recompute));
+  recompute();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>&sect;4 CDR Index &amp; Data &mdash; CDR Growth Model</title>
+<link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar-mount"></nav>
+  <main>
+    <div class="section" id="s4">
+      <div class="section-header">
+        <div class="section-num">04</div>
+        <div class="section-title-wrap">
+          <h1>The CDR Index &mdash; Measurement and Data</h1>
+          <div class="subtitle">How abstract institutional qualities are standardized into a globally comparable composite index</div>
+        </div>
+      </div>
+
+      <div class="learning-obj">
+        <h4>Learning Objectives</h4>
+        <ul>
+          <li>Apply the standardization formulas to convert raw country data into the [0,1] CDR variables</li>
+          <li>Identify the data sources for each variable and understand their limitations (e.g., C excludes privately traded capital)</li>
+          <li>Interpret the CDR index = CDRs (sum) + CDRp (product) decomposition</li>
+        </ul>
+      </div>
+
+      <div class="content-grid">
+        <div class="content-block block-describe">
+          <h4>Variable Standardization Formulas</h4>
+          <ul>
+            <li><strong>g</strong> = (G &minus; G<sub>min</sub>) / (G<sub>max</sub> &minus; G<sub>min</sub>)</li>
+            <li><strong>C</strong> = (Cap<sub>pc</sub> &minus; Cap<sub>min</sub>) / (Cap<sub>max</sub> &minus; Cap<sub>min</sub>)</li>
+            <li><strong>D</strong> = (D<sub>rank,low</sub> &minus; D<sub>rank</sub>) / (D<sub>rank,low</sub> &minus; D<sub>rank,high</sub>)</li>
+            <li><strong>R</strong> = (Corr<sub>rank,low</sub> &minus; Corr<sub>rank</sub>) / (Corr<sub>rank,low</sub> &minus; Corr<sub>rank,high</sub>)</li>
+            <li><strong>N</strong> = (NR<sub>pc</sub> &minus; NR<sub>min</sub>) / (NR<sub>max</sub> &minus; NR<sub>min</sub>)</li>
+          </ul>
+        </div>
+        <div class="content-block block-describe">
+          <h4>Data Sources</h4>
+          <ul>
+            <li><strong>GDPppp:</strong> IMF (constant international $2014)</li>
+            <li><strong>Capitalism:</strong> Index Mundi / total market capitalization (US$)</li>
+            <li><strong>Democracy:</strong> Democracy Ranking (rank-ordered, 1 = most democratic)</li>
+            <li><strong>Rule of Law:</strong> Transparency International Corruption Perceptions Index (inverted)</li>
+            <li><strong>Natural Resources:</strong> World Bank &mdash; total resource rents per capita</li>
+            <li><strong>Latitude:</strong> La Porta et al. (1999) &mdash; instrumental variable for 2SLS</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="equation-box">
+        <div class="eq-label">CDR Index Decomposition</div>
+        <div class="eq">CDR index = CDRs + CDRp</div>
+        <div class="eq" style="margin-top:0.5rem;">CDRs (sum index) = 1.53&middot;C + 0.14&middot;D + 0.23&middot;R</div>
+        <div class="eq">CDRp (product index) = &minus;1.21&middot;C&middot;D&middot;R</div>
+        <div class="eq-note">The negative CDRp term represents democratic friction &mdash; decision-making disagreement that reduces G from its theoretical maximum. All variables standardized to [0,1]. Data: 79 countries, year 2014 baseline; re-estimated 1995&ndash;2016 with identical results (global time invariance).</div>
+      </div>
+
+      <div class="table-preview">
+        <table id="countryTable">
+          <thead>
+            <tr><th>Country</th><th>GDPppp ($)</th><th>C</th><th>D</th><th>R</th><th>CDR index</th><th>N</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p style="font-size:0.78rem; color:var(--text-muted); margin-top:-0.5rem; margin-bottom:1rem;">Click any column header to sort. This is the 8-country example table reproduced from the outline (P1 Tables 1&ndash;2 / P3 Table 1 contain the full 79-country panel).</p>
+
+      <div class="widget">
+        <h4>Live CDR Index &amp; Predicted GDP Calculator <span class="widget-badge">real OLS formula</span></h4>
+        <div class="widget-row">
+          <div class="widget-field">
+            <label>Load example country
+              <select id="countrySelect"></select>
+            </label>
+          </div>
+        </div>
+        <div class="widget-row">
+          <div class="widget-field">
+            <label>Capitalism (C) <span class="field-val" id="valC">0.50</span></label>
+            <input type="range" id="sliderC" min="0" max="1" step="0.001" value="0.5">
+          </div>
+          <div class="widget-field">
+            <label>Democracy (D) <span class="field-val" id="valD">0.50</span></label>
+            <input type="range" id="sliderD" min="0" max="1" step="0.001" value="0.5">
+          </div>
+          <div class="widget-field">
+            <label>Rule of Law (R) <span class="field-val" id="valR">0.50</span></label>
+            <input type="range" id="sliderR" min="0" max="1" step="0.001" value="0.5">
+          </div>
+          <div class="widget-field">
+            <label>Natural Resources (N) <span class="field-val" id="valN">0.05</span></label>
+            <input type="range" id="sliderN" min="0" max="1" step="0.001" value="0.05">
+          </div>
+        </div>
+        <div class="widget-output">
+          <div class="out-item"><div class="out-val" id="outCDRIndex">&mdash;</div><div class="out-lbl">CDR index (CDRs+CDRp)</div></div>
+          <div class="out-item"><div class="out-val" id="outGHat">&mdash;</div><div class="out-lbl">Predicted ĝ (OLS)</div></div>
+          <div class="out-item"><div class="out-val" id="outGDP">&mdash;</div><div class="out-lbl">Predicted GDPppp</div></div>
+          <div class="out-item"><div class="out-val" id="outActual">&mdash;</div><div class="out-lbl">Actual GDPppp (if example loaded)</div></div>
+        </div>
+        <div class="widget-note">Uses the real published OLS equation from &sect;6: ĝ = 1.53C + 0.14D + 0.23R &minus; 1.21&middot;C&middot;D&middot;R + 0.38N, inverse-transformed with G<sub>max</sub>=$83,066 (Singapore) and G<sub>min</sub>=$1,112 as in Applied Exercise 2 (&sect;12).</div>
+      </div>
+
+      <div class="source-bar">
+        <span class="label">Sources</span>
+        <div class="sources">
+          <span class="src p1">P1 &middot; &sect;3 Data (Tables 1 &amp; 2: 79-country data), &sect;4 Analysis (variable definitions), pp. 3&ndash;6</span>
+          <span class="src p3">P3 &middot; &sect;3 CDR Index Definitions, Table 1 (21-country standardized data), Appendix A (raw data), pp. 4&ndash;6, 17</span>
+          <span class="src p4">P4 &middot; &sect;4 Global Time Invariant CDR model (standardization), Table 1 (year panel), pp. 6&ndash;8</span>
+        </div>
+      </div>
+
+      <div class="pager" id="pager-mount"></div>
+    </div>
+  </main>
+</div>
+<footer id="site-footer"></footer>
+
+<script>const SITE_ROOT = "../";</script>
+<script src="../assets/js/layout.js"></script>
+<script src="../assets/js/widgets.js"></script>
+<script src="../assets/js/data.js"></script>
+<script>
+function gdpClass(gdp) { return gdp >= 30000 ? "high" : gdp >= 12000 ? "mid" : "low"; }
+
+document.addEventListener("DOMContentLoaded", () => {
+  initLayout("s4");
+
+  const tbody = document.querySelector("#countryTable tbody");
+  CDR_COUNTRIES.forEach(c => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${c.flag} ${c.name}</td>
+      <td class="${gdpClass(c.gdp)}" data-sort="${c.gdp}">${c.gdp.toLocaleString()}</td>
+      <td>${c.C.toFixed(3)}</td><td>${c.D.toFixed(3)}</td><td>${c.R.toFixed(3)}</td>
+      <td class="${gdpClass(c.gdp)}">${c.cdr.toFixed(3)}</td><td>${c.N.toFixed(3)}</td>`;
+    tbody.appendChild(tr);
+  });
+  makeSortable(document.getElementById("countryTable"));
+
+  const select = document.getElementById("countrySelect");
+  select.innerHTML = `<option value="">— manual sliders —</option>` +
+    CDR_COUNTRIES.map((c, i) => `<option value="${i}">${c.flag} ${c.name}</option>`).join("");
+
+  const sliders = { C: document.getElementById("sliderC"), D: document.getElementById("sliderD"), R: document.getElementById("sliderR"), N: document.getElementById("sliderN") };
+  const vals = { C: document.getElementById("valC"), D: document.getElementById("valD"), R: document.getElementById("valR"), N: document.getElementById("valN") };
+  const outIndex = document.getElementById("outCDRIndex");
+  const outG = document.getElementById("outGHat");
+  const outGDP = document.getElementById("outGDP");
+  const outActual = document.getElementById("outActual");
+
+  function recompute() {
+    const C = parseFloat(sliders.C.value), D = parseFloat(sliders.D.value), R = parseFloat(sliders.R.value), N = parseFloat(sliders.N.value);
+    Object.entries({ C, D, R, N }).forEach(([k, v]) => vals[k].textContent = v.toFixed(3));
+    const cdrIndex = (OLS.C * C + OLS.D * D + OLS.R * R) + (OLS.CDR * C * D * R);
+    const gHat = olsGHat({ C, D, R, N });
+    outIndex.textContent = cdrIndex.toFixed(3);
+    outG.textContent = gHat.toFixed(3);
+    outGDP.textContent = fmtUSD(inverseGDP(gHat));
+  }
+
+  Object.values(sliders).forEach(s => s.addEventListener("input", recompute));
+
+  select.addEventListener("change", () => {
+    if (select.value === "") { outActual.textContent = "—"; recompute(); return; }
+    const c = CDR_COUNTRIES[parseInt(select.value, 10)];
+    sliders.C.value = c.C; sliders.D.value = c.D; sliders.R.value = c.R; sliders.N.value = c.N;
+    outActual.textContent = fmtUSD(c.gdp);
+    recompute();
+  });
+
+  recompute();
+});
+</script>
+</body>
+</html>

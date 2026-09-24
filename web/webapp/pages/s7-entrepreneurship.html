@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>&sect;7 Entrepreneurship &mdash; CDR Growth Model</title>
+<link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar-mount"></nav>
+  <main>
+    <div class="section" id="s7">
+      <div class="section-header">
+        <div class="section-num">07</div>
+        <div class="section-title-wrap">
+          <h1>Entrepreneurship &mdash; The True Source of Wealth</h1>
+          <div class="subtitle">New human capital ideas vs. capital stock from prior ideas; the information theory of economics</div>
+        </div>
+      </div>
+
+      <div class="learning-obj">
+        <h4>Learning Objectives</h4>
+        <ul>
+          <li>Distinguish entrepreneurship capital (exogenous, imagination &amp; creativity) from capital stock (endogenous, accumulated prior ideas)</li>
+          <li>Explain why entrepreneurship capital contributes ~6&times; more to GDP than capital stock</li>
+          <li>Describe the D+R information channel through which entrepreneurial ideas are detected and acted on</li>
+        </ul>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-chip acc-stat"><div class="val">85%</div><div class="lbl">Entrepreneurship capital contribution to G</div></div>
+        <div class="stat-chip n-stat"><div class="val">15%</div><div class="lbl">Capital stock contribution to G</div></div>
+        <div class="stat-chip acc-stat"><div class="val">6&times;</div><div class="lbl">New ideas vs. old capital stock</div></div>
+        <div class="stat-chip c-stat"><div class="val">~21%</div><div class="lbl">Optimal reinvestment in capital stock (= World Bank GFCF)</div></div>
+      </div>
+
+      <div class="content-grid">
+        <div class="content-block block-describe">
+          <h4>Information Theory of Economics</h4>
+          <p>D and R provide a stable, low-noise information channel. Entrepreneurial ideas appear as disequilibrium signals. In low D, low R environments, noise drowns the signal &mdash; ideas die. In high D, high R environments (high signal-to-noise ratio), ideas are detected and acted on. This is Gilder's (2013) information theory of capitalism formalized within CDR structure.</p>
+        </div>
+        <div class="content-block block-describe">
+          <h4>The Chicken&ndash;Duck Example (Pedagogical)</h4>
+          <p>A coastal community subsists on chicken. Annual flooding drowns all chickens &mdash; severe food shortage. <em>Status quo:</em> no entrepreneurship. <em>Act of entrepreneurship:</em> farmer notices ducks float. Switches to ducks. Community lifted from poverty. Zero change in natural resources; 100% of wealth increase from one creative idea. CDR model: wealth comes from mind, not matter.</p>
+        </div>
+        <div class="content-block block-describe">
+          <h4>The Garbage Bag Example (Pedagogical)</h4>
+          <p>1950: Harry Wasylyk and Larry Hansen invented the plastic garbage bag &mdash; placing a plastic bag in a trash can. Worker's job changed from cleaning to simply collecting. Surplus capital created by the imaginative idea of a lowly home trash collector. As the idea spread, it traveled from bottom to top (Union Carbide). CDR: supply creates its own demand.</p>
+        </div>
+      </div>
+
+      <div class="figure-placeholder">
+        <span class="fig-icon">💡</span>
+        <div class="fig-title">Figure: Democratic Law-Abiding Entrepreneurial GDP-Creating Process</div>
+        <div class="fig-caption">Three-box flow diagram (from P3 Fig.7 / P2 Appendix C Fig.4): [Entrepreneurship &beta;<sub>N</sub>N + &epsilon;<sub>CDR</sub>] &rarr; Catalyst [Democracy + Rule of Law &beta;<sub>0</sub> + &beta;<sub>D</sub>D + &beta;<sub>R</sub>R] &rarr; [Capitalism &beta;<sub>C</sub>&ecirc; + &beta;<sub>CDR</sub>&ecirc;&middot;D&middot;R] &rarr; G. Arrows show Innovation &rarr; Catalyst &rarr; Investment flow.</div>
+      </div>
+
+      <div class="widget">
+        <h4>Contribution Breakdown <span class="widget-badge">live chart</span></h4>
+        <div class="chart-container short"><canvas id="entreChart"></canvas></div>
+        <div class="widget-note">Left: share of GDP contribution from entrepreneurship capital (new ideas) vs. capital stock (accumulated prior ideas). Right: the optimal reinvestment fraction into capital stock, decomposed into net reinvestment (~17.5%) plus depreciation replacement (~3.5%) &mdash; consistent with World Bank Gross Fixed Capital Formation (GFCF) figures.</div>
+      </div>
+
+      <div class="source-bar">
+        <span class="label">Sources</span>
+        <div class="sources">
+          <span class="src p2">P2 &middot; Appendix C (Entrepreneurship: information theory, Fig.4), Appendix D (Elasticity), pp. 17&ndash;18</span>
+          <span class="src p3">P3 &middot; &sect;Entrepreneurship (chicken-duck example, dead capital, shale example), &sect;Discussion, pp. 13&ndash;15</span>
+          <span class="src p4">P4 &middot; &sect;2 Supply-side wealth (garbage bag, supply-side examples), &sect;5 New vs. old capital (2SLS results), &sect;8 Entrepreneurship elasticity, pp. 3&ndash;4, 10&ndash;13</span>
+          <span class="src p1">P1 &middot; &sect;4.1 Parametric derivation (2SLS decoupling), p. 7</span>
+        </div>
+      </div>
+
+      <div class="pager" id="pager-mount"></div>
+    </div>
+  </main>
+</div>
+<footer id="site-footer"></footer>
+
+<script>const SITE_ROOT = "../";</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="../assets/js/layout.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  initLayout("s7");
+  try {
+  new Chart(document.getElementById("entreChart"), {
+    type: "bar",
+    data: {
+      labels: ["GDP contribution", "Optimal reinvestment (% of GFCF)"],
+      datasets: [
+        { label: "Entrepreneurship capital (new ideas)", data: [85, null], backgroundColor: "#f59e0b" },
+        { label: "Capital stock (prior ideas)", data: [15, null], backgroundColor: "#64748b" },
+        { label: "Net reinvestment", data: [null, 17.5], backgroundColor: "#93c5fd" },
+        { label: "Depreciation replacement", data: [null, 3.5], backgroundColor: "#7c3aed" }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { color: "#e2e8f0", font: { size: 10 } } } },
+      scales: {
+        x: { stacked: true, ticks: { color: "#94a3b8" }, grid: { display: false } },
+        y: { stacked: true, ticks: { color: "#94a3b8", callback: v => v + "%" }, grid: { color: "rgba(148,163,184,0.08)" }, max: 100 }
+      }
+    }
+  });
+  } catch (e) { console.error("Entrepreneurship chart failed to render:", e); }
+});
+</script>
+</body>
+</html>

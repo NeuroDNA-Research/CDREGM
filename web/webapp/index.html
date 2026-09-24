@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The CDR Economic Growth Model</title>
+<meta name="description" content="Capitalism, Democracy, Rule of Law — an interactive academic and pedagogical web application built on the CDR economic growth model.">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+<header class="site-header" id="site-header"></header>
+
+<!-- ═══════════════════════════════════════ HERO ═══════════════════════════════════════ -->
+<div class="hero">
+  <div class="hero-badge">Academic &amp; Pedagogical Web Application</div>
+  <div class="logo-row">
+    <div class="logo-item">
+      <img src="assets/img/fsu-logo-placeholder.svg" alt="Florida State University logo placeholder">
+      <div class="logo-caption">Florida State University<br><em>placeholder — official logo to follow</em></div>
+    </div>
+    <div class="logo-item">
+      <img src="assets/img/om-logo.png" alt="Universidad Dominicana O&amp;M logo">
+      <div class="logo-caption">Universidad Dominicana O&amp;M</div>
+    </div>
+  </div>
+  <h1>The <span class="c">Capitalism</span>, <span class="d">Democracy</span>,<br>
+      <span class="r">Rule of Law</span> Economic Growth Model</h1>
+  <p class="hero-sub">A scientific framework for understanding how nations create wealth</p>
+  <p class="hero-authors">
+    Based on research by <strong>Dennis Ridley</strong> (Florida A&amp;M / Florida State University)
+    &amp; <strong>Felipe Llaugel</strong> (Universidad Dominicana O&amp;M)
+    &amp; <strong>Abdullah Khan</strong> (Claflin University)
+  </p>
+  <div class="cdr-pills">
+    <span class="pill pill-c">C &mdash; Capitalism</span>
+    <span class="pill pill-d">D &mdash; Democracy</span>
+    <span class="pill pill-r">R &mdash; Rule of Law</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ META ═══════════════════════════════════════ -->
+<div class="meta-banner">
+  <span><strong>Target audience:</strong> Graduate &amp; advanced undergraduate students, policy researchers, development economists</span>
+  <span><strong>Data:</strong> 79 countries &middot; 1995&ndash;2016 &middot; IMF / World Bank / Transparency International</span>
+  <span><strong>JEL codes:</strong> E02, P16</span>
+</div>
+
+<!-- ═══════════════════════════════════════ LAYOUT ═══════════════════════════════════════ -->
+<div class="layout">
+  <nav class="sidebar" id="sidebar-mount"></nav>
+
+  <main>
+    <div class="intro-card" id="s0">
+      <h2>App Overview &amp; Design Philosophy</h2>
+      <p>This web application presents the CDR (Capitalism, Democracy, Rule of Law) economic growth model as an integrated academic and pedagogical experience. The content is drawn from five peer-reviewed papers by Ridley, Llaugel, Khan, and Garcia. A fifth dimension — the human collaboration capacity that makes Rule of Law functional — is explored through research on AI-assisted collaboration skill development. The app moves the learner progressively from historical context through theoretical foundations, empirical validation, and finally to policy implications.</p>
+      <p style="margin-top:0.75rem;">Each section pairs <strong>academic rigor</strong> (formal definitions, regression equations, statistical evidence) with <strong>pedagogical scaffolding</strong> (learning objectives, live calculators, quizzes, real country data). The overall narrative arc is: <em>Why does wealth differ across nations? The answer lies in institutions, not resources.</em></p>
+      <div class="sources" style="margin-top:1rem;">
+        <span class="src p1">P1 &middot; Abstract, &sect;1&ndash;5</span>
+        <span class="src p2">P2 &middot; &sect;1&ndash;5, Appendices A&ndash;F</span>
+        <span class="src p3">P3 &middot; &sect;1&ndash;6, Appendix A</span>
+        <span class="src p4">P4 &middot; &sect;1&ndash;9, Appendix A</span>
+        <span class="src p5">P5 &middot; &sect;1&ndash;8</span>
+      </div>
+    </div>
+
+    <h2 style="font-family:var(--serif); font-weight:400; font-size:1.3rem; margin-bottom:0.25rem;">Contents</h2>
+    <p style="color:var(--text-muted); font-size:0.85rem;">Fourteen sections, each with learning objectives, source citations, and a working interactive tool.</p>
+
+    <div class="toc-grid">
+      <a class="toc-card" href="pages/s1-mystery-of-wealth.html"><span class="toc-num">&sect;01</span><div><h3>The Mystery of Wealth</h3><p>Why some nations prosper and others do not.</p></div></a>
+      <a class="toc-card" href="pages/s2-history-of-growth-theory.html"><span class="toc-num">&sect;02</span><div><h3>History of Growth Theory</h3><p>From Malthus to CDR.</p></div></a>
+      <a class="toc-card" href="pages/s3-cdr-framework.html"><span class="toc-num">&sect;03</span><div><h3>CDR Framework</h3><p>Formal definitions and the scientific law.</p></div></a>
+      <a class="toc-card" href="pages/s4-cdr-index-data.html"><span class="toc-num">&sect;04</span><div><h3>CDR Index &amp; Data</h3><p>Standardization, sources, live index calculator.</p></div></a>
+      <a class="toc-card" href="pages/s5-graphical-evidence.html"><span class="toc-num">&sect;05</span><div><h3>Graphical Evidence</h3><p>C, D, R and GDP, charted.</p></div></a>
+      <a class="toc-card" href="pages/s6-statistical-model.html"><span class="toc-num">&sect;06</span><div><h3>Statistical Model</h3><p>OLS &amp; 2SLS — live regression calculator.</p></div></a>
+      <a class="toc-card" href="pages/s7-entrepreneurship.html"><span class="toc-num">&sect;07</span><div><h3>Entrepreneurship</h3><p>The true source of wealth.</p></div></a>
+      <a class="toc-card" href="pages/s8-global-time-invariance.html"><span class="toc-num">&sect;08</span><div><h3>Global Time Invariance</h3><p>Why CDR qualifies as a scientific law.</p></div></a>
+      <a class="toc-card" href="pages/s9-growth-dynamics.html"><span class="toc-num">&sect;09</span><div><h3>Growth Dynamics</h3><p>1.8% steady state, 30% ceiling — live simulator.</p></div></a>
+      <a class="toc-card" href="pages/s10-policy-case-studies.html"><span class="toc-num">&sect;10</span><div><h3>Policy &amp; Case Studies</h3><p>Singapore, Norway, Nigeria, Russia and more.</p></div></a>
+      <a class="toc-card" href="pages/s11-micro-macro-integration.html"><span class="toc-num">&sect;11</span><div><h3>Micro&ndash;Macro Integration</h3><p>Bridging CDR with Cobb-Douglas production.</p></div></a>
+      <a class="toc-card" href="pages/s12-pedagogical-module.html"><span class="toc-num">&sect;12</span><div><h3>Pedagogical Module</h3><p>Exercises, quiz, and discussion prompts.</p></div></a>
+      <a class="toc-card" href="pages/s13-human-collaboration-foundation.html"><span class="toc-num">&sect;13</span><div><h3>Human Collaboration Foundation</h3><p>The behavioral engine of Rule of Law.</p></div></a>
+      <a class="toc-card" href="pages/s14-ai-collaboration-catalyst.html"><span class="toc-num">&sect;14</span><div><h3>AI as Collaboration Catalyst</h3><p>Scaffolding human collaboration skill.</p></div></a>
+    </div>
+  </main>
+</div>
+
+<!-- ═══════════════════════════════════════ FOOTER ═══════════════════════════════════════ -->
+<footer id="site-footer"></footer>
+
+<script>const SITE_ROOT = "";</script>
+<script src="assets/js/layout.js"></script>
+<script>document.addEventListener("DOMContentLoaded", () => initLayout("home"));</script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>&sect;1 The Mystery of Wealth &mdash; CDR Growth Model</title>
+<link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar-mount"></nav>
+  <main>
+    <div class="section" id="s1">
+      <div class="section-header">
+        <div class="section-num">01</div>
+        <div class="section-title-wrap">
+          <h1>The Mystery of Wealth</h1>
+          <div class="subtitle">Why some nations prosper and others do not &mdash; a motivating introduction</div>
+        </div>
+      </div>
+
+      <div class="learning-obj">
+        <h4>Learning Objectives</h4>
+        <ul>
+          <li>Recognize the historical pattern of near-zero per-capita GDP growth prior to the industrial revolution</li>
+          <li>Understand why the sustained ~1.8% annual growth rate observed in developed nations was previously unexplained</li>
+          <li>Identify why natural resources alone fail to account for cross-country wealth differences</li>
+        </ul>
+      </div>
+
+      <div class="content-grid">
+        <div class="content-block block-describe">
+          <h4>Content: The Growth Enigma</h4>
+          <p>From the year 0 to ~1850, global per-capita GDP was virtually flat. After 1850, England, USA, Germany, and Japan began sustained growth. The mystery: what changed? The same 1.8% average growth rate observed in USA, England, and Germany since 1870 &mdash; despite vastly different geographies, cultures, and resources &mdash; demands a structural explanation.</p>
+        </div>
+        <div class="content-block block-describe">
+          <h4>Content: The Natural Resources Paradox</h4>
+          <p>Singapore, Hong Kong, Bermuda, Taiwan, and Japan have negligible natural resources yet rank among the wealthiest nations. Nigeria, Russia, and Saudi Arabia possess vast resources but lower per-capita GDP. This paradox motivates CDR theory: intangible institutions explain what tangible resources cannot.</p>
+        </div>
+      </div>
+
+      <div class="widget">
+        <h4>Global Per-Capita GDP, Year 0&ndash;2010 <span class="widget-badge">live chart</span></h4>
+        <div class="chart-container"><canvas id="gdpTimelineChart"></canvas></div>
+        <div class="widget-note">Stylized curve illustrating the pattern described by Maddison (2010): near-zero growth for roughly 1,000 years, followed by post-1850 takeoff in early-industrializing nations. Shape is illustrative, not plotted from the exact Maddison series &mdash; see P2 &sect;2, Fig. 1 for the published chart.</div>
+      </div>
+
+      <div class="interactive">
+        <h4>Poll: What do you think drives economic growth?</h4>
+        <div id="growthPoll"></div>
+      </div>
+
+      <div class="finding">
+        <div class="find-label">Key Insight</div>
+        "For the first 1,000 years AD, per-capita GDP grew at ~0.2% annually. After 1870, it grew at ~1.6%. The developed country convergence to 1.8% is not accidental &mdash; it is the expected endogenous growth rate derivable from the CDR model."
+      </div>
+
+      <div class="content-grid">
+        <div class="content-block block-interact">
+          <h4>Did You Know?</h4>
+          <ul>
+            <li><strong>Singapore</strong> &mdash; zero natural resources, GDPppp $83,066, highest in the CDR dataset.</li>
+            <li><strong>Norway</strong> &mdash; high natural-resource rents, but channels oil wealth through a sovereign endowment rather than a resource-driven economy.</li>
+            <li><strong>Nigeria</strong> &mdash; some of the world's highest-quality crude oil, yet GDPppp of $6,054.</li>
+            <li><strong>Russia</strong> &mdash; vast gas and oil reserves, GDPppp of $24,449 &mdash; a fraction of resource-poor peers.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="source-bar">
+        <span class="label">Sources</span>
+        <div class="sources">
+          <span class="src p2">P2 &middot; &sect;2 Historical Background, Fig. 1 (Maddison 2010 data), pp. 2&ndash;3</span>
+          <span class="src p4">P4 &middot; &sect;1 Introduction, Fig. 1 (US GDP 1870&ndash;2011), pp. 1&ndash;3</span>
+          <span class="src p3">P3 &middot; &sect;1 Introduction, &sect;4 Graphical Analysis &mdash; GDP vs Natural Resources, pp. 1, 9</span>
+        </div>
+      </div>
+
+      <div class="pager" id="pager-mount"></div>
+    </div>
+  </main>
+</div>
+<footer id="site-footer"></footer>
+
+<script>const SITE_ROOT = "../";</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="../assets/js/layout.js"></script>
+<script src="../assets/js/widgets.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  initLayout("s1");
+
+  try {
+  new Chart(document.getElementById("gdpTimelineChart"), {
+    type: "line",
+    data: {
+      labels: ["0","500","1000","1300","1500","1700","1800","1850","1870","1900","1913","1950","1970","1990","2010"],
+      datasets: [
+        {
+          label: "Early-industrializing nations (England, USA, Germany, Japan) — illustrative",
+          data: [430,440,450,480,540,640,750,870,1130,2020,2400,4800,9800,17200,26000],
+          borderColor: "#f59e0b",
+          backgroundColor: "rgba(245,158,11,0.12)",
+          tension: 0.35,
+          fill: true,
+          pointRadius: 2
+        },
+        {
+          label: "World average — illustrative",
+          data: [430,440,450,465,500,555,610,660,730,930,1010,1420,2000,3200,5500],
+          borderColor: "#7c3aed",
+          backgroundColor: "rgba(124,58,237,0.08)",
+          tension: 0.35,
+          fill: true,
+          pointRadius: 2
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { color: "#e2e8f0", font: { size: 10 } } } },
+      scales: {
+        x: { ticks: { color: "#94a3b8" }, grid: { color: "rgba(148,163,184,0.08)" }, title: { display: true, text: "Year (AD)", color: "#94a3b8" } },
+        y: { ticks: { color: "#94a3b8" }, grid: { color: "rgba(148,163,184,0.08)" }, title: { display: true, text: "Per-capita GDP (int'l $, illustrative)", color: "#94a3b8" } }
+      }
+    }
+  });
+  } catch (e) { console.error("GDP timeline chart failed to render:", e); }
+
+  mountPoll(document.getElementById("growthPoll"), "s1-growth-drivers", [
+    "Natural resources & geography",
+    "Population size / labor force",
+    "Technology & capital investment",
+    "Institutions: Capitalism, Democracy & Rule of Law"
+  ]);
+});
+</script>
+</body>
+</html>

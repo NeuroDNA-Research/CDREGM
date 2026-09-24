@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>&sect;8 Global Time Invariance &mdash; CDR Growth Model</title>
+<link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar-mount"></nav>
+  <main>
+    <div class="section" id="s8">
+      <div class="section-header">
+        <div class="section-num">08</div>
+        <div class="section-title-wrap">
+          <h1>Global Time Invariance &mdash; A Scientific Law</h1>
+          <div class="subtitle">CDR parameters are stable across 22 years (1995&ndash;2016) and across all countries &mdash; qualifying CDR as a scientific law</div>
+        </div>
+      </div>
+
+      <div class="learning-obj">
+        <h4>Learning Objectives</h4>
+        <ul>
+          <li>Explain what "global time invariance" means and why it is the key criterion distinguishing a scientific law from an empirical model</li>
+          <li>Interpret the CDR parameters-over-time plot showing stability of &beta;<sub>C</sub>, &beta;<sub>D</sub>, &beta;<sub>R</sub>, &beta;<sub>CDR</sub>, &beta;<sub>N</sub> from 1995&ndash;2016</li>
+          <li>Connect global invariance to the claim that capital-to-GDP conversion follows physical and chemical laws of nature</li>
+        </ul>
+      </div>
+
+      <div class="finding">
+        <div class="find-label">CDR Scientific Law Statement</div>
+        "The CDR model is global time invariant. After adjusting for factors of production, capital to GDPppp conversion is the same everywhere in the world, determined by the physical and chemical laws of nature. The CDR model is the first and only scientific economic growth model." &mdash; P1, Abstract
+      </div>
+
+      <div class="content-grid">
+        <div class="content-block block-describe">
+          <h4>What Was Tested</h4>
+          <p>The 2014 CDR model was re-estimated using rolling windows: 2016 only, 2015&ndash;2016, 2014&ndash;2016, 2013&ndash;2016, &hellip;, 1995&ndash;2016. For all 22 years, &beta;<sub>D</sub>, &beta;<sub>R</sub>, &beta;<sub>N</sub> are approximately constant. &beta;<sub>C</sub> and &beta;<sub>CDR</sub> are approximately constant for the most recent 9 years; for earlier years when capitalization data were unavailable, they were held constant &mdash; yet the model converges forward.</p>
+        </div>
+        <div class="content-block block-describe">
+          <h4>Why This Qualifies as Law</h4>
+          <p>Global invariance means the CDR model can be used as a forecasting model: G for any country in any year can be estimated when C, D, R, and the global min/max G are known. The CDR law is analogous to physical laws: "technology functions according to fixed laws of science &mdash; in that sense, the world is flat and parametrically globally invariant." (Kuhn, 2012)</p>
+        </div>
+      </div>
+
+      <div class="widget">
+        <h4>CDR Parameters Over Time, 1995&ndash;2016 <span class="widget-badge">illustrative</span></h4>
+        <div class="chart-container"><canvas id="invarianceChart"></canvas></div>
+        <div class="widget-note">This chart draws flat reference lines at the published coefficient values to illustrate the <em>claim</em> of stability across the 22-year panel. It is not plotted from the exact year-by-year estimates &mdash; those are in P2 Appendix E Fig. 6 and P4 &sect;4 Table 1 (year panel 2008&ndash;2014).</div>
+      </div>
+
+      <div class="source-bar">
+        <span class="label">Sources</span>
+        <div class="sources">
+          <span class="src p1">P1 &middot; Abstract ("global time invariant"), &sect;1 Introduction, p. 1</span>
+          <span class="src p2">P2 &middot; Appendix E: The Global Time Invariant CDR model (Fig.6 parameters over time), &sect;4 Discussion (time invariance), pp. 19, 9</span>
+          <span class="src p4">P4 &middot; &sect;4 Global Time Invariant CDR model (Table 1: year panel 2008&ndash;2014), &sect;1 Introduction (forecasting model), pp. 6&ndash;8</span>
+        </div>
+      </div>
+
+      <div class="pager" id="pager-mount"></div>
+    </div>
+  </main>
+</div>
+<footer id="site-footer"></footer>
+
+<script>const SITE_ROOT = "../";</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="../assets/js/layout.js"></script>
+<script src="../assets/js/data.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  initLayout("s8");
+  const years = []; for (let y = 1995; y <= 2016; y++) years.push(String(y));
+  const flat = (v) => years.map(() => v);
+  try {
+  new Chart(document.getElementById("invarianceChart"), {
+    type: "line",
+    data: {
+      labels: years,
+      datasets: [
+        { label: "β_C (OLS)", data: flat(OLS.C), borderColor: "#93c5fd", pointRadius: 0, borderWidth: 2 },
+        { label: "β_D (OLS)", data: flat(OLS.D), borderColor: "#86efac", pointRadius: 0, borderWidth: 2 },
+        { label: "β_R (OLS)", data: flat(OLS.R), borderColor: "#fca5a5", pointRadius: 0, borderWidth: 2 },
+        { label: "β_CDR (OLS)", data: flat(OLS.CDR), borderColor: "#f59e0b", pointRadius: 0, borderWidth: 2 },
+        { label: "β_N (OLS)", data: flat(OLS.N), borderColor: "#c4b5fd", pointRadius: 0, borderWidth: 2 },
+        { label: "R²adj", data: flat(OLS.R2), borderColor: "#e2e8f0", borderDash: [4,3], pointRadius: 0, borderWidth: 1.5 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { color: "#e2e8f0", font: { size: 10 } } } },
+      scales: {
+        x: { ticks: { color: "#94a3b8", maxTicksLimit: 12 }, grid: { color: "rgba(148,163,184,0.06)" } },
+        y: { ticks: { color: "#94a3b8" }, grid: { color: "rgba(148,163,184,0.08)" } }
+      }
+    }
+  });
+  } catch (e) { console.error("Invariance chart failed to render:", e); }
+});
+</script>
+</body>
+</html>

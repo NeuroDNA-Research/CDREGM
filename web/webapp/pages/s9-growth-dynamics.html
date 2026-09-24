@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>&sect;9 Growth Dynamics &mdash; CDR Growth Model</title>
+<link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar-mount"></nav>
+  <main>
+    <div class="section" id="s9">
+      <div class="section-header">
+        <div class="section-num">09</div>
+        <div class="section-title-wrap">
+          <h1>Growth Dynamics &mdash; Expected Value and Limits</h1>
+          <div class="subtitle">Parametric derivation of the theoretical 1.8% steady-state growth rate and the 30% single-year maximum</div>
+        </div>
+      </div>
+
+      <div class="learning-obj">
+        <h4>Learning Objectives</h4>
+        <ul>
+          <li>Derive the theoretical endogenous growth rate (~1.8%) from CDR regression coefficients</li>
+          <li>Explain the connection between 1.8% and Euler's constant: &asymp; &frac14;e&sup2;</li>
+          <li>Interpret the parametric integral derivation of maximum endogenous growth (~30%) and its economic meaning (overheating threshold)</li>
+          <li>Read the CDR growth field as a vector field &mdash; interpret its curl (institutional "twisting" cost) and divergence (outward expansionary pull), and derive the geometric return on investment</li>
+        </ul>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-chip acc-stat"><div class="val">1.8%</div><div class="lbl">Long-run expected endogenous growth rate (= &frac14;e&sup2;)</div></div>
+        <div class="stat-chip acc-stat"><div class="val">30%</div><div class="lbl">Theoretical maximum single-year growth (overheating threshold)</div></div>
+        <div class="stat-chip n-stat"><div class="val">&minus;12.9%</div><div class="lbl">US contraction 1932 (Great Depression worst year)</div></div>
+        <div class="stat-chip n-stat"><div class="val">25%</div><div class="lbl">Libya 2017 &mdash; highest empirical growth found</div></div>
+        <div class="stat-chip acc-stat"><div class="val">9.6%</div><div class="lbl">Geometric ROI = divergence / |curl| at C=D=R=1</div></div>
+      </div>
+
+      <div class="equation-box">
+        <div class="eq-label">Expected Endogenous Growth in g (Parametric Derivation)</div>
+        <div class="eq">Expected growth = (1/2)[&beta;<sub>0</sub> + (&beta;&#770;<sub>C</sub>&minus;&beta;&#770;<sub>&ecirc;</sub>) + &beta;<sub>D</sub> + &beta;<sub>R</sub> + &beta;&#770;<sub>CDR</sub> + &beta;<sub>N</sub>]</div>
+        <div class="eq">= (1/2)(&minus;0.00051 + (1.534346&minus;1.295617) + 0.116963 + 0.275395 &minus; 0.98133 + 0.388146)</div>
+        <div class="eq">= 0.018698 per unit &asymp; <strong>1.8%</strong></div>
+        <div class="eq-note">95% CI: 1.8 &plusmn; 1.96 &times; 2.3% = {&minus;2.7%, 6.3%}. The mature country convergence rate (USA, UK, Germany) falls within this interval. This value is a fixed constant of the model &mdash; it does not vary with &ecirc; (see simulator below for the value that does).</div>
+      </div>
+
+      <div class="widget">
+        <h4>Growth Simulator: Maximum Endogenous Growth vs. Entrepreneurship Saturation (&ecirc;) <span class="widget-badge">real formula, live</span></h4>
+        <div class="widget-row">
+          <div class="widget-field">
+            <label>Entrepreneurship capital saturation (&ecirc;) <span class="field-val" id="ehatVal">0.85</span></label>
+            <input type="range" id="ehatSlider" min="0" max="1" step="0.001" value="0.85">
+          </div>
+        </div>
+        <div class="widget-output">
+          <div class="out-item"><div class="out-val" id="maxGrowthOut">&mdash;</div><div class="out-lbl">Theoretical max single-year growth</div></div>
+          <div class="out-item"><div class="out-val">1.8%</div><div class="out-lbl">Long-run steady state (constant)</div></div>
+          <div class="out-item"><div class="out-val" id="riskOut">&mdash;</div><div class="out-lbl">Overheating risk</div></div>
+        </div>
+        <div class="chart-container short"><canvas id="maxGrowthChart"></canvas></div>
+        <div class="widget-note">Uses the real published formula: Max growth = &beta;<sub>0</sub> + (&beta;<sub>C</sub>&minus;&beta;<sub>&ecirc;</sub>)/2 + &beta;<sub>D</sub>/2 + &beta;<sub>R</sub>/2 + &beta;&#770;<sub>CDR</sub>&middot;&ecirc;/4 + &beta;<sub>N</sub>/2. At &ecirc;=0.85 this evaluates to &asymp;30%, matching P1 &sect;4.3. Sustained growth well above the 1.8% steady state risks economic overheating &mdash; excess demand over supply capacity.</div>
+      </div>
+
+      <div class="finding">
+        <div class="find-label">Key Result</div>
+        "This theoretical 1.8% is numerically equal to what economists have observed empirically as the steady-state rate to which countries converge as they develop. This derivation explains the previously observed but unexplained 1.8% and brings that mystery to an end." &mdash; P1, &sect;4.1
+      </div>
+
+      <div class="equation-box">
+        <div class="eq-label">The CDR Field as a Vector Quantity &mdash; Curl, Divergence &amp; Geometric Return on Investment (P1 &sect;4.3&ndash;4.4)</div>
+        <div class="eq">F(C,D,R) = F<sub>C</sub>&thinsp;i + F<sub>D</sub>&thinsp;j + F<sub>R</sub>&thinsp;k</div>
+        <div class="eq">&nabla;&times;F = (&part;F<sub>R</sub>/&part;D &minus; &part;F<sub>D</sub>/&part;R)i &minus; (&part;F<sub>R</sub>/&part;C &minus; &part;F<sub>C</sub>/&part;R)j + (&part;F<sub>D</sub>/&part;C &minus; &part;F<sub>C</sub>/&part;D)k</div>
+        <div class="eq">Evaluated at C = D = R = 1, &ecirc; = 0.85, with &beta;<sub>D</sub> = 0.116963, &beta;<sub>R</sub> = 0.275395, &beta;<sub>CDR</sub> = &minus;0.98133:</div>
+        <div class="eq">&nabla;&times;F &asymp; &minus;0.16&thinsp;i &minus; 0.80&thinsp;j + 0.96&thinsp;k &middot; &nabla;&middot;F &asymp; 0.18511</div>
+        <div class="eq">ROI<sub>geometric</sub> = divergence / |curl| = 0.18511 / (|&minus;0.16| + |&minus;0.80| + |0.96|) = 0.18511 / 1.92 &asymp; <strong>9.6%</strong></div>
+        <div class="eq-note">Treating F as the marginal-return vector of the CDR growth field, curl measures how the marginal return to one pillar twists against the others &mdash; the geometric expression of the decision-making friction discussed in &sect;6 &mdash; while divergence measures the field's net outward, expansionary pull. Analogous to defining investment return as profit over investment, Ridley &amp; Llaugel (2022) define a geometric return on investment as divergence over total curl magnitude: even at full institutional saturation (C=D=R=1), only about a tenth of the CDR field's raw expansionary force survives as realizable growth &mdash; the rest is absorbed by the coordination "twist" among Capitalism, Democracy, and Rule of Law. See P1 &sect;4.3&ndash;4.4 for the full derivation.</div>
+      </div>
+
+      <div class="content-grid">
+        <div class="content-block block-teach">
+          <h4>Historical Comparisons</h4>
+          <ul>
+            <li><strong>US WWII spurt:</strong> 17.7% growth in 1941 &mdash; approaching but not exceeding the theoretical 30% ceiling.</li>
+            <li><strong>Great Depression:</strong> &minus;12.9% contraction in 1932, the worst year on record.</li>
+            <li><strong>Libya, 2017:</strong> 25% growth &mdash; highest empirical figure found in the dataset, still under the 30% theoretical maximum.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="source-bar">
+        <span class="label">Sources</span>
+        <div class="sources">
+          <span class="src p1">P1 &middot; &sect;4.1 Expected endogenous growth derivation (1.8%), &sect;4.2 Parametric integral average, &sect;4.3 Maximum growth (30%) &amp; the CDR vector field (curl/divergence, geometric ROI), &sect;4.4 Discussion (overheating, decision-making cost, geography extension to 90% R&sup2;), &sect;5 Conclusions, pp. 6&ndash;11</span>
+          <span class="src p2">P2 &middot; &sect;4 Parametric derivation optimal growth rate (3.7% for full CDR model), &sect;5 Conclusions, pp. 11&ndash;13</span>
+        </div>
+      </div>
+
+      <div class="pager" id="pager-mount"></div>
+    </div>
+  </main>
+</div>
+<footer id="site-footer"></footer>
+
+<script>const SITE_ROOT = "../";</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="../assets/js/layout.js"></script>
+<script src="../assets/js/data.js"></script>
+<script>
+let mgChart;
+function buildMaxGrowthChart() {
+  try {
+    const points = [];
+    for (let e = 0; e <= 1.0001; e += 0.02) points.push({ x: +e.toFixed(2), y: maxGrowth(e) * 100 });
+    mgChart = new Chart(document.getElementById("maxGrowthChart"), {
+      type: "line",
+      data: { datasets: [{ label: "Theoretical max growth (%)", data: points, borderColor: "#f59e0b", backgroundColor: "rgba(245,158,11,0.1)", fill: true, pointRadius: 0, tension: 0.15 }] },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { type: "linear", title: { display: true, text: "ê (entrepreneurship saturation)", color: "#94a3b8" }, ticks: { color: "#94a3b8" }, grid: { color: "rgba(148,163,184,0.08)" }, min: 0, max: 1 },
+          y: { title: { display: true, text: "Max growth (%)", color: "#94a3b8" }, ticks: { color: "#94a3b8" }, grid: { color: "rgba(148,163,184,0.08)" } }
+        }
+      }
+    });
+  } catch (e) { console.error("Max-growth chart failed to render:", e); }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  initLayout("s9");
+
+  // Wire up the slider/calculator first so it works even if the chart below fails to load.
+  const slider = document.getElementById("ehatSlider");
+  const ehatVal = document.getElementById("ehatVal");
+  const maxOut = document.getElementById("maxGrowthOut");
+  const riskOut = document.getElementById("riskOut");
+
+  function recompute() {
+    const e = parseFloat(slider.value);
+    ehatVal.textContent = e.toFixed(2);
+    const g = maxGrowth(e);
+    maxOut.textContent = fmtPct(g);
+    let risk, color;
+    if (g * 100 < 5) { risk = "Low"; color = "#86efac"; }
+    else if (g * 100 < 18) { risk = "Moderate"; color = "#fde68a"; }
+    else { risk = "High — overheating range"; color = "#fca5a5"; }
+    riskOut.textContent = risk;
+    riskOut.style.color = color;
+  }
+  slider.addEventListener("input", recompute);
+  recompute();
+
+  buildMaxGrowthChart();
+});
+</script>
+</body>
+</html>

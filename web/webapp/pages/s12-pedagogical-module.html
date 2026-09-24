@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>&sect;12 Pedagogical Module &mdash; CDR Growth Model</title>
+<link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar-mount"></nav>
+  <main>
+    <div class="section" id="s12">
+      <div class="section-header">
+        <div class="section-num">12</div>
+        <div class="section-title-wrap">
+          <h1>Pedagogical Module &mdash; Teaching CDR Economics</h1>
+          <div class="subtitle">Discussion questions, conceptual exercises, assessment tools, and key takeaways for course use</div>
+        </div>
+      </div>
+
+      <div class="module">
+        <div class="module-header">Core Conceptual Questions</div>
+        <div class="module-body">
+          <ul>
+            <li><strong>Q1.</strong> Why does the CDR model standardize all variables to [0,1]? What would happen if raw dollar values were used as regression inputs?</li>
+            <li><strong>Q2.</strong> The coefficient of C&middot;D&middot;R is negative (&minus;1.21). Does this mean democracy hurts economic growth? Explain using the catalysis framework.</li>
+            <li><strong>Q3.</strong> Singapore has zero natural resources and high GDP; Nigeria has massive oil reserves and low GDP. How does CDR theory explain this? What would Nigeria need to change?</li>
+            <li><strong>Q4.</strong> Why is latitude a valid instrumental variable for purging endogenous capital stock from C? What assumption must hold, and how is it justified?</li>
+            <li><strong>Q5.</strong> If a country could instantaneously set C=D=R=1, what would CDR theory predict about GDP growth? Would this be sustainable?</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="module">
+        <div class="module-header">Applied Exercises</div>
+        <div class="module-body">
+          <ul>
+            <li><strong>Exercise 1.</strong> Using the standardization formulas and the Table in &sect;4, compute the CDR index for two countries of your choice. Compare your computed CDR to their reported GDPppp. <em>(Try it: &sect;4 has a live calculator with a country dropdown.)</em></li>
+            <li><strong>Exercise 2.</strong> Using the OLS equation ĝ = 1.53C + 0.14D + 0.23R &minus; 1.21&middot;C&middot;D&middot;R + 0.38N, compute the predicted GDPppp for a country with C=0.5, D=0.8, R=0.7, N=0.05, given G<sub>max</sub> = $83,066 and G<sub>min</sub> = $1,112.</li>
+            <li><strong>Exercise 3.</strong> A country's Rule of Law score improves from R=0.25 to R=0.60 (other variables held constant). Compute the marginal change in predicted g. Translate to dollars using the inverse transformation.</li>
+            <li><strong>Exercise 4.</strong> Calculate the entrepreneurship capital elasticity of g for a country with D=R=0.7 and reinvestment fraction f=0.1. Use the formula from P2 Appendix D / P4 &sect;8.</li>
+            <li><strong>Exercise 5.</strong> Plot GDP growth rates for South Korea (1960&ndash;present) and explain the CDR interpretation: rapid growth during CDR adoption &rarr; convergence to ~1.8% as CDR matures.</li>
+          </ul>
+
+          <div class="widget" style="margin-top:1rem;">
+            <h4>Try Exercise 2 Live <span class="widget-badge">real formula</span></h4>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.75rem;">C=0.5, D=0.8, R=0.7, N=0.05, G<sub>max</sub>=$83,066, G<sub>min</sub>=$1,112.</p>
+            <button class="filter-btn" id="revealBtn" type="button" style="cursor:pointer;">Reveal computed answer</button>
+            <div class="widget-output" id="exerciseAnswer" style="display:none; margin-top:1rem;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="module">
+        <div class="module-header">Key Takeaways &mdash; Summary Card</div>
+        <div class="module-body">
+          <ul>
+            <li><strong>1.</strong> GDP is governed by a scientific law: G = f(C, D, R) &mdash; global time invariant, parsimonious, R&sup2; = 83%.</li>
+            <li><strong>2.</strong> The source of all wealth is human imagination and creativity (entrepreneurship capital), not natural resources or physical labor.</li>
+            <li><strong>3.</strong> Capitalism, Democracy, and Rule of Law are the only policy-controllable determinants of GDP. Natural resources, geography, culture, population size are negligible.</li>
+            <li><strong>4.</strong> Entrepreneurship capital (new ideas) contributes ~6&times; more to GDP than capital stock (old ideas). CDR contributes ~13&times; more than natural resources.</li>
+            <li><strong>5.</strong> The theoretical steady-state growth rate is ~1.8% (= &frac14;e&sup2;). The theoretical maximum single-year growth is ~30%. Sustained growth above ~1.8% will eventually cause overheating.</li>
+            <li><strong>6.</strong> Democracy creates friction (negative C&middot;D&middot;R interaction) &mdash; this is necessary and unavoidable in a democratic system. The optimal response is to accelerate democratic decision-making, not reduce democracy.</li>
+            <li><strong>7.</strong> High CDR countries are where ideas go to fly. Low CDR countries are where ideas go to die.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="widget">
+        <h4>Concept Check <span class="widget-badge">live quiz</span></h4>
+        <div id="conceptQuiz"></div>
+      </div>
+
+      <div class="module">
+        <div class="module-header">Discussion Prompts for Advanced Seminars</div>
+        <div class="module-body">
+          <ul>
+            <li><strong>D1.</strong> The CDR model excludes government spending (its coefficient is statistically insignificant). How does this challenge both Keynesian and supply-side fiscal policy prescriptions?</li>
+            <li><strong>D2.</strong> CDR theory suggests wealth is unlimited because it originates in human imagination, which is unlimited (Simon, 1981). Evaluate this claim against resource-constrained growth frameworks.</li>
+            <li><strong>D3.</strong> "It is in the positive-sum self-interest of rich countries to help poor countries develop their CDR institutions." Evaluate this claim using the plus-sum capitalism framework from P3 &sect;Discussion.</li>
+            <li><strong>D4.</strong> Property rights are described as essential to rule of law. De Soto (2000) found 90% of countries have no property rights for the common person. What are the specific barriers to implementing property rights in developing countries?</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="source-bar">
+        <span class="label">Sources</span>
+        <div class="sources">
+          <span class="src p2">P2 &middot; &sect;4 Discussion (CDR education, oppressed communities), &sect;5 Conclusions, pp. 8&ndash;13</span>
+          <span class="src p3">P3 &middot; &sect;6 Conclusions (policy prescriptions, entrepreneurship education), pp. 15&ndash;16</span>
+          <span class="src p4">P4 &middot; Appendix A.1 Summary of CDR Findings, pp. 15</span>
+          <span class="src p1">P1 &middot; &sect;5 Conclusions, Nomenclature, pp. 11&ndash;12</span>
+        </div>
+      </div>
+
+      <div class="pager" id="pager-mount"></div>
+    </div>
+  </main>
+</div>
+<footer id="site-footer"></footer>
+
+<script>const SITE_ROOT = "../";</script>
+<script src="../assets/js/layout.js"></script>
+<script src="../assets/js/widgets.js"></script>
+<script src="../assets/js/data.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  initLayout("s12");
+
+  document.getElementById("revealBtn").addEventListener("click", () => {
+    const gHat = olsGHat({ C: 0.5, D: 0.8, R: 0.7, N: 0.05 });
+    const gdp = inverseGDP(gHat);
+    const out = document.getElementById("exerciseAnswer");
+    out.style.display = "flex";
+    out.innerHTML = `
+      <div class="out-item"><div class="out-val">${gHat.toFixed(4)}</div><div class="out-lbl">Predicted ĝ</div></div>
+      <div class="out-item"><div class="out-val">${fmtUSD(gdp)}</div><div class="out-lbl">Predicted GDPppp</div></div>
+    `;
+  });
+
+  mountQuiz(document.getElementById("conceptQuiz"), [
+    {
+      q: "Why does the CDR model standardize C, D, R, N, and g to the [0,1] range before regression?",
+      options: ["To make coefficients directly comparable across variables measured in very different original units (dollars, ranks, indices)", "Because raw dollar values are illegal to use in academic papers", "It has no real purpose — it is a cosmetic step"],
+      correct: 0,
+      explain: "Standardization puts every variable on the same 0–1 scale so their regression coefficients can be meaningfully compared and the model generalizes across countries with very different raw units."
+    },
+    {
+      q: "A country's Rule of Law score rises from R=0.25 to R=0.60, holding C, D, N fixed. Under the OLS model, what happens to predicted GDP?",
+      options: ["It falls, because R has a negative coefficient", "It rises, because R has a positive direct coefficient (0.23) even though the C·D·R interaction term is negative", "It stays exactly the same"],
+      correct: 1,
+      explain: "R's own coefficient (+0.23) is positive; only the three-way interaction term is negative, and its effect depends on the levels of C and D too."
+    },
+    {
+      q: "According to CDR theory, could a country instantaneously set C=D=R=1 and sustain the resulting growth rate forever?",
+      options: ["Yes, sustained maximum growth is the model's intended steady state", "No — the ~30% maximum implied at full saturation is well above the 1.8% long-run steady state and would risk economic overheating", "The model makes no prediction either way"],
+      correct: 1,
+      explain: "§9 distinguishes the long-run steady state (~1.8%) from the theoretical single-year ceiling (~30%); sustaining the ceiling would mean persistent excess demand over supply capacity."
+    },
+    {
+      q: "Why is latitude used as the instrumental variable in the 2SLS first stage?",
+      options: ["Because it correlates with historical institutional development patterns (La Porta et al. 1999) but is plausibly uncorrelated with the regression error term, letting it isolate exogenous entrepreneurship capital", "Because latitude directly causes higher GDP through climate", "Latitude is used only for map-making, not estimation"],
+      correct: 0,
+      explain: "A valid instrument must be correlated with the endogenous regressor (C) but uncorrelated with the error term — latitude is used here as in La Porta et al. (1999)."
+    }
+  ]);
+});
+</script>
+</body>
+</html>

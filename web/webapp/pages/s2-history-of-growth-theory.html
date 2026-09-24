@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>&sect;2 History of Growth Theory &mdash; CDR Growth Model</title>
+<link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar-mount"></nav>
+  <main>
+    <div class="section" id="s2">
+      <div class="section-header">
+        <div class="section-num">02</div>
+        <div class="section-title-wrap">
+          <h1>A History of Economic Growth Theory</h1>
+          <div class="subtitle">From Malthus to CDR &mdash; a chronological survey of what each model got right and where it fell short</div>
+        </div>
+      </div>
+
+      <div class="learning-obj">
+        <h4>Learning Objectives</h4>
+        <ul>
+          <li>Situate the CDR model within the history of economic thought</li>
+          <li>Critically evaluate why classical and neoclassical models fail to fully explain cross-country growth</li>
+          <li>Understand how Schumpeter anticipated entrepreneurship's central role two centuries before CDR formalized it</li>
+        </ul>
+      </div>
+
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-year">15th c. / 18th c.</div><div class="tl-theory">Mercantilism &amp; Physiocracy</div><div class="tl-desc">Wealth as trade surplus or land productivity. No mechanism for sustained growth creation.</div></div>
+        <div class="tl-item"><div class="tl-year">1776</div><div class="tl-theory">Adam Smith &mdash; Classical Theory</div><div class="tl-desc">Division of labor creates surplus capital. Recognized gain from specialization and cooperation. Not a complete growth model but foundational for CDR's source-of-wealth concept.</div></div>
+        <div class="tl-item"><div class="tl-year">1798</div><div class="tl-theory">Malthus &mdash; Population Theory</div><div class="tl-desc">Proposed population growth would exhaust resources. Reverse is empirically true: population growth is positively correlated with economic growth. CDR supersedes Malthus.</div></div>
+        <div class="tl-item"><div class="tl-year">1817&ndash;1821</div><div class="tl-theory">Ricardo &mdash; Comparative Advantage</div><div class="tl-desc">Gain from trade. Treated labor as homogeneous &mdash; ignoring skilled/unskilled distinction and human capital ideas. CDR preserves Ricardo's homogeneous brawn definition while adding brain.</div></div>
+        <div class="tl-item"><div class="tl-year">1911</div><div class="tl-theory">Schumpeter &mdash; Creative Destruction</div><div class="tl-desc">Capital accumulation not the main driver; entrepreneurial creativity is. Required private property, competitive markets, and efficient finance &mdash; all embedded in CDR's C, D, R variables.</div></div>
+        <div class="tl-item"><div class="tl-year">1930s&ndash;1950s</div><div class="tl-theory">Keynes / Harrod-Domar</div><div class="tl-desc">Incomplete markets; fiscal policy as driver. Government spending included in CDR regression shows zero coefficient &mdash; not a growth determinant under CDR law.</div></div>
+        <div class="tl-item"><div class="tl-year">1956&ndash;1957</div><div class="tl-theory">Solow &mdash; Neoclassical Growth</div><div class="tl-desc">Economies converge to balanced growth path. Capital stock only &mdash; cannot capture entrepreneurship. There is no such thing as an aggregate production function (Cohen &amp; Harcourt, 2003). CDR complements rather than replaces micro production function.</div></div>
+        <div class="tl-item"><div class="tl-year">1980s&ndash;1990s</div><div class="tl-theory">Romer / Endogenous Growth</div><div class="tl-desc">Endogenous technological progress. Misapplied Pontryagin's principle. CDR provides the missing institutional framework that enables technological progress.</div></div>
+        <div class="tl-item"><div class="tl-year">2016&ndash;present</div><div class="tl-theory">Ridley et al. &mdash; CDR Model</div><div class="tl-desc">First global time-invariant model. Parsimonious (3 variables). Scientific law governing capital-to-GDP conversion. R&sup2; = 83%. Explains the source of wealth, its conversion, and its limits.</div></div>
+      </div>
+
+      <div class="widget">
+        <h4>Quiz: Match the Theory to its Key Limitation <span class="widget-badge">live quiz</span></h4>
+        <div id="theoryQuiz"></div>
+      </div>
+
+      <div class="source-bar">
+        <span class="label">Sources</span>
+        <div class="sources">
+          <span class="src p2">P2 &middot; &sect;2 Historical Background, &sect;3 Chronological Review, pp. 1&ndash;6 (Table: Growth Concepts, Fig.1)</span>
+          <span class="src p3">P3 &middot; &sect;2 Literature Review: Economic Freedom, Political Freedom, Parsimony, pp. 2&ndash;3</span>
+          <span class="src p4">P4 &middot; &sect;1 Introduction (history of CDR development), &sect;2 Supply-side wealth, pp. 1&ndash;4</span>
+        </div>
+      </div>
+
+      <div class="pager" id="pager-mount"></div>
+    </div>
+  </main>
+</div>
+<footer id="site-footer"></footer>
+
+<script>const SITE_ROOT = "../";</script>
+<script src="../assets/js/layout.js"></script>
+<script src="../assets/js/widgets.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  initLayout("s2");
+  mountQuiz(document.getElementById("theoryQuiz"), [
+    {
+      q: "Malthus predicted that population growth would exhaust resources. What does CDR-era data actually show?",
+      options: ["Population growth is negatively correlated with GDP growth, confirming Malthus", "Population growth is positively correlated with economic growth — the reverse of Malthus's prediction", "Population has no measurable relationship to growth"],
+      correct: 1,
+      explain: "CDR research finds the empirical relationship runs the opposite direction from Malthus's prediction."
+    },
+    {
+      q: "Solow's neoclassical growth model captures capital stock accumulation. What can it not capture?",
+      options: ["Entrepreneurship — new ideas as a distinct, exogenous source of growth", "Trade between nations", "Diminishing returns to capital"],
+      correct: 0,
+      explain: "Solow's model is capital-stock only; CDR adds entrepreneurship capital (ê) as the dominant driver, missing from the Solow framework."
+    },
+    {
+      q: "In the CDR regression, government spending's coefficient is statistically insignificant. Which theory does this most directly challenge?",
+      options: ["Ricardo's comparative advantage", "Keynesian / Harrod-Domar fiscal-policy-driven growth", "Adam Smith's division of labor"],
+      correct: 1,
+      explain: "Keynesian and Harrod-Domar models treat fiscal policy (government spending) as a primary growth lever; CDR data does not support this."
+    },
+    {
+      q: "Schumpeter (1911) anticipated which core CDR idea, roughly a century early?",
+      options: ["That natural resources are the primary driver of wealth", "That entrepreneurial creativity, not capital accumulation, drives growth", "That population control is necessary for prosperity"],
+      correct: 1,
+      explain: "Schumpeter's 'creative destruction' foreshadows CDR's entrepreneurship-capital (ê) mechanism, decades before it was formalized."
+    }
+  ]);
+});
+</script>
+</body>
+</html>
