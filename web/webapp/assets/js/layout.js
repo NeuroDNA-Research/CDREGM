@@ -35,7 +35,7 @@ function renderHeader(root, activeId) {
   return `
     <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">&#9776; Sections</button>
     <a href="${root}index.html" style="text-decoration:none; display:flex; align-items:center; gap:0.6rem;">
-      <img class="logo-slot" src="${root}assets/img/fsu-logo-placeholder.svg" alt="Florida State University logo placeholder" title="FSU logo — placeholder">
+      <img class="logo-slot logo-plate" src="${root}assets/img/famu-logo.png" alt="FAMU School of Business &amp; Industry logo" title="FAMU School of Business &amp; Industry">
       <img class="logo-slot" src="${root}assets/img/om-logo.png" alt="Universidad Dominicana O&amp;M logo" title="Universidad Dominicana O&amp;M">
       <span class="wordmark-group">
         <span class="wordmark"><span class="c">C</span><span class="d">D</span><span class="r">R</span> Growth Model</span>
