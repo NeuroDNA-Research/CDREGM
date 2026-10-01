@@ -23,7 +23,7 @@ const SECTIONS = [
 ];
 
 // Placeholder — the CDR Laboratory site URL was not available at build time.
-const CDR_LAB_URL_PLACEHOLDER = "#cdr-lab-url-placeholder";
+const CDR_LAB_URL_PLACEHOLDER = "https://sbi.famu.edu/departments/economics-pld.php";
 
 function pageHref(id, root) {
   if (id === "home") return root + "index.html";
@@ -84,7 +84,6 @@ function renderFooter(root) {
       <a class="famu-link" href="${CDR_LAB_URL_PLACEHOLDER}" target="_blank" rel="noopener">
         FAMU Economics Department website &middot; visit the CDR Laboratory to run experiments
         <span class="arrow">&rarr;</span>
-        <span class="placeholder-tag">link TBD</span>
       </a>
     </div>
   `;

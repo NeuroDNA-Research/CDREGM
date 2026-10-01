@@ -24,10 +24,10 @@ const G_MIN = 1112;
 // OLS Stage-1 model (§6): ĝ = C·C + D·D + R·R + CDR·(C·D·R) + N·N ,  R²adj = 83%, n = 79
 const OLS = { C: 1.53, D: 0.14, R: 0.23, CDR: -1.21, N: 0.38, R2: 0.83 };
 
-// First-stage 2SLS (§6): ê = const + L·L + D·D + R·R + CDR·(C·D·R) − N·N ,  R²adj = 95%
+// First-stage 2SLS (§6): Ĉ = const + L·L + D·D + R·R + CDR·(C·D·R) − N·N ,  R²adj = 95%
 const STAGE1 = { const: 0.04, L: -0.07, D: -0.16, R: 0.22, CDR: 1.11, N: -0.02, R2: 0.95 };
 
-// Second-stage 2SLS (§6): ĝ = ê·ehat + D·D + R·R + CDR·(ê·D·R) + N·N ,  R²adj = 74%
+// Second-stage 2SLS (§6): ĝ = Ĉ·chat + D·D + R·R + CDR·(Ĉ·D·R) + N·N ,  R²adj = 74%
 const STAGE2 = { ehat: 1.30, D: 0.12, R: 0.28, CDR: -0.98, N: 0.39, R2: 0.74 };
 
 // Parametric-derivation coefficients (§9), P1 §4.1–4.3
