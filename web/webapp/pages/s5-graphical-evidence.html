@@ -57,12 +57,10 @@
         <p>P2 Appendix A reproduces a "G vs CDR index" scatter plot using country flag bubbles, where bubble size is proportional to the square root of population. 79 countries form a nearly straight line, confirming that the CDR-to-GDP relationship holds regardless of country size, geographic location, culture, or population characteristics. The 8-country subset above (flag markers) shows the same pattern.</p>
       </div>
 
-      <div class="figure-row">
-        <div class="figure-placeholder">
-          <span class="fig-icon">🌐</span>
-          <div class="fig-title">Fig. 6 &middot; 4D Bubble Graph</div>
-          <div class="fig-caption">Axes: C (Capitalism, vertical), D and R (horizontal). Bubble size and color = GDPppp. Parsimonious CDR 3D + GDP as 4th dimension. Singapore and Switzerland as outliers. Full interactive 3D version not yet built &mdash; see P1 &sect;4 Fig. 1.</div>
-        </div>
+      <div class="widget">
+        <h4>Fig. 6 &middot; 4D Bubble Graph <span class="widget-badge">live chart</span></h4>
+        <div class="chart-container"><canvas id="bubble4dChart"></canvas></div>
+        <div class="widget-note">Axes: Democracy (D, horizontal) and Capitalism (C, vertical). Bubble size represents GDPppp; bubble color represents Rule of Law (R). This 2D projection renders the published 4D idea in-browser using the available country examples.</div>
       </div>
 
       <div class="source-bar">
@@ -82,7 +80,7 @@
 <footer id="site-footer"></footer>
 
 <script>const SITE_ROOT = "../";</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <script src="../assets/js/layout.js"></script>
 <script src="../assets/js/data.js"></script>
 <script>
@@ -96,6 +94,13 @@ const VAR_NOTES = {
 };
 
 let chart;
+function ruleOfLawColor(r, alpha = 0.75) {
+  const low = [124, 58, 237];
+  const high = [245, 158, 11];
+  const mix = low.map((v, i) => Math.round(v + (high[i] - v) * r));
+  return `rgba(${mix[0]}, ${mix[1]}, ${mix[2]}, ${alpha})`;
+}
+
 function buildChart(varKey) {
   try {
   const ctx = document.getElementById("scatterChart");
@@ -128,9 +133,56 @@ function buildChart(varKey) {
   } catch (e) { console.error("Scatter chart failed to render:", e); }
 }
 
+function buildBubble4DChart() {
+  try {
+  const ctx = document.getElementById("bubble4dChart");
+  const points = CDR_COUNTRIES.map(c => ({
+    x: c.D,
+    y: c.C,
+    r: 6 + Math.sqrt(c.gdp) / 18,
+    label: `${c.flag} ${c.name}`,
+    gdp: c.gdp,
+    rule: c.R
+  }));
+  new Chart(ctx, {
+    type: "bubble",
+    data: {
+      datasets: [{
+        label: "C, D, R, and GDPppp",
+        data: points,
+        backgroundColor: points.map(p => ruleOfLawColor(p.rule)),
+        borderColor: points.map(p => ruleOfLawColor(p.rule, 1)),
+        borderWidth: 1.5,
+        hoverBorderColor: "#e2e8f0"
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: "#e2e8f0" } },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              const p = ctx.raw;
+              return `${p.label}: D=${p.x.toFixed(3)}, C=${p.y.toFixed(3)}, R=${p.rule.toFixed(3)}, GDPppp=$${p.gdp.toLocaleString()}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: { min: 0, max: 1, title: { display: true, text: "Democracy (D)", color: "#94a3b8" }, ticks: { color: "#94a3b8" }, grid: { color: "rgba(148,163,184,0.08)" } },
+        y: { min: 0, max: 1, title: { display: true, text: "Capitalism (C)", color: "#94a3b8" }, ticks: { color: "#94a3b8" }, grid: { color: "rgba(148,163,184,0.08)" } }
+      }
+    }
+  });
+  } catch (e) { console.error("4D bubble chart failed to render:", e); }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initLayout("s5");
   buildChart("C");
+  buildBubble4DChart();
   document.querySelectorAll("#chartTabs .tab-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       document.querySelectorAll("#chartTabs .tab-btn").forEach(b => b.classList.remove("active"));
