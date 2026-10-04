@@ -80,7 +80,7 @@ function renderFooter(root) {
     <div class="pdf-ref p5"><strong>[P5] Ridley, D., Llaugel, F., &amp; Garcia, C. A. (2026)</strong> &ldquo;Artificial Intelligence in Human Collaboration Skills Invocation, Recovery and Enhancement.&rdquo; <em>Theoretical Economics Letters</em>, 16(1), 249&ndash;268.</div>
 
     <div class="footer-credit-bar">
-      <span>&copy; <span id="footerYear"></span> Dennis Ridley, Felipe Llaugel, Aryanne de Silva, Pierre Ngnepieba &amp; Abdullah Khan &middot; CDR theory and research. Web application design and educational content by NeuroDNA.</span>
+      <span>&copy; <span id="footerYear"></span> Dennis Ridley, Felipe Llaugel, Cesar Garcia, Aryanne de Silva, Pierre Ngnepieba &amp; Abdullah Khan &middot; CDR theory and research. Web application design and educational content by NeuroDNA.</span>
       <a class="famu-link" href="${CDR_LAB_URL_PLACEHOLDER}" target="_blank" rel="noopener">
         FAMU Economics Department website &middot; visit the CDR Laboratory to run experiments
         <span class="arrow">&rarr;</span>
