@@ -35,7 +35,7 @@ function renderHeader(root, activeId) {
   return `
     <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">&#9776; Sections</button>
     <a href="${root}index.html" style="text-decoration:none; display:flex; align-items:center; gap:0.6rem;">
-      <img class="logo-slot" src="${root}assets/img/fsu-logo-placeholder.svg" alt="Florida State University logo placeholder" title="FSU logo — placeholder">
+      <img class="logo-slot logo-plate" src="${root}assets/img/famu-logo.png" alt="FAMU School of Business &amp; Industry logo" title="FAMU School of Business &amp; Industry">
       <img class="logo-slot" src="${root}assets/img/om-logo.png" alt="Universidad Dominicana O&amp;M logo" title="Universidad Dominicana O&amp;M">
       <span class="wordmark-group">
         <span class="wordmark"><span class="c">C</span><span class="d">D</span><span class="r">R</span> Growth Model</span>
@@ -80,7 +80,7 @@ function renderFooter(root) {
     <div class="pdf-ref p5"><strong>[P5] Ridley, D., Llaugel, F., &amp; Garcia, C. A. (2026)</strong> &ldquo;Artificial Intelligence in Human Collaboration Skills Invocation, Recovery and Enhancement.&rdquo; <em>Theoretical Economics Letters</em>, 16(1), 249&ndash;268.</div>
 
     <div class="footer-credit-bar">
-      <span>&copy; <span id="footerYear"></span> Dennis Ridley, Felipe Llaugel, Aryanne de Silva, Pierre Ngnepieba &amp; Abdullah Khan &middot; CDR theory and research. Web application design and educational content by NeuroDNA.</span>
+      <span>&copy; <span id="footerYear"></span> Dennis Ridley, Felipe Llaugel, Cesar Garcia, Aryanne de Silva, Pierre Ngnepieba &amp; Abdullah Khan &middot; CDR theory and research. Web application design and educational content by NeuroDNA.</span>
       <a class="famu-link" href="${CDR_LAB_URL_PLACEHOLDER}" target="_blank" rel="noopener">
         FAMU Economics Department website &middot; visit the CDR Laboratory to run experiments
         <span class="arrow">&rarr;</span>
