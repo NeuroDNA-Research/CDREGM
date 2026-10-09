@@ -22,22 +22,21 @@ function mountQuiz(container, questions) {
     const feedback = document.createElement("div");
     feedback.className = "quiz-feedback";
 
-    let answered = false;
+    // Every click re-grades, so learners can try another answer without reloading.
     item.options.forEach((optText, oi) => {
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "quiz-option";
       btn.textContent = optText;
       btn.addEventListener("click", () => {
-        if (answered) return;
-        answered = true;
-        const buttons = opts.querySelectorAll(".quiz-option");
-        buttons.forEach((b, bi) => {
-          b.disabled = true;
-          if (bi === item.correct) b.classList.add("correct");
-          else if (bi === oi) b.classList.add("incorrect");
-        });
-        feedback.textContent = (oi === item.correct ? "Correct. " : "Not quite. ") + (item.explain || "");
+        opts.querySelectorAll(".quiz-option").forEach(b => b.classList.remove("correct", "incorrect"));
+        if (oi === item.correct) {
+          btn.classList.add("correct");
+          feedback.textContent = "Correct. " + (item.explain || "");
+        } else {
+          btn.classList.add("incorrect");
+          feedback.textContent = "Not quite. Try another answer.";
+        }
       });
       opts.appendChild(btn);
     });

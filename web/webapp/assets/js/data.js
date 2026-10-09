@@ -57,12 +57,12 @@ function inverseGDP(g, gmax = G_MAX, gmin = G_MIN) {
   return g * (gmax - gmin) + gmin;
 }
 
-// Expected endogenous growth (§9, P1 §4.1) — constant, does not vary with ê
+// Expected endogenous growth (§9, P1 §4.1) — constant, does not vary with Ĉ
 function expectedGrowth(p = GROWTH_PARAMS) {
   return 0.5 * (p.beta0 + (p.betaC - p.betaEhat) + p.betaD + p.betaR + p.betaCDR + p.betaN);
 }
 
-// Theoretical maximum endogenous growth as a function of ê (§9, P1 §4.3)
+// Theoretical maximum endogenous growth as a function of Ĉ (§9, P1 §4.3)
 function maxGrowth(ehat, p = GROWTH_PARAMS) {
   return p.beta0
     + (p.betaC - p.betaEhat) / 2
