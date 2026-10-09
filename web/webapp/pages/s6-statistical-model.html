@@ -46,13 +46,13 @@
 
       <div class="equation-box">
         <div class="eq-label">First-Stage 2SLS (Instrument: Latitude L<sub>i</sub>)</div>
-        <div class="eq">C&#770;<sub>i</sub> = 0.04 &minus; 0.07L<sub>i</sub> &minus; 0.16D<sub>i</sub> + 0.22R<sub>i</sub> + 1.11C<sub>i</sub>&middot;D<sub>i</sub>&middot;R<sub>i</sub> &minus; 0.02N<sub>i</sub></div>
+        <div class="eq">&#264;<sub>i</sub> = 0.04 &minus; 0.07L<sub>i</sub> &minus; 0.16D<sub>i</sub> + 0.22R<sub>i</sub> + 1.11C<sub>i</sub>&middot;D<sub>i</sub>&middot;R<sub>i</sub> &minus; 0.02N<sub>i</sub></div>
         <div class="eq-note">|t| = (3.7) (4.6) (6.4) (27.1) (0.61) &middot; R&sup2;<sub>adj</sub> = 95%</div>
       </div>
 
       <div class="equation-box">
-        <div class="eq-label">Second-Stage 2SLS (Exogenous Capital C&#770;)</div>
-        <div class="eq">ĝ<sub>i</sub> = 1.30C&#770;<sub>i</sub> + 0.12D<sub>i</sub> + 0.28R<sub>i</sub> &minus; 0.98C&#770;<sub>i</sub>&middot;D<sub>i</sub>&middot;R<sub>i</sub> + 0.39N<sub>i</sub></div>
+        <div class="eq-label">Second-Stage 2SLS (Exogenous Capital &#264;)</div>
+        <div class="eq">ĝ<sub>i</sub> = 1.30&#264;<sub>i</sub> + 0.12D<sub>i</sub> + 0.28R<sub>i</sub> &minus; 0.98&#264;<sub>i</sub>&middot;D<sub>i</sub>&middot;R<sub>i</sub> + 0.39N<sub>i</sub></div>
         <div class="eq-note">|t| = (2.66) (0.88) (1.95) (1.88) (4.45) &middot; R&sup2;<sub>adj</sub> = 74%<br>Coefficient drop 1.53&rarr;1.30: confirms ~85% of C is exogenous entrepreneurship capital; ~15% is endogenous capital stock from prior ideas.</div>
       </div>
 
@@ -83,13 +83,13 @@
           <div class="widget-field"><label>Latitude instrument (L, standardized) <span class="field-val" id="s6L">0.00</span></label><input type="range" id="s6sliderL" min="-1" max="1" step="0.001" value="0"></div>
         </div>
         <div class="widget-output">
-          <div class="out-item"><div class="out-val" id="s6ehat">&mdash;</div><div class="out-lbl">Stage 1: C&#770; (exogenous capital)</div></div>
+          <div class="out-item"><div class="out-val" id="s6ehat">&mdash;</div><div class="out-lbl">Stage 1: &#264; (exogenous capital)</div></div>
           <div class="out-item"><div class="out-val" id="s6olsG">&mdash;</div><div class="out-lbl">OLS ĝ (using C directly)</div></div>
-          <div class="out-item"><div class="out-val" id="s6s2G">&mdash;</div><div class="out-lbl">2SLS ĝ (using C&#770;)</div></div>
+          <div class="out-item"><div class="out-val" id="s6s2G">&mdash;</div><div class="out-lbl">2SLS ĝ (using &#264;)</div></div>
           <div class="out-item"><div class="out-val" id="s6olsGDP">&mdash;</div><div class="out-lbl">OLS predicted GDPppp</div></div>
           <div class="out-item"><div class="out-val" id="s6s2GDP">&mdash;</div><div class="out-lbl">2SLS predicted GDPppp</div></div>
         </div>
-        <div class="widget-note">Stage 1 purges the endogenous (capital-stock) portion of C using latitude as an instrument. Stage 2 re-estimates growth using only the exogenous capital component C&#770;. The gap between the OLS and 2SLS predictions is the portion of naive C-based prediction attributable to already-accumulated capital stock rather than new ideas.</div>
+        <div class="widget-note">Stage 1 purges the endogenous (capital-stock) portion of C using latitude as an instrument. Stage 2 re-estimates growth using only the exogenous capital component &#264;. The gap between the OLS and 2SLS predictions is the portion of naive C-based prediction attributable to already-accumulated capital stock rather than new ideas.</div>
       </div>
 
       <div class="source-bar">

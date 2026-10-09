@@ -104,6 +104,8 @@
           <div class="out-item"><div class="out-val" id="outGDP">&mdash;</div><div class="out-lbl">Predicted GDPppp</div></div>
           <div class="out-item"><div class="out-val" id="outActual">&mdash;</div><div class="out-lbl">Actual GDPppp (if example loaded)</div></div>
         </div>
+        <div class="chart-container"><canvas id="cdrBubbleChart"></canvas></div>
+        <div class="widget-note">GDPppp vs CDR index. The highlighted bubble is the country defined by the sliders and moves each time C, D, R or N changes; the dashed line is the model's predicted GDPppp across the CDR index at the current N. Gray bubbles are the published example countries at their actual GDPppp.</div>
         <div class="widget-note">Uses the real published OLS equation from &sect;6: ĝ = 1.53C + 0.14D + 0.23R &minus; 1.21&middot;C&middot;D&middot;R + 0.38N, inverse-transformed with G<sub>max</sub>=$83,066 (Singapore) and G<sub>min</sub>=$1,112 as in Applied Exercise 2 (&sect;12).</div>
       </div>
 
@@ -123,6 +125,7 @@
 <footer id="site-footer"></footer>
 
 <script>const SITE_ROOT = "../";</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <script src="../assets/js/layout.js"></script>
 <script src="../assets/js/widgets.js"></script>
 <script src="../assets/js/data.js"></script>
@@ -154,6 +157,69 @@ document.addEventListener("DOMContentLoaded", () => {
   const outGDP = document.getElementById("outGDP");
   const outActual = document.getElementById("outActual");
 
+  // GDPppp vs CDR index bubble chart; the live bubble is redrawn (animated) on every slider move.
+  let bubbleChart = null;
+  function buildBubbleChart() {
+    try {
+      bubbleChart = new Chart(document.getElementById("cdrBubbleChart"), {
+        type: "bubble",
+        data: {
+          datasets: [
+            {
+              label: "Selected / slider country",
+              data: [{ x: 0, y: 0, r: 13, label: "Slider country" }],
+              backgroundColor: "rgba(245,158,11,0.85)",
+              borderColor: "#fde68a",
+              borderWidth: 2
+            },
+            {
+              type: "line",
+              label: "Model prediction (current N)",
+              data: [],
+              borderColor: "rgba(245,158,11,0.55)",
+              borderDash: [6, 4],
+              borderWidth: 1.5,
+              pointRadius: 0,
+              fill: false
+            },
+            {
+              label: "Example countries (actual)",
+              data: CDR_COUNTRIES.map(c => ({ x: c.cdr, y: c.gdp, r: 7, label: `${c.flag} ${c.name}` })),
+              backgroundColor: "rgba(148,163,184,0.45)",
+              borderColor: "rgba(226,232,240,0.7)",
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          animation: { duration: 450, easing: "easeOutCubic" },
+          plugins: {
+            legend: { labels: { color: "#e2e8f0" } },
+            tooltip: {
+              filter: (item) => item.dataset.type !== "line",
+              callbacks: { label: (ctx) => `${ctx.raw.label}: CDR=${ctx.raw.x.toFixed(3)}, GDPppp=${fmtUSD(ctx.raw.y)}` }
+            }
+          },
+          scales: {
+            x: { type: "linear", suggestedMin: 0, suggestedMax: 1, title: { display: true, text: "CDR index (CDRs + CDRp)", color: "#94a3b8" }, ticks: { color: "#94a3b8" }, grid: { color: "rgba(148,163,184,0.08)" } },
+            y: { min: 0, suggestedMax: 100000, title: { display: true, text: "GDPppp ($)", color: "#94a3b8" }, ticks: { color: "#94a3b8", callback: (v) => "$" + (v / 1000) + "k" }, grid: { color: "rgba(148,163,184,0.08)" } }
+          }
+        }
+      });
+    } catch (e) { console.error("CDR bubble chart failed to render:", e); }
+  }
+
+  function updateBubbleChart(cdrIndex, N, label) {
+    if (!bubbleChart) return;
+    const live = bubbleChart.data.datasets[0];
+    live.data[0].x = cdrIndex;
+    live.data[0].y = inverseGDP(cdrIndex + OLS.N * N);
+    live.data[0].label = label;
+    bubbleChart.data.datasets[1].data = [0, Math.max(1, cdrIndex)].map(x => ({ x, y: inverseGDP(x + OLS.N * N) }));
+    bubbleChart.update();
+  }
+
   function recompute() {
     const C = parseFloat(sliders.C.value), D = parseFloat(sliders.D.value), R = parseFloat(sliders.R.value), N = parseFloat(sliders.N.value);
     Object.entries({ C, D, R, N }).forEach(([k, v]) => vals[k].textContent = v.toFixed(3));
@@ -162,9 +228,15 @@ document.addEventListener("DOMContentLoaded", () => {
     outIndex.textContent = cdrIndex.toFixed(3);
     outG.textContent = gHat.toFixed(3);
     outGDP.textContent = fmtUSD(inverseGDP(gHat));
+    const picked = select.value === "" ? null : CDR_COUNTRIES[parseInt(select.value, 10)];
+    updateBubbleChart(cdrIndex, N, picked ? `${picked.flag} ${picked.name} (predicted)` : "Slider country (predicted)");
   }
 
-  Object.values(sliders).forEach(s => s.addEventListener("input", recompute));
+  // Moving a slider by hand means the values no longer describe the loaded example country.
+  Object.values(sliders).forEach(s => s.addEventListener("input", () => {
+    if (select.value !== "") { select.value = ""; outActual.textContent = "—"; }
+    recompute();
+  }));
 
   select.addEventListener("change", () => {
     if (select.value === "") { outActual.textContent = "—"; recompute(); return; }
@@ -174,6 +246,7 @@ document.addEventListener("DOMContentLoaded", () => {
     recompute();
   });
 
+  buildBubbleChart();
   recompute();
 });
 </script>

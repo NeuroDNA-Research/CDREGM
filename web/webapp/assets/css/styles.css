@@ -640,3 +640,7 @@ footer h3 { font-family: var(--serif); font-weight: 400; font-size: 1rem; margin
   main { padding: 1.5rem; }
   footer { padding: 1.5rem; }
 }
+
+/* Hat accent drawn above a symbol (e.g. β̂): combining U+0302 renders beside the glyph in monospace equation fonts */
+.hat { position: relative; display: inline-block; }
+.hat::after { content: "^"; position: absolute; left: 0; right: 0; top: -0.3em; text-align: center; font-size: 0.85em; line-height: 1; }
